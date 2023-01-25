@@ -7,7 +7,7 @@ USE `cmsexpressjs`;
 	Create Necesscary Table for your initial project!
 */
 CREATE TABLE IF NOT EXISTS `categories` (
-	`id` INT NOT NULL UNIQUE,
+	`id` varchar(55) NOT NULL UNIQUE,
 	`name` varchar(55) NOT NULL,
 	`created_at` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
 	`updated_at` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
