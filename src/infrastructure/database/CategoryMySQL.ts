@@ -1,4 +1,4 @@
-import { Connection, MysqlError } from "mysql";
+import { Connection } from "mysql2";
 import { CategoryRepository } from "../../repository/CategoryRepository";
 import Category from "../../entity/Category";
 
@@ -9,20 +9,15 @@ export default class CategoryMySQL implements CategoryRepository {
 		this._connection = connection;
 	}
 
-	public async getCategory(uuid: string): Promise<Category> {
+	public async getCategory(name: string): Promise<Category> {
 		return new Promise<Category>((resolve, reject) => {
 			this._connection.query(
-				`SELECT id, name FROM categories WHERE id = ? LIMIT 5`,
-				[uuid],
-				(err: MysqlError | null, result: any) => {
+				`SELECT id, name, created_at, updated_at FROM categories WHERE name = ? LIMIT 1`,
+				[name],
+				(err: any | null, result: any) => {
 					if (err) reject(err.message);
-					if (
-						result !== undefined &&
-						result !== null &&
-						result !== result.length
-					) {
-						console.log(result);
-						// let category: Category = new Category(result);
+					if (result !== undefined && result !== null && result !== "") {
+						resolve(result[0]);
 					}
 				}
 			);
@@ -34,9 +29,9 @@ export default class CategoryMySQL implements CategoryRepository {
 			this._connection.query(
 				"INSERT INTO categories (id, name, created_at, updated_at) VALUES (?, ?, NOW(), NOW())",
 				[category.id, category.name],
-				(err: MysqlError | null, result: any) => {
+				(err: any | null, result: any) => {
 					if (err) reject(err.message);
-          resolve(result);
+					resolve(result);
 				}
 			);
 		});

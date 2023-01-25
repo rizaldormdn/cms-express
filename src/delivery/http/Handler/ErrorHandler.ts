@@ -6,8 +6,13 @@ export default (): Router => {
 	router.use((req: Request, res: Response) => {
     res.status(404).json({
       status: "error",
-      message: "Not Found",
-      data: null
+      message: "Page Not Found",
+      data: {
+        method: req.method,
+        url: req.url,
+        path: req.path,
+        query: req.query,
+      }
     })
   });
 

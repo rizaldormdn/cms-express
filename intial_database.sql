@@ -1,7 +1,7 @@
-CREATE DATABASE IF NOT EXISTS `cms-expressjs`;
+CREATE DATABASE IF NOT EXISTS `cmsexpressjs`;
 CREATE USER IF NOT EXISTS 'cms-expressjs'@'localhost' IDENTIFIED WITH mysql_native_password BY 'Exampledb#2023';
 GRANT ALL ON `cms-expressjs`.* TO 'cms-expressjs'@'localhost';
-USE `cms-expressjs`;
+USE `cmsexpressjs`;
 
 /*
 	Create Necesscary Table for your initial project!

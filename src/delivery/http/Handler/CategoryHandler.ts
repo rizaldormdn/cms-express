@@ -57,44 +57,9 @@ export default (repository: CategoryRepository): Router => {
 		}
 	);
 
-	router.post(
-		"/category",
-		body("uuid").isLength({ min: 3, max: 55 }), // Mengecek apakah body.name memenuhi syarat minimum dan maximum
-		async (req: Request, res: Response): Promise<void> => {
-			// Membuat variable penampung error
-			let errors: Result<ValidationError> = validationResult(req);
-
-			// Mengecek apakah terdapat error
-			if (!errors.isEmpty()) {
-				res
-					.status(400)
-					.json({
-						status: "error",
-						message: errors.array(),
-					})
-					.end();
-				return;
-			}
-
-			// let category: Category = new Category(req.body.name);
-			let category: Category = await repository.getCategory(req.body.uuid);
-
-			console.log("We got the category: " + category);
-
-			res
-				.status(200)
-				.json({
-					status: "success",
-					message: "Category successfully retrieved",
-					data: category,
-				})
-				.end();
-		}
-	);
-
 	router.get(
-		"/category/:uuid",
-		param("uuid").isLength({ min: 3, max: 55 }), // Mengecek apakah body.name memenuhi syarat minimum dan maximum
+		"/category/:name",
+		param("name").isLength({ min: 1, max: 55 }),
 		async (req: Request, res: Response): Promise<void> => {
 			// Membuat variable penampung error
 			let errors: Result<ValidationError> = validationResult(req);
@@ -112,7 +77,7 @@ export default (repository: CategoryRepository): Router => {
 			}
 
 			// let category: Category = new Category(req.body.name);
-			let category: Category = await repository.getCategory(req.body.uuid);
+			let category: Category = await repository.getCategory(req.params.name);
 
 			console.log("We got the category: " + category);
 
@@ -121,11 +86,13 @@ export default (repository: CategoryRepository): Router => {
 				.json({
 					status: "success",
 					message: "Category successfully retrieved",
-					data: category,
+					data: {
+						category,
+						params: req.params,
+					},
 				})
 				.end();
 		}
 	);
-
 	return router;
 };
