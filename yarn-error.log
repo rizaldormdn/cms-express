@@ -1,0 +1,62 @@
+Arguments: 
+  C:\Program Files\nodejs\node.exe C:\Program Files\nodejs\node_modules\yarn\bin\yarn.js add dotenv cors jest jwt express @types/express @types/jwt @types/cors @types/jest
+
+PATH: 
+  C:\Users\Mahrus\bin;C:\Program Files\Git\mingw64\bin;C:\Program Files\Git\usr\local\bin;C:\Program Files\Git\usr\bin;C:\Program Files\Git\usr\bin;C:\Program Files\Git\mingw64\bin;C:\Program Files\Git\usr\bin;C:\Users\Mahrus\bin;C:\WINDOWS\system32;C:\WINDOWS;C:\WINDOWS\System32\Wbem;C:\WINDOWS\System32\WindowsPowerShell\v1.0;C:\WINDOWS\System32\OpenSSH;C:\Users\Mahrus\AppData\Roaming\nvm;C:\Program Files\nodejs;C:\Program Files\Git\cmd;C:\Users\Mahrus\AppData\Local\Microsoft\WindowsApps;C:\Users\Mahrus\AppData\Roaming\nvm;C:\Program Files\nodejs;D:\Installed Software\Microsoft VS Code\bin;C:\Program Files\Git\usr\bin\vendor_perl;C:\Program Files\Git\usr\bin\core_perl
+
+Yarn version: 
+  1.22.19
+
+Node version: 
+  18.13.0
+
+Platform: 
+  win32 x64
+
+Trace: 
+  Error: https://registry.yarnpkg.com/@types%2fjwt: Not found
+      at params.callback [as _callback] (C:\Users\Mahrus\AppData\Roaming\nvm\v18.13.0\node_modules\yarn\lib\cli.js:66145:18)
+      at self.callback (C:\Users\Mahrus\AppData\Roaming\nvm\v18.13.0\node_modules\yarn\lib\cli.js:140890:22)
+      at Request.emit (node:events:513:28)
+      at Request.<anonymous> (C:\Users\Mahrus\AppData\Roaming\nvm\v18.13.0\node_modules\yarn\lib\cli.js:141862:10)
+      at Request.emit (node:events:513:28)
+      at IncomingMessage.<anonymous> (C:\Users\Mahrus\AppData\Roaming\nvm\v18.13.0\node_modules\yarn\lib\cli.js:141784:12)
+      at Object.onceWrapper (node:events:627:28)
+      at IncomingMessage.emit (node:events:525:35)
+      at endReadableNT (node:internal/streams/readable:1359:12)
+      at process.processTicksAndRejections (node:internal/process/task_queues:82:21)
+
+npm manifest: 
+  {
+    "name": "blog-cms-backend",
+    "version": "1.0.0",
+    "description": "",
+    "main": "dist/App.js",
+    "scripts": {
+      "test": "jest"
+    },
+    "repository": {
+      "type": "git",
+      "url": "git+https://github.com/mahrus-rohisyam/blog-cms-backend.git"
+    },
+    "keywords": [
+      "typescript",
+      "javascript",
+      "blog",
+      "cms",
+      "nodejs",
+      "express"
+    ],
+    "author": "Mahrus Sayid",
+    "license": "MIT",
+    "bugs": {
+      "url": "https://github.com/mahrus-rohisyam/blog-cms-backend/issues"
+    },
+    "homepage": "https://github.com/mahrus-rohisyam/blog-cms-backend#readme"
+  }
+
+yarn manifest: 
+  No manifest
+
+Lockfile: 
+  No lockfile
