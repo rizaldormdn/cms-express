@@ -1,0 +1,23 @@
+export default class Content {
+  private _title: string;
+  private _content: string;
+  private _excerpt: string;
+
+  constructor(title: string, content: string, excerpt: string) {
+    this._title = title;
+    this._content = content;
+    this._excerpt = excerpt;
+  }
+
+  public get title(): string {
+    return this._title;
+  }
+
+  public get content(): string {
+    return this._content;
+  }
+
+  public get excerpt(): string {
+    return this._excerpt;
+  }
+}

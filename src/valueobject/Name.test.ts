@@ -12,7 +12,7 @@ describe('name value object', () => {
   })
 
   test('full name of "John Doe" should be "John Doe"', () => {
-    expect(name.full()).toBe('John Doe')
+    expect(name.full()).toBe('John Doe') 
   })
 
   test('full name of "John" should be "John"', () => {
