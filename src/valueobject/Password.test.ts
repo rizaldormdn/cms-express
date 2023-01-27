@@ -1,56 +1,28 @@
-// import HashPassword from "./HashPassword";
-// import Password from "./Password";
-
-// describe("password hash", async () => {
-//   let password: Password = new Password("testpassword");
-//   const hashed: string = await HashPassword.hash(password.password);
-
-//   //   check password
-//   let compare: boolean = await HashPassword.passwordComppare(
-//     password.password,
-//     hashed
-//   );
-
-//   test(`if password == ""`, () => {
-//     let password: Password = new Password("");
-//     expect(password.password).toBe("password tidak boleh kosong");
-//   });
-//   test("if password != hash password", () => {
-//     expect(!compare.valueOf()).toBe(false);
-//   });
-//   test("if password == hash password", () => {
-//     expect(compare.valueOf()).toBe(true);
-//   });
-// });
-
 import Password from "./Password";
 
 describe("password value object", () => {
-  let salt = "$2b$10$WCZ6j4PLICecyCYvBvL7We";
-  let password: Password = new Password();
-  let existing: Password = new Password(salt);
+  it("can verify the right password", () => {
+    let password: Password = new Password();
 
-  existing.hash = "password";
+    password.hash("password");
 
-  test("salt should be defined", () => {
-    expect(password.salt.length).toBeDefined();
-  });
+    expect(password.verify("password")).toBeTruthy();
+  })
 
-  test("salt can contain the existing one", () => {
-    expect(existing.salt).toBe(salt);
-  });
+  it("can verify the right password with defined salt", () => {
+    let salt = "$2b$10$WCZ6j4PLICecyCYvBvL7We";
+    let password: Password = new Password(salt);
 
-  test("hash should be defined", () => {
-    password.hash = "password";
+    password.hash("password");
 
-    expect(password.hash).toBeDefined();
-  });
+    expect(password.verify("password")).toBeTruthy();
+  })
 
-  it("can verify the existing password", () => {
-    let other: Password = new Password(salt);
+  it("can verify the wrong password", () => {
+    let password: Password = new Password();
 
-    other.hash = "password";
+    password.hash("password");
 
-    expect(existing.verify("password")).toBeTruthy();
-  });
+    expect(password.verify("wrongpassword")).toBeFalsy();
+  })
 });
