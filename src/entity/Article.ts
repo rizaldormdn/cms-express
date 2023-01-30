@@ -1,20 +1,7 @@
 import Category from "./Category";
-
-type Content = {
-  title: string;
-  content: string;
-  excerpt: string;
-  image: string;
-};
-
-type Author = {
-  name: string;
-};
-
-type ArticleDate = {
-  createdAt: Date;
-  updatedAt: Date;
-};
+import Author from "../aggregate/Author";
+import ArticleDate from "../valueobject/ArticleDate";
+import Content from "../valueobject/Content";
 
 export default class Article {
   public _slug: string;
@@ -24,18 +11,12 @@ export default class Article {
   public _isPublished: boolean;
   public _date: ArticleDate;
 
-  constructor(
-    slug: string,
-    content: Content,
-    author: Author,
-    category: Category,
-    date: ArticleDate
-  ) {
-    this._slug = slug;
+  constructor(content: Content, author: Author, category: Category) {
     this._content = content;
     this._author = author;
     this._category = category;
-    this._date = date;
+    this._slug = this.generateSlug(content._title);
+    this._date = new Date();
     this._isPublished = false;
   }
 
@@ -64,11 +45,15 @@ export default class Article {
   }
 
   public generateSlug(title: string): string {
-    let slug = title.replace(/\s+/g, "-");
+    let timestamp = new Date().getTime().toString();
+    let randomString =
+      Math.random().toString(36).substring(2, 15) +
+      Math.random().toString(36).substring(2, 15);
+    let slug =
+      title.replace(/\s+/g, "-") + "-" + timestamp + "-" + randomString;
     slug = slug.toLowerCase();
     slug = slug.replace(/[^a-z0-9-]/g, "");
-    this._slug = slug;
-    return this._slug;
+    return slug;
   }
 
   /* 

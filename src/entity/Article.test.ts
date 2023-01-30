@@ -1,44 +1,47 @@
 import Article from "./Article";
+import Author from "../aggregate/Author";
 import Category from "./Category";
+import Content from "../valueobject/Content";
 
 describe("Article", () => {
+  let content: Content;
+  let author: Author;
+  let category: Category;
   let article: Article;
-  let category = new Category("test-category");
-  let content = {
-    title: "Test Title",
-    content: "Test Content",
-    excerpt: "Test Excerpt",
-    image: "test-image.jpg",
-  };
-  let author = { name: "Test Author" };
-  let date = { createdAt: new Date(), updatedAt: new Date() };
 
   beforeEach(() => {
-    article = new Article("test-slug", content, author, category, date);
+    content = new Content("This is Title", "This is the content");
+    author = new Author("John Doe", "johndoe@email.com");
+    category = new Category("Technology");
+    article = new Article(content, author, category);
   });
 
-  test("generateSlug()", () => {
-    let title = "Test Title";
-    let expectedSlug = "test-title";
-    expect(article.generateSlug(title)).toBe(expectedSlug);
-    expect(article.slug).toBe(expectedSlug);
+  test("should have correct slug", () => {
+    expect(article.slug).toMatch(/^this-is-title-\w{20}$/);
   });
 
-  test("relatedArticles()", () => {
-    // Code Later
+  test("should have correct content", () => {
+    expect(article.content).toBe(content);
   });
 
-  test("publish()", () => {
+  test("should have correct author", () => {
+    expect(article.author).toBe(author);
+  });
+
+  test("should have correct category", () => {
+    expect(article.category).toBe(category);
+  });
+
+  test("should have correct isPublished value", () => {
     expect(article.isPublished).toBe(false);
+  });
+
+  test("should be able to change isPublished value to true", () => {
     article.publish();
     expect(article.isPublished).toBe(true);
   });
 
-  test("getter", () => {
-    expect(article.slug).toBe("test-slug");
-    expect(article.content).toBe(content);
-    expect(article.author).toBe(author);
-    expect(article.category).toBe(category);
-    expect(article.date).toBe(date);
+  test("should have a date", () => {
+    expect(article.date).toBeInstanceOf(Date);
   });
 });

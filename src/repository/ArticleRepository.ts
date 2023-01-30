@@ -1,8 +1,5 @@
 import Article from "../entity/Article";
-
-type Author = {
-  name: string;
-};
+import Author from "../aggregate/Author";
 
 export default interface ArticleRepository {
   getArticles(author: Author): Promise<Article[]>;
