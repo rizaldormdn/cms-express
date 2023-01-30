@@ -12,6 +12,12 @@ export default class Article {
   public _date: ArticleDate;
 
   constructor(content: Content, author: Author, category: Category) {
+    if (!content) {
+      throw new Error("Content is required");
+    }
+    if (!author) {
+      throw new Error("Author is required");
+    }
     this._content = content;
     this._author = author;
     this._category = category;
