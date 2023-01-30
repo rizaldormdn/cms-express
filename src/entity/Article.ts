@@ -2,27 +2,39 @@ import Category from "./Category";
 import Author from "../aggregate/Author";
 import ArticleDate from "../valueobject/ArticleDate";
 import Content from "../valueobject/Content";
+import Image from "./Image";
+
+export type Articles = Article[];
 
 export default class Article {
   public _slug: string;
   public _content: Content;
   public _author: Author;
   public _category: Category;
+  public _image: Image;
   public _isPublished: boolean;
   public _date: ArticleDate;
 
-  constructor(content: Content, author: Author, category: Category) {
+  constructor(
+    content: Content,
+    author: Author,
+    category: Category,
+    image: Image
+  ) {
     if (!content) {
       throw new Error("Content is required");
     }
     if (!author) {
       throw new Error("Author is required");
     }
+    if (this._date === "") {
+      new ArticleDate();
+    }
     this._content = content;
     this._author = author;
     this._category = category;
+    this._image = image;
     this._slug = this.generateSlug(content._title);
-    this._date = new Date();
     this._isPublished = false;
   }
 
@@ -42,6 +54,10 @@ export default class Article {
     return this._category;
   }
 
+  get image(): Category {
+    return this._image;
+  }
+
   get isPublished(): boolean {
     return this._isPublished;
   }
@@ -51,22 +67,20 @@ export default class Article {
   }
 
   public generateSlug(title: string): string {
-    let timestamp = new Date().getTime().toString();
-    let randomString =
-      Math.random().toString(36).substring(2, 15) +
-      Math.random().toString(36).substring(2, 15);
-    let slug =
-      title.replace(/\s+/g, "-") + "-" + timestamp + "-" + randomString;
-    slug = slug.toLowerCase();
-    slug = slug.replace(/[^a-z0-9-]/g, "");
-    return slug;
+    return (
+      title.toLowerCase().replace(/\s+/g, "-") + btoa(Date.now().toString())
+    );
   }
 
-  /* 
-  public relatedArticles(): void {
-    Code Later
+  public static allArticles: Articles = [];
+
+  public relatedArticles(): Articles {
+    return Article.allArticles
+      .filter(
+        (article) => article.category === this.category && article !== this
+      )
+      .slice(0, 4);
   }
-  */
 
   public publish(): void {
     this._isPublished = true;
