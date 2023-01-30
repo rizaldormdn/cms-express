@@ -54,7 +54,7 @@ export default class Article {
     return this._category;
   }
 
-  get image(): Category {
+  get image(): Image {
     return this._image;
   }
 
