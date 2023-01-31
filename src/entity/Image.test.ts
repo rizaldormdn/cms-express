@@ -5,12 +5,11 @@ describe("Image", () => {
 let image: Image;
 const url = "https://example.com/image.jpg";
 const alt = "Example image";
-const meta = { size: 100 };
-const dimension = { size: 200 };
-const thumbnails = { size: 50 };
+const dimension = ""
+const thumbnails = ""
 
 beforeEach(() => {
-image = new Image(url, alt, meta, dimension, thumbnails);
+image = new Image(url, alt, dimension, thumbnails);
 });
 
 it("should have a unique id", () => {
@@ -24,10 +23,6 @@ expect(image.url).toBe(url);
 
 it("should have the correct alt text", () => {
 expect(image.alt).toBe(alt);
-});
-
-it("should have the correct meta", () => {
-expect(image.meta).toEqual(meta);
 });
 
 it("should have the correct dimension", () => {

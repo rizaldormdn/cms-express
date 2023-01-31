@@ -1,31 +1,26 @@
-import { uuid } from "uuidv4"
-type ImageMeta={
-    size: number
-}
-type Dimension={
-    size: number
-}
-type Thumbnails={
-    size: number
-}
+import { uuid } from "uuidv4";
+import Thumbnail from "./Thumbnail";
+import Dimension from "../valueobject/Dimension"
 
 export default class Image {
 	private _id: string;
 	private _url: string;
 	private _alt: string;
-	private _meta: ImageMeta;
 	private _dimension: Dimension;
-	private _thumbnails: Thumbnails;
+	private _thumbnails: Thumbnail;
 
-
-
-	constructor(url: string, alt: string, meta: ImageMeta, dimension: Dimension, thumbnails: Thumbnails) {
+	constructor(url: string, alt: string, dimension: Dimension, thumbnails: Thumbnail) {
 		this._id = uuid();
 		this._url = url;
 		this._alt = alt;
-		this._meta = meta;
 		this._dimension = dimension;
+		if (dimension === "") {
+			throw new Error("Dimension cannot be empty");
+		  }
 		this._thumbnails = thumbnails;
+		if (thumbnails === "") {
+			throw new Error("Thumbnail cannot be empty");
+		  }
 	}
 
 	get id(): string {
@@ -40,15 +35,11 @@ export default class Image {
 		return this._alt;
 	}
 
-    get meta(): ImageMeta{
-        return this._meta;
-    }
-
     get dimension(): Dimension{
         return this._dimension;
     }
 
-    get thumbnails(): Thumbnails{
+    get thumbnails(): Thumbnail{
         return this._thumbnails;
     }
 }
