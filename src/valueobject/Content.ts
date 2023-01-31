@@ -4,13 +4,18 @@ export default class Content {
   private _excerpt: string;
 
   constructor(title: string, content: string, excerpt: string) {
-    if (title === "" || content === "" || excerpt === "") {
-      throw new Error("this part can not be empty");
-    }
-
     this._title = title;
+    if (title === "") {
+      throw new Error("title cannot be empty");
+    }
     this._content = content;
+    if (content === "") {
+      throw new Error("content cannot be empty");
+    }
     this._excerpt = excerpt;
+    if (excerpt === "") {
+      throw new Error("excerpt cannot be empty");
+    }
   }
 
   public get title(): string {
