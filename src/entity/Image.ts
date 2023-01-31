@@ -16,11 +16,11 @@ export default class Image {
 		this._dimension = dimension;
 		if (dimension === "") {
 			throw new Error("Dimension cannot be empty");
-		  }
+		}
 		this._thumbnails = thumbnails;
 		if (thumbnails === "") {
 			throw new Error("Thumbnail cannot be empty");
-		  }
+		}
 	}
 
 	get id(): string {
