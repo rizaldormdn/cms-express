@@ -1,7 +1,7 @@
 import Content from "./Content";
 
 describe("content value object", () => {
-  let content: Content = new Content("Jalan-alan", "ke pantai", "Liburan");
+  let content: Content = new Content("Jalan-jalan", "ke pantai", "Liburan");
 
   test('title of "Jalan-jalan" should be "Jalan-jalan"', () => {
     expect(content.title).toBe("Jalan-jalan");
