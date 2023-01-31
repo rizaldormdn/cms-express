@@ -1,0 +1,9 @@
+
+import Image  from '../entity/Article'
+import ThumbnailCategory from '../entity/ThumbnailCategory'
+
+export interface ThumbnailCategoryRepository{
+    getThumbnailCategories():Promise<Image>
+    saveThumbnailCategory(thumbnailCategory:ThumbnailCategory):Promise<Image>
+    deleteThumbnailCategory(uuid:string):Promise<void>
+}
