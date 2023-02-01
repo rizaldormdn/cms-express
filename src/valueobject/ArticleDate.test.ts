@@ -1,6 +1,5 @@
 import ArticleDate from './ArticleDate'
 
-<<<<<<< HEAD
 describe('vlaue object ArticleDate', () => {
      const articleDate: ArticleDate = new ArticleDate()
 
@@ -24,23 +23,5 @@ describe('vlaue object ArticleDate', () => {
           const updatedAt = new Date('2023-01-01')
           articleDate.update(updatedAt)
           expect(articleDate.updatedAt).toEqual(updatedAt)
-=======
-describe('ArticleDate Value object', () => {
-     let createdAt = new Date()
-     let updatedAt = new Date()
-     let articleDate: ArticleDate = new ArticleDate(createdAt, updatedAt)
-     
-     test('check createdAt property', () => {
-          expect(articleDate.createdAt.getTime()).toBe(createdAt.getTime())
-     })
-     test('check updatedAt property', () => {
-          expect(articleDate.updatedAt.getTime()).toBe(updatedAt.getTime())
-     })
-     test('check createdAt getter', () => {
-          expect(articleDate.createdAt).toBe(createdAt)
-     })
-     test('check updatedAt getter', () => {
-          expect(articleDate.updatedAt).toBe(updatedAt)
->>>>>>> a97dbfb09ec3c60ad8275b4edb05a98036c71235
      })
 })
