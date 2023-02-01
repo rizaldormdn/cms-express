@@ -12,7 +12,6 @@ export default class Email {
     this._domain = emailParts[emailParts.length - 1];
   }
 
-
   public get local(): string {
     return this._local;
   }

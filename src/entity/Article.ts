@@ -1,25 +1,25 @@
 import Category from "./Category";
-import Author from "../aggregate/Author";
 import ArticleDate from "../valueobject/ArticleDate";
 import Content from "../valueobject/Content";
 import Image from "./Image";
 
-export type Articles = Article[];
-
 export default class Article {
-  public _slug: string;
-  public _content: Content;
-  public _author: Author;
-  public _category: Category;
-  public _image: Image;
-  public _isPublished: boolean;
-  public _date: ArticleDate;
+  private _slug: string;
+  private _content: Content;
+  private _author: string;
+  private _category: Category;
+  private _image: Image;
+  private _isPublished: boolean;
+  private _date: ArticleDate;
+  private _relatedArticles: Articles;
 
   constructor(
     content: Content,
-    author: Author,
+    author: string,
     category: Category,
-    image: Image
+    image: Image,
+    date: ArticleDate,
+    relatedArticles: Articles
   ) {
     if (!content) {
       throw new Error("Content is required");
@@ -27,62 +27,63 @@ export default class Article {
     if (!author) {
       throw new Error("Author is required");
     }
-    if (this._date === "") {
+    if (!date) {
       new ArticleDate();
     }
+    this._slug = this.generateSlug(content.title);
     this._content = content;
     this._author = author;
     this._category = category;
     this._image = image;
-    this._slug = this.generateSlug(content._title);
     this._isPublished = false;
+    this._date = new ArticleDate();
+    if (!date) {
+      this._date = date;
+    }
+    this._relatedArticles = relatedArticles;
   }
 
-  get slug(): string {
-    return this._slug;
-  }
-
-  get content(): Content {
-    return this._content;
-  }
-
-  get author(): Author {
-    return this._author;
-  }
-
-  get category(): Category {
-    return this._category;
-  }
-
-  get image(): Image {
-    return this._image;
-  }
-
-  get isPublished(): boolean {
-    return this._isPublished;
-  }
-
-  get date(): ArticleDate {
-    return this._date;
-  }
-
-  public generateSlug(title: string): string {
+  private generateSlug(title: string): string {
     return (
-      title.toLowerCase().replace(/\s+/g, "-") + btoa(Date.now().toString())
+      title.toLowerCase().replace(/\s+/g, "-") + Buffer.from(Date.now().toString(), 'base64')
     );
   }
 
-  public static allArticles: Articles = [];
+  public get slug(): string {
+    return this._slug;
+  }
+
+  public get content(): Content {
+    return this._content;
+  }
+
+  public get author(): string {
+    return this._author;
+  }
+
+  public get category(): Category {
+    return this._category;
+  }
+
+  public get image(): Image {
+    return this._image;
+  }
+
+  public get isPublished(): boolean {
+    return this._isPublished;
+  }
+
+  public get date(): ArticleDate {
+    return this._date;
+  }
 
   public relatedArticles(): Articles {
-    return Article.allArticles
-      .filter(
-        (article) => article.category === this.category && article !== this
-      )
-      .slice(0, 4);
+    return this._relatedArticles.slice(0, 4)
   }
 
   public publish(): void {
     this._isPublished = true;
   }
 }
+
+export type Articles = Article[];
