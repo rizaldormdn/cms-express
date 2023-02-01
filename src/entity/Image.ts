@@ -12,15 +12,18 @@ export default class Image {
 	constructor(url: string, alt: string, dimension: Dimension, thumbnails: Thumbnail) {
 		this._id = uuid();
 		this._url = url;
+		if (url === "") {
+			throw new Error("Url cannot be empty");
+		}
 		this._alt = alt;
+		if (alt === "") {
+			throw new Error("Alt cannot be empty");
+		}
 		this._dimension = dimension;
 		if (dimension === "") {
 			throw new Error("Dimension cannot be empty");
 		}
 		this._thumbnails = thumbnails;
-		if (thumbnails === "") {
-			throw new Error("Thumbnail cannot be empty");
-		}
 	}
 
 	get id(): string {
