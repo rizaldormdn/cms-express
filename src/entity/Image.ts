@@ -10,19 +10,19 @@ export default class Image {
 	private _thumbnails: Thumbnail;
 
 	constructor(url: string, alt: string, dimension: Dimension, thumbnails: Thumbnail) {
-		this._id = uuid();
-		this._url = url;
-		if (url === "") {
+		if(url === "") {
 			throw new Error("Url cannot be empty");
 		}
-		this._alt = alt;
-		if (alt === "") {
+		if(alt === "") {
 			throw new Error("Alt cannot be empty");
 		}
-		this._dimension = dimension;
-		if (dimension === "") {
+		if(dimension === "") {
 			throw new Error("Dimension cannot be empty");
 		}
+		this._url = url;
+		this._alt = alt;
+		this._dimension = dimension;
+		this._id = uuid();
 		this._thumbnails = thumbnails;
 	}
 
