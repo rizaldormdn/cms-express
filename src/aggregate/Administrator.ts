@@ -1,11 +1,6 @@
 import Author from "./Author";
 import User from "./User";
 import { Articles } from "../entity/Article";
-import Email from "../valueobject/Email";
-import Name from "../valueobject/Name";
-import Password from "../valueobject/Password";
-
-export type Authors = Authors[];
 
 class Administator {
   private _authors: Authors;
@@ -21,3 +16,5 @@ class Administator {
 }
 
 export default Administator;
+
+export type Authors = Authors[];

@@ -45,7 +45,8 @@ export default class Article {
 
   private generateSlug(title: string): string {
     return (
-      title.toLowerCase().replace(/\s+/g, "-") + Buffer.from(Date.now().toString(), 'base64')
+      title.toLowerCase().replace(/\s+/g, "-") +
+      Buffer.from(Date.now().toString(), "base64")
     );
   }
 
@@ -78,7 +79,7 @@ export default class Article {
   }
 
   public relatedArticles(): Articles {
-    return this._relatedArticles.slice(0, 4)
+    return this._relatedArticles.slice(0, 4);
   }
 
   public publish(): void {

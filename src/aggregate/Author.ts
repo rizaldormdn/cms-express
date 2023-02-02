@@ -8,6 +8,8 @@ import Email from "../valueobject/Email";
 import Name from "../valueobject/Name";
 import Password from "../valueobject/Password";
 
+import { Authors } from "./Administrator";
+
 class Author extends User {
   private _articles: Articles;
   constructor(
@@ -22,7 +24,7 @@ class Author extends User {
 
   public createArticle(
     content: Content,
-    author: string,
+    author: Authors | any,
     image: Image,
     category: Category,
     date: ArticleDate,
