@@ -4,12 +4,12 @@ export default class Password {
   private _salt: string;
   private _hashedPassword: string;
 
-  constructor(salt: string = "", hash: string = "") {
+  constructor(salt: string = "", hashedPassword: string = "") {
     this._salt = salt;
     if (this._salt === "") {
       this._salt = bcrypt.genSaltSync();
     }
-    this._hashedPassword = hash;
+    this._hashedPassword = hashedPassword;
   }
 
   public hash(password: string) {
