@@ -1,10 +1,10 @@
 import { Connection } from "mysql2";
-import Administrator from "../../../aggregate/Administrator";
-import Author from "../../../aggregate/Author";
-import * as UserRepositoryDomain from "../../../repository/UserRepository";
-import Email from "../../../valueobject/Email";
-import Name from "../../../valueobject/Name";
-import Password from "../../../valueobject/Password";
+import Administrator from "../../../domain/aggregate/Administrator";
+import Author from "../../../domain/aggregate/Author";
+import * as UserRepositoryDomain from "../../../domain/repository/UserRepository";
+import Email from "../../../domain/valueobject/Email";
+import Name from "../../../domain/valueobject/Name";
+import Password from "../../../domain/valueobject/Password";
 
 export default class UserRepository implements UserRepositoryDomain.default {
 	private _connection: Connection;

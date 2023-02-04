@@ -1,7 +1,7 @@
 import mysql, { Connection } from "mysql2";
 import sinon, { SinonMock } from "sinon";
-import * as UserRepositoryDomain from "../../../repository/UserRepository";
-import Email from "../../../valueobject/Email";
+import * as UserRepositoryDomain from "../../../domain/repository/UserRepository";
+import Email from "../../../domain/valueobject/Email";
 import UserRepository from "./UserRepository";
 
 describe("User Repository MySQL", () => {
