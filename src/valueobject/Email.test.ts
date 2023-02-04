@@ -14,4 +14,12 @@ describe('email value object', () => {
   test('email of "test@example.com" should be "test@example.com"', () => {
     expect(email.string()).toBe('test@example.com');
   })
+
+  it('should return an error for an invalid email', () => {
+    let invalidEmails: string[] = ['', 'test.example.com', 'test@example']
+
+    for (let invalidEmail of invalidEmails) {
+      expect(() => new Email(invalidEmail)).toThrowError()
+    }
+  })
 })

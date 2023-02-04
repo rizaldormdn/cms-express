@@ -1,9 +1,12 @@
+
+import * as EmailValidator from 'email-validator';
+
 export default class Email {
   private _local: string;
   private _domain: string;
 
   constructor(email: string) {
-    if (email.length < 7 || !email.includes("@") || !email.includes(".")) {
+    if (!EmailValidator.validate(email)) {
       throw new Error("email is invalid");
     }
 
