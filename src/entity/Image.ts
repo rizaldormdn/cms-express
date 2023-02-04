@@ -45,3 +45,4 @@ export default class Image {
 	}
 }
 
+export type Images = Image[]
