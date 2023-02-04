@@ -1,0 +1,2 @@
+INSERT INTO `users` (email, first_name, last_name, salt, hashed_password, is_administrator)
+VALUES ('admin@example.com', 'Admin', '', '$2b$10$z1e0ySIYbA/5FXNzZy.Qge', '$2b$10$z1e0ySIYbA/5FXNzZy.Qgefti4GC8YwobSbO81EfD9JTuX/X1J1Xu', true);

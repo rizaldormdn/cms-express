@@ -1,5 +1,5 @@
 import { Connection } from "mysql2";
-import { CategoryRepository } from "../../repository/CategoryRepository";
+import { CategoryRepository } from "../../../repository/CategoryRepository";
 import Category from "../../entity/Category";
 
 export default class CategoryMySQL implements CategoryRepository {

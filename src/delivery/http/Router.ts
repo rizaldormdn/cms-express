@@ -2,7 +2,7 @@ import { Router } from 'express';
 import PingHandler from './Handler/PingHandler';
 import CategoryHandler from './Handler/CategoryHandler';
 import { Connection } from 'mysql2';
-import CategoryMySQL from '../../infrastructure/database/CategoryMySQL';
+import CategoryMySQL from '../../infrastructure/database/mysql/CategoryRepository';
 import ErrorHandler from './Handler/ErrorHandler';
 
 export default (connection: Connection): Router => {

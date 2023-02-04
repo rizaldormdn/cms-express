@@ -1,5 +1,5 @@
 import { Request, Response, Router } from "express";
-import CategoryMySQL from "../../../infrastructure/database/CategoryMySQL";
+import CategoryMySQL from "../../../infrastructure/database/mysql/CategoryRepository";
 import { CategoryRepository } from "../../../repository/CategoryRepository";
 import { body } from "express-validator";
 import {
