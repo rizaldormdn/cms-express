@@ -1,7 +1,7 @@
 {
 	"name": "blog-cms-backend",
 	"version": "1.0.0",
-	"description": "CMS Backend System for Blog Created for Salt Academy Project Collaboration by it's student.",
+	"description": "CMS Backend System for Blog. Created for Salt Academy's project collaboration with its student.",
 	"main": "dist/App.js",
 	"scripts": {
 		"test": "jest",
