@@ -6,41 +6,33 @@ import Image from "./Image";
 export default class Article {
   private _slug: string;
   private _content: Content;
+  private _image: Image;
   private _author: string;
   private _category: Category;
-  private _image: Image;
+  private _relatedArticles: Articles;
   private _isPublished: boolean;
   private _date: ArticleDate;
-  private _relatedArticles: Articles;
 
   constructor(
     content: Content,
+    image: Image,
     author: string,
     category: Category,
-    image: Image,
-    date: ArticleDate,
-    relatedArticles: Articles
+    relatedArticles: Articles,
+    date: ArticleDate
   ) {
-    if (!content) {
-      throw new Error("Content is required");
+    if (author === "") {
+      throw new Error("author is required");
     }
-    if (!author) {
-      throw new Error("Author is required");
-    }
-    if (!date) {
-      new ArticleDate();
-    }
+
     this._slug = this.generateSlug(content.title);
     this._content = content;
+    this._image = image;
     this._author = author;
     this._category = category;
-    this._image = image;
-    this._isPublished = false;
-    this._date = new ArticleDate();
-    if (!date) {
-      this._date = date;
-    }
     this._relatedArticles = relatedArticles;
+    this._isPublished = false;
+    this._date = date
   }
 
   private generateSlug(title: string): string {
@@ -58,6 +50,10 @@ export default class Article {
     return this._content;
   }
 
+  public get image(): Image {
+    return this._image;
+  }
+
   public get author(): string {
     return this._author;
   }
@@ -66,8 +62,8 @@ export default class Article {
     return this._category;
   }
 
-  public get image(): Image {
-    return this._image;
+  public get relatedArticles(): Articles {
+    return this._relatedArticles.slice(0, 4);
   }
 
   public get isPublished(): boolean {
@@ -76,10 +72,6 @@ export default class Article {
 
   public get date(): ArticleDate {
     return this._date;
-  }
-
-  public relatedArticles(): Articles {
-    return this._relatedArticles.slice(0, 4);
   }
 
   public publish(): void {
