@@ -21,7 +21,15 @@ export default class User {
     return this._name;
   }
 
+  public changeName(name: Name) {
+    this._name = name;
+  }
+
   public get password(): Password {
     return this._password;
+  }
+
+  public updatePassword(password: Password) {
+    this._password = password;
   }
 }

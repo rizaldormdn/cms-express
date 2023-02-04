@@ -40,6 +40,10 @@ export default class UserRepository implements UserRepositoryDomain.default {
 		return new Promise<void>(() => {});
 	}
 
+	public updateAdministrator(administrator: Administrator): Promise<void> {
+		return new Promise<void>(() => {});
+	}
+
 	public updateAuthor(author: Author): Promise<void> {
 		return new Promise<void>(() => {});
 	}

@@ -33,7 +33,24 @@ describe("aggregate user", () => {
     expect(user.name.full()).toBe("John Doe");
   });
 
+  it("should change name", () => {
+    let newName: Name = new Name("John", "Cena")
+
+    user.changeName(newName);
+
+    expect(user.name.full()).toBe("John Cena")
+  })
+
   it("should have password", () => {
     expect(user.password).toBe(password);
+  })
+
+  it("should change password", () => {
+    let newPassword: Password = new Password()
+
+    newPassword.hash("password123")
+    user.updatePassword(newPassword)
+
+    expect(user.password.verify("password123")).toBeTruthy()
   })
 });
