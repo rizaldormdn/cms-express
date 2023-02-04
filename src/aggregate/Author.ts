@@ -8,43 +8,37 @@ import Email from "../valueobject/Email";
 import Name from "../valueobject/Name";
 import Password from "../valueobject/Password";
 
-import { Authors } from "./Administrator";
-
-class Author extends User {
+export default class Author extends User {
   private _articles: Articles;
+
   constructor(
-    articles: Articles,
     email: Email,
     name: Name,
-    password: Password
+    password: Password,
+    articles: Articles,
   ) {
     super(email, name, password);
+    
     this._articles = articles;
+  }
+
+  public get articles(): Articles {
+    return this._articles;
   }
 
   public createArticle(
     content: Content,
-    author: Authors | any,
     image: Image,
     category: Category,
-    date: ArticleDate,
-    relatedArticles: Articles
   ): Article {
-    let article = new Article(
-      content,
-      author,
-      category,
-      image,
-      date,
-      relatedArticles
-    );
-    return article;
+    let article = new Article(content, image, super.name.full(), category, [], new ArticleDate())
+
+    this._articles.push(article)
+
+    return article
   }
 
   public createCategory(name: string): Category {
-    let category: Category = new Category(name);
-    return category;
+    return new Category(name, []);
   }
 }
-
-export default Author;

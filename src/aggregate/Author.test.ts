@@ -1,39 +1,35 @@
 import Author from "./Author";
-import Article, { Articles } from "../entity/Article";
+import Article from "../entity/Article";
 import Email from "../valueobject/Email";
 import Name from "../valueobject/Name";
 import Password from "../valueobject/Password";
-
 import Content from "../valueobject/Content";
 import Category from "../entity/Category";
 import Image from "../entity/Image";
-import ArticleDate from "../valueobject/ArticleDate";
-
 import Dimension from "../valueobject/Dimension";
-import Thumbnail from "../entity/Thumbnail";
 
-import ThumbnailCategory from "../entity/ThumbnailCategory";
+describe("aggregate author", () => {
+  let email: Email = new Email("test@example.com");
+  let name: Name = new Name("John Doe");
+  let password: Password = new Password("$2b$10$WCZ6j4PLICecyCYvBvL7We");
+  let author: Author = new Author(email, name, password, []);
 
-describe("email, name, password value object", () => {
-  let dimension = new Dimension(20, 20);
+  it("should have articles", () => {
+    expect(author.articles).toBe([])
+  })
 
-  let thumbnailCategory = new ThumbnailCategory("ThumbnailCategory", dimension);
+  it("should create an article", () => {
+    let content = new Content("This is title", "This is content", "This is excerpt")
+    let dimension = new Dimension(1200, 630)
+    let image = new Image("http://example.com/image.jpg", "A sample image", dimension, [])
+    let category = new Category("Default", [])
+    let article: Article = author.createArticle(content, image, category)
 
-  let thumbnail = new Thumbnail("url/example", thumbnailCategory);
+    expect(article).toBeDefined()
+    expect(author.articles).toContain(article)
+  })
 
-  let content = new Content("title", "content", "excerp");
-  let category = new Category("name");
-  let image = new Image("url/example/image", "image", dimension, thumbnail);
-
-  let date = new ArticleDate();
-
-  let article = new Article(content, "author", category, image, date);
-  let email = new Email("test@example.com");
-  let name = new Name("John Doe");
-  let password = new Password("$2b$10$WCZ6j4PLICecyCYvBvL7We");
-  let author = new Author(article, email, name, password);
-
-  test('email local of "test" should be "test"', () => {
-    expect(author.email.local).toBe("test");
-  });
+  it("should create a category", () => {
+    expect(author.createCategory("Default")).toBeDefined()
+  })
 });

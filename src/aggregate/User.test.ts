@@ -3,7 +3,7 @@ import Email from "../valueobject/Email";
 import Name from "../valueobject/Name";
 import Password from "../valueobject/Password";
 
-describe("email, name, password value object", () => {
+describe("aggregate user", () => {
   let email: Email = new Email("test@example.com");
   let name: Name = new Name("John Doe");
   let password: Password = new Password("$2b$10$WCZ6j4PLICecyCYvBvL7We");
