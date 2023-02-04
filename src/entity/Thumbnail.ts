@@ -28,3 +28,5 @@ export default class Thumbnail {
     return this._category;
   }
 }
+
+export type Thumbnails = Thumbnail[]
