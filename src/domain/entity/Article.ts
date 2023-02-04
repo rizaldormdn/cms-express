@@ -14,6 +14,7 @@ export default class Article {
   private _date: ArticleDate;
 
   constructor(
+    slug: string,
     content: Content,
     image: Image,
     author: string,
@@ -25,7 +26,10 @@ export default class Article {
       throw new Error("author is required");
     }
 
-    this._slug = this.generateSlug(content.title);
+    this._slug = slug
+    if (this._slug === "") {
+      this._slug = this.generateSlug(content.title);
+    }
     this._content = content;
     this._image = image;
     this._author = author;

@@ -11,7 +11,7 @@ describe("Article", () => {
   let author = "John Doe"
   let relatedArticles: Articles = []
   let date = new ArticleDate()
-  let article = new Article(content, image, author, [], relatedArticles, date);
+  let article = new Article("", content, image, author, [], relatedArticles, date);
 
   it("should have a slug based on the article title", () => {
     expect(article.slug).toMatch(/^this-is-title-[a-zA-Z0-9]+/);
@@ -37,7 +37,7 @@ describe("Article", () => {
   });
 
   it("should throw an error if author is missing", () => {
-    expect(() => new Article(content, image, "", [], [], new ArticleDate())).toThrow(
+    expect(() => new Article("", content, image, "", [], [], new ArticleDate())).toThrow(
       "author is required"
     );
   });
