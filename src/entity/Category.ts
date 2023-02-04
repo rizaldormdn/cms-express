@@ -1,40 +1,17 @@
 import { v4 as uuidv4 } from "uuid";
-/* since the class is not exist, i create type object fist
-	after that i can easily change it into the right class
-
-	import Article from "./Article";
-*/
-
-type Article = {
-  slug: string;
-  content: {
-    title: string;
-    excerpt: string;
-    content: string;
-  };
-  author: string;
-  category: Category;
-  image: string;
-  isPublished: boolean;
-  date: {
-    createdAt: Date;
-    updatedAt: Date;
-  };
-};
-
-/* the type object above is only for example purposes
-	until class of Article merged to master
-*/
+import Article, { Articles } from "./Article";
 
 export default class Category {
   private _id: string;
   private _name: string;
-  private _articles: Article[] = [];
+  private _articles: Articles;
 
-  constructor(name: string) {
+  constructor(name: string, articles: Articles) {
     if (name === "") throw new Error("name cannot be empty");
+
     this._id = uuidv4();
     this._name = name;
+    this._articles = articles;
   }
 
   get id(): string {
@@ -45,11 +22,11 @@ export default class Category {
     return this._name;
   }
 
-  addArticle(article: Article): void {
-    this._articles.push(article);
+  get articles(): Articles {
+    return this._articles;
   }
 
-  get articles(): Article[] {
-    return this._articles;
+  addArticle(article: Article): void {
+    this._articles.push(article);
   }
 }
