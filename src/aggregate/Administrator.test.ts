@@ -12,8 +12,7 @@ describe("Administator", () => {
 
   it("should create an author", () => {
     let authorEmail: Email = new Email("author@example.com");
-    let user: User = new User(authorEmail, name, password);
     
-    expect(administator.createAuthor(user)).toBeDefined()
+    expect(administator.addAuthor(authorEmail, name)).toBeDefined()
   })
 })

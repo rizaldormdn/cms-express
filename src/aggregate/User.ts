@@ -3,9 +3,9 @@ import Name from "../valueobject/Name";
 import Password from "../valueobject/Password";
 
 export default class User {
-  private _email: Email;
-  private _name: Name;
-  private _password: Password;
+  protected _email: Email;
+  protected _name: Name;
+  protected _password: Password;
 
   constructor(email: Email, name: Name, password: Password) {
     this._email = email;

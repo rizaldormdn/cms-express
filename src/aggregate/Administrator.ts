@@ -13,7 +13,7 @@ export default class Administrator extends User {
     super(email, name, password);
   }
 
-  public createAuthor(user: User): Author {
-    return new Author(user.email, user.name, user.password, []);
+  public addAuthor(email: Email, name: Name): Author {
+    return new Author(email, name, new Password(), []);
   }
 }

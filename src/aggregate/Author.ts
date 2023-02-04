@@ -26,7 +26,11 @@ export default class Author extends User {
     return this._articles;
   }
 
-  public createArticle(
+  public addPassword(password: Password) {
+    super._password = password;
+  }
+
+  public addArticle(
     content: Content,
     image: Image,
     tags: Tags,
