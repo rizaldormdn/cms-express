@@ -1,6 +1,6 @@
-import Category from "./Category";
 import ArticleDate from "../valueobject/ArticleDate";
 import Content from "../valueobject/Content";
+import { Tags } from "../valueobject/Tag";
 import Image from "./Image";
 
 export default class Article {
@@ -8,7 +8,7 @@ export default class Article {
   private _content: Content;
   private _image: Image;
   private _author: string;
-  private _category: Category;
+  private _tags: Tags;
   private _relatedArticles: Articles;
   private _isPublished: boolean;
   private _date: ArticleDate;
@@ -17,7 +17,7 @@ export default class Article {
     content: Content,
     image: Image,
     author: string,
-    category: Category,
+    tags: Tags,
     relatedArticles: Articles,
     date: ArticleDate
   ) {
@@ -29,7 +29,7 @@ export default class Article {
     this._content = content;
     this._image = image;
     this._author = author;
-    this._category = category;
+    this._tags = tags;
     this._relatedArticles = relatedArticles;
     this._isPublished = false;
     this._date = date
@@ -58,8 +58,8 @@ export default class Article {
     return this._author;
   }
 
-  public get category(): Category {
-    return this._category;
+  public get tags(): Tags {
+    return this._tags;
   }
 
   public get relatedArticles(): Articles {

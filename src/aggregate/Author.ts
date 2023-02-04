@@ -1,4 +1,3 @@
-import Category from "../entity/Category";
 import Article, { Articles } from "../entity/Article";
 import ArticleDate from "../valueobject/ArticleDate";
 import Content from "../valueobject/Content";
@@ -7,6 +6,7 @@ import User from "./User";
 import Email from "../valueobject/Email";
 import Name from "../valueobject/Name";
 import Password from "../valueobject/Password";
+import { Tags } from "../valueobject/Tag";
 
 export default class Author extends User {
   private _articles: Articles;
@@ -29,16 +29,12 @@ export default class Author extends User {
   public createArticle(
     content: Content,
     image: Image,
-    category: Category,
+    tags: Tags,
   ): Article {
-    let article = new Article(content, image, super.name.full(), category, [], new ArticleDate())
+    let article = new Article(content, image, super.name.full(), tags, [], new ArticleDate())
 
     this._articles.push(article)
 
     return article
-  }
-
-  public createCategory(name: string): Category {
-    return new Category(name, []);
   }
 }

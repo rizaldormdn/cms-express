@@ -1,7 +1,6 @@
 import Content from "../valueobject/Content";
 import Dimension from "../valueobject/Dimension";
 import Image from "./Image";
-import Category from "./Category";
 import Article, { Articles } from "./Article";
 import ArticleDate from "../valueobject/ArticleDate";
 
@@ -10,20 +9,19 @@ describe("Article", () => {
   let dimension = new Dimension(1200, 630);
   let image = new Image("http://example.com/image.jpg", "A sample image", dimension, []);
   let author = "John Doe"
-  let category = new Category("Default", [])
   let relatedArticles: Articles = []
   let date = new ArticleDate()
-  let article = new Article(content, image, author, category, relatedArticles, date);
+  let article = new Article(content, image, author, [], relatedArticles, date);
 
   it("should have a slug based on the article title", () => {
     expect(article.slug).toMatch(/^test-title-[a-zA-Z0-9]+/);
   });
 
-  it("should have content, author, category image, related articles and date properties", () => {
+  it("should have content, image, author, tags, related articles, and date properties", () => {
     expect(article.content).toEqual(content);
-    expect(article.author).toEqual(author);
-    expect(article.category).toEqual(category);
     expect(article.image).toEqual(image);
+    expect(article.author).toEqual(author);
+    expect(article.tags).toEqual([]);
     expect(article.relatedArticles).toEqual(relatedArticles)
     expect(article.date).toEqual(date)
   });
@@ -39,7 +37,7 @@ describe("Article", () => {
   });
 
   it("should throw an error if author is missing", () => {
-    expect(() => new Article(content, image, "", category, [], new ArticleDate())).toThrow(
+    expect(() => new Article(content, image, "", [], [], new ArticleDate())).toThrow(
       "author is required"
     );
   });

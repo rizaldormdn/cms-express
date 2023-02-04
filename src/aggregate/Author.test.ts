@@ -4,7 +4,6 @@ import Email from "../valueobject/Email";
 import Name from "../valueobject/Name";
 import Password from "../valueobject/Password";
 import Content from "../valueobject/Content";
-import Category from "../entity/Category";
 import Image from "../entity/Image";
 import Dimension from "../valueobject/Dimension";
 
@@ -22,14 +21,9 @@ describe("aggregate author", () => {
     let content = new Content("This is title", "This is content", "This is excerpt")
     let dimension = new Dimension(1200, 630)
     let image = new Image("http://example.com/image.jpg", "A sample image", dimension, [])
-    let category = new Category("Default", [])
-    let article: Article = author.createArticle(content, image, category)
+    let article: Article = author.createArticle(content, image, [])
 
     expect(article).toBeDefined()
     expect(author.articles).toContain(article)
-  })
-
-  it("should create a category", () => {
-    expect(author.createCategory("Default")).toBeDefined()
   })
 });
