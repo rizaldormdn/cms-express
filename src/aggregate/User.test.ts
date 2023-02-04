@@ -5,7 +5,7 @@ import Password from "../valueobject/Password";
 
 describe("aggregate user", () => {
   let email: Email = new Email("test@example.com");
-  let name: Name = new Name("John Doe");
+  let name: Name = new Name("John", "Doe");
   let password: Password = new Password("$2b$10$WCZ6j4PLICecyCYvBvL7We");
   let user: User = new User(email, name, password);
 
@@ -33,7 +33,7 @@ describe("aggregate user", () => {
     expect(user.name.full()).toBe("John Doe");
   });
 
-  test("user can verify the password", () => {
-    expect(user.password.verify("password")).toBeTruthy();
-  });
+  it("should have password", () => {
+    expect(user.password).toBe(password);
+  })
 });

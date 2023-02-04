@@ -1,5 +1,5 @@
 import Author from "./Author";
-import Article from "../entity/Article";
+import Article, { Articles } from "../entity/Article";
 import Email from "../valueobject/Email";
 import Name from "../valueobject/Name";
 import Password from "../valueobject/Password";
@@ -11,10 +11,11 @@ describe("aggregate author", () => {
   let email: Email = new Email("test@example.com");
   let name: Name = new Name("John Doe");
   let password: Password = new Password("$2b$10$WCZ6j4PLICecyCYvBvL7We");
-  let author: Author = new Author(email, name, password, []);
+  let articles: Articles = [];
+  let author: Author = new Author(email, name, password, articles);
 
   it("should have articles", () => {
-    expect(author.articles).toBe([])
+    expect(author.articles).toBe(articles)
   })
 
   it("should add a password", () => {

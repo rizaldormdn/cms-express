@@ -1,6 +1,6 @@
 require('dotenv').config()
 
-import express, { Express, Router, Response, Request } from 'express';
+import express, { Express, Router } from 'express';
 
 export default class Server {
   private _router: Router;

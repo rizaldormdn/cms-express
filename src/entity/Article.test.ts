@@ -14,7 +14,7 @@ describe("Article", () => {
   let article = new Article(content, image, author, [], relatedArticles, date);
 
   it("should have a slug based on the article title", () => {
-    expect(article.slug).toMatch(/^test-title-[a-zA-Z0-9]+/);
+    expect(article.slug).toMatch(/^this-is-title-[a-zA-Z0-9]+/);
   });
 
   it("should have content, image, author, tags, related articles, and date properties", () => {

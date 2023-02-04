@@ -37,8 +37,8 @@ export default class Article {
 
   private generateSlug(title: string): string {
     return (
-      title.toLowerCase().replace(/\s+/g, "-") +
-      Buffer.from(Date.now().toString(), "base64")
+      title.toLowerCase().replace(/\s+/g, "-") + "-" +
+      Buffer.from(Date.now().toString()).toString('base64')
     );
   }
 
