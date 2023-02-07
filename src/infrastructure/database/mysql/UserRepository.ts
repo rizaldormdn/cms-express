@@ -33,22 +33,32 @@ export default class UserRepository implements UserRepositoryDomain.default {
 	}
 
 	public getAuthor(email: Email): Promise<Author> {
-		return new Promise<Author>(() => {});
+		return new Promise<Author>(() => { });
 	}
 
 	public saveAuthor(author: Author): Promise<void> {
-		return new Promise<void>(() => {});
+		return new Promise<void>(() => { });
 	}
 
 	public updateAdministrator(administrator: Administrator): Promise<void> {
-		return new Promise<void>(() => {});
+		return new Promise<void>(() => { });
 	}
 
 	public updateAuthor(author: Author): Promise<void> {
-		return new Promise<void>(() => {});
+		return new Promise<void>(() => { });
 	}
 
 	public deleteAuthor(email: Email): Promise<void> {
-		return new Promise<void>(() => {});
+		return new Promise<void>((resolve, reject) => {
+			this._connection.query('DELETE FORM users WHERE email =?',
+				[email.string()],
+				(err: any | null, result: any) => {
+					if (err) {
+						reject(err)
+					}
+					resolve(result)
+				}
+			)
+		});
 	}
 }
