@@ -1,3 +1,4 @@
+import { request } from "express";
 import { Connection } from "mysql2";
 import Administrator from "../../../domain/aggregate/Administrator";
 import Author from "../../../domain/aggregate/Author";
@@ -33,22 +34,39 @@ export default class UserRepository implements UserRepositoryDomain.default {
 	}
 
 	public getAuthor(email: Email): Promise<Author> {
-		return new Promise<Author>(() => {});
+		return new Promise<Author>(() => { });
 	}
 
 	public saveAuthor(author: Author): Promise<void> {
-		return new Promise<void>(() => {});
+		return new Promise<void>(() => { });
 	}
 
 	public updateAdministrator(administrator: Administrator): Promise<void> {
-		return new Promise<void>(() => {});
+		return new Promise<void>((resolve, reject) => {
+			
+			this._connection.query(
+				"UPDATE users SET email = ?, first_name = ?, last_name = ? WHERE email = ? AND is_administrator IS TRUE LIMIT 1",
+				[
+					administrator.email,					
+					administrator.name.first,
+					administrator.name.last,					
+					administrator.email,
+				],
+				(err: any | null, result: any) => {
+					if (err) reject(err)
+					if (result.affectedRows > 0) {
+						resolve(result)
+					}
+				}
+			)
+		});
 	}
 
 	public updateAuthor(author: Author): Promise<void> {
-		return new Promise<void>(() => {});
+		return new Promise<void>(() => { });
 	}
 
 	public deleteAuthor(email: Email): Promise<void> {
-		return new Promise<void>(() => {});
+		return new Promise<void>(() => { });
 	}
 }
