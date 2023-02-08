@@ -18,7 +18,7 @@ export default class Author extends User {
     articles: Articles,
   ) {
     super(email, name, password);
-    
+
     this._articles = articles;
   }
 

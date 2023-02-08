@@ -28,17 +28,31 @@ describe("User Repository MySQL", () => {
 				],
 				["first_name", "last_name", "salt", "hashed_password"]
 			);
-		
+
 		expect(await repository.getAdministrator(email)).toBeDefined()
 	});
 
 	it("should return an error if failed get an administrator", async () => {
 		mock.expects("query").once().callsArgWith(2, new Error(), null, null);
 
-    try {
-      await repository.getAdministrator(email);
-    } catch (err) {
-      expect(err).toBeInstanceOf(Error)
-    }
+		try {
+			await repository.getAdministrator(email);
+		} catch (err) {
+			expect(err).toBeInstanceOf(Error)
+		}
+	})
+
+	it('should return an delete author', async () => {
+		mock.expects('query').once().withArgs('DELETE FROM users WHERE email = ?')
+		expect(await repository.deleteAuthor(email)).toBeDefined()
+	})
+	
+	it('should return an error if failed delete an author', async () => {
+		mock.expects('query').once().callArgWith(2, new Error(), null, null);
+		try {
+			await repository.deleteAuthor(email)
+		} catch (err) {
+			expect(err).toBeInstanceOf(Error)
+		}
 	})
 });
