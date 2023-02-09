@@ -42,13 +42,15 @@ describe("User Repository MySQL", () => {
 		}
 	})
 
-	it('should return an delete author', async () => {
-		mock.expects('query').once().withArgs('DELETE FROM users WHERE email = ?')
-		expect(await repository.deleteAuthor(email)).toBeDefined()
+	it("should delete an author", () => {
+		mock.expects("query").withArgs("DELETE FROM users WHERE email = ? AND is_administrator IS FALSE")
+
+		repository.deleteAuthor(email)
 	})
 	
-	it('should return an error if failed delete an author', async () => {
-		mock.expects('query').once().callArgWith(2, new Error(), null, null);
+	it("should return an error if failed delete an author", async () => {
+		mock.expects("query").once().callArgWith(2, new Error(), null, null);
+	
 		try {
 			await repository.deleteAuthor(email)
 		} catch (err) {

@@ -1,4 +1,3 @@
-import { request } from "express";
 import { Connection } from "mysql2";
 import Administrator from "../../../domain/aggregate/Administrator";
 import Author from "../../../domain/aggregate/Author";
@@ -24,7 +23,7 @@ export default class UserRepository implements UserRepositoryInterface.default {
 					if (result.length > 0) {
 						resolve(new Administrator(
 							email,
-							new Name(result[0].first_name),
+							new Name(result[0].first_name, result[0].last_name),
 							new Password(result[0].salt, result[0].hashed_password)
 						))
 					}
@@ -45,18 +44,18 @@ export default class UserRepository implements UserRepositoryInterface.default {
 		return new Promise<void>((resolve, reject) => {
 			
 			this._connection.query(
-				"UPDATE users SET email = ?, first_name = ?, last_name = ? WHERE email = ? AND is_administrator IS TRUE LIMIT 1",
-				[
-					administrator.email,					
+				"UPDATE users SET first_name = ?, last_name = ?, salt = ?, hashed_password = ? WHERE email = ? AND is_administrator IS TRUE",
+				[		
 					administrator.name.first,
-					administrator.name.last,					
+					administrator.name.last,
+					administrator.password.salt,
+					administrator.password.hashedPassword,
 					administrator.email,
 				],
 				(err: any | null, result: any) => {
 					if (err) reject(err)
-					if (result.affectedRows > 0) {
-						resolve(result)
-					}
+
+					resolve(result)
 				}
 			)
 		});
@@ -67,6 +66,16 @@ export default class UserRepository implements UserRepositoryInterface.default {
 	}
 
 	public deleteAuthor(email: Email): Promise<void> {
-		return new Promise<void>(() => { });
+		return new Promise<void>((resolve, reject) => {
+			this._connection.query(
+				'DELETE FROM users WHERE email = ? AND is_administrator IS FALSE',
+				[email.string()],
+				(err: any | null, result: any) => {
+					if (err) reject(err)
+
+					resolve(result)
+				}
+			)
+		});
 	}
 }

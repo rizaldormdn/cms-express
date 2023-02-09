@@ -35,7 +35,7 @@ export default class Author extends User {
     image: Image,
     tags: Tags,
   ): Article {
-    let article = new Article(content, image, super.name.full(), tags, [], new ArticleDate())
+    let article = new Article("", content, image, super.name.full(), tags, [], new ArticleDate())
 
     this._articles.push(article)
 
