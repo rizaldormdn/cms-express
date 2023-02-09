@@ -1,7 +1,7 @@
 import Image, { Images } from "../entity/Image"
 import Author from '../aggregate/Author'
 
-export interface ImageRepository{
+export default interface ImageRepository{
   getImages(author: Author): Promise<Images>
   getImage(uuid: string): Promise<Image>
   saveImage(image: Image): Promise<void>

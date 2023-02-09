@@ -1,12 +1,12 @@
 import { Connection } from "mysql2";
 import Administrator from "../../../domain/aggregate/Administrator";
 import Author from "../../../domain/aggregate/Author";
-import * as UserRepositoryDomain from "../../../domain/repository/UserRepository";
+import * as UserRepositoryInterface from "../../../domain/repository/UserRepository";
 import Email from "../../../domain/valueobject/Email";
 import Name from "../../../domain/valueobject/Name";
 import Password from "../../../domain/valueobject/Password";
 
-export default class UserRepository implements UserRepositoryDomain.default {
+export default class UserRepository implements UserRepositoryInterface.default {
 	private _connection: Connection;
 
 	constructor(connection: Connection) {
