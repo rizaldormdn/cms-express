@@ -1,6 +1,13 @@
 import Password from "./Password";
 
 describe("password value object", () => {
+  it("should have salt and hashed password", () => {
+    let password: Password = new Password();
+
+    expect(password.salt).not.toBe("")
+    expect(password.hashedPassword).toBe("")
+  })
+
   it("can verify the right password", () => {
     let password: Password = new Password();
 

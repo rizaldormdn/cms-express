@@ -1,13 +1,12 @@
-import { request } from "express";
 import { Connection } from "mysql2";
 import Administrator from "../../../domain/aggregate/Administrator";
 import Author from "../../../domain/aggregate/Author";
-import * as UserRepositoryDomain from "../../../domain/repository/UserRepository";
+import * as UserRepositoryInterface from "../../../domain/repository/UserRepository";
 import Email from "../../../domain/valueobject/Email";
 import Name from "../../../domain/valueobject/Name";
 import Password from "../../../domain/valueobject/Password";
 
-export default class UserRepository implements UserRepositoryDomain.default {
+export default class UserRepository implements UserRepositoryInterface.default {
 	private _connection: Connection;
 
 	constructor(connection: Connection) {
@@ -24,7 +23,7 @@ export default class UserRepository implements UserRepositoryDomain.default {
 					if (result.length > 0) {
 						resolve(new Administrator(
 							email,
-							new Name(result[0].first_name),
+							new Name(result[0].first_name, result[0].last_name),
 							new Password(result[0].salt, result[0].hashed_password)
 						))
 					}
@@ -45,18 +44,19 @@ export default class UserRepository implements UserRepositoryDomain.default {
 		return new Promise<void>((resolve, reject) => {
 			
 			this._connection.query(
-				"UPDATE users SET hash = ?, first_name = ?, last_name = ? WHERE email = ? AND is_administrator IS TRUE LIMIT 1",
+				"UPDATE users SET email = ?, first_name = ?, last_name = ?, salt = ?, hashed_password = ? WHERE email = ? AND is_administrator IS TRUE LIMIT 1",
 				[
-					administrator.password,					
+					administrator.email,					
 					administrator.name.first,
-					administrator.name.last,					
+					administrator.name.last,
+					administrator.password.salt,
+					administrator.password.hashedPassword,
 					administrator.email,
 				],
 				(err: any | null, result: any) => {
 					if (err) reject(err)
-					if (result.affectedRows > 0) {
-						resolve(result)
-					}
+
+					resolve(result)
 				}
 			)
 		});
@@ -71,12 +71,12 @@ export default class UserRepository implements UserRepositoryDomain.default {
 			this._connection.query('DELETE FROM users WHERE is_administrator = FALSE AND email = ?',
 				[email.string()],
 				(err: any | null, result: any) => {
-					if (err) {
-						reject(err)
-					}
+					if (err) reject(err)
+
 					resolve(result)
 				}
 			)
-		 });
+		});
+>>>>>>>>> Temporary merge branch 2
 	}
 }

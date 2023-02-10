@@ -12,6 +12,14 @@ export default class Password {
     this._hashedPassword = hashedPassword;
   }
 
+  public get salt(): string {
+    return this._salt;
+  }
+
+  public get hashedPassword(): string {
+    return this._hashedPassword;
+  }
+
   public hash(password: string) {
     this._hashedPassword = bcrypt.hashSync(password, this._salt);
   }
