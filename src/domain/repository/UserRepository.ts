@@ -1,6 +1,6 @@
-import Administrator  from '../aggregate/Administrator'
+import Administrator  from '../entity/Administrator'
 import Email from '../valueobject/Email'
-import Author  from '../aggregate/Author'
+import Author  from '../entity/Author'
 
 export default interface UserRepository{
   getAdministrator(email: Email): Promise<Administrator>

@@ -1,8 +1,10 @@
-import Author from '../aggregate/Author'
-import Article, { Articles } from '../aggregate/Article'
+import Author from '../entity/Author'
+import Article from '../aggregate/Article'
+import { ArticleSnapshots } from '../valueobject/ArticleSnapshot'
 
 export default interface ArticleRepository{
-  getArticles(author: Author): Promise<Articles>
+  getFeaturedArticles(): Promise<ArticleSnapshots>
+  getArticles(author: Author): Promise<ArticleSnapshots>
   getArticle(slug: string): Promise<Article>
   saveArticle(article: Article): Promise<void>
   updateArticle(article: Article): Promise<void>

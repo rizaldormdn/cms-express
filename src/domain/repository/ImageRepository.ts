@@ -1,5 +1,5 @@
 import Image, { Images } from "../entity/Image"
-import Author from '../aggregate/Author'
+import Author from '../entity/Author'
 
 export default interface ImageRepository{
   getImages(author: Author): Promise<Images>
