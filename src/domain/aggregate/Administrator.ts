@@ -14,6 +14,6 @@ export default class Administrator extends User {
   }
 
   public addAuthor(email: Email, name: Name): Author {
-    return new Author(email, name, new Password(), []);
+    return new Author(email, name, new Password());
   }
 }

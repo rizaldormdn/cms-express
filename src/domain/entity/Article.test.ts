@@ -1,7 +1,7 @@
 import Content from "../valueobject/Content";
 import Dimension from "../valueobject/Dimension";
 import Image from "./Image";
-import Article, { Articles } from "./Article";
+import Article from "./Article";
 import ArticleDate from "../valueobject/ArticleDate";
 import ImageURL from "../valueobject/ImageURL";
 import Slug from "../valueobject/Slug";

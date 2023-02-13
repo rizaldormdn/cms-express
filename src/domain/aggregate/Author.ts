@@ -1,5 +1,4 @@
-import Article, { Articles } from "../entity/Article";
-import ArticleDate from "../valueobject/ArticleDate";
+import Article from "../entity/Article";
 import Content from "../valueobject/Content";
 import Image from "../entity/Image";
 import User from "./User";
@@ -7,23 +6,15 @@ import Email from "../valueobject/Email";
 import Name from "../valueobject/Name";
 import Password from "../valueobject/Password";
 import { Tags } from "../valueobject/Tag";
+import Slug from "../valueobject/Slug";
 
 export default class Author extends User {
-  private _articles: Articles;
-
   constructor(
     email: Email,
     name: Name,
     password: Password,
-    articles: Articles,
   ) {
     super(email, name, password);
-
-    this._articles = articles;
-  }
-
-  public get articles(): Articles {
-    return this._articles;
   }
 
   public addPassword(password: Password) {
@@ -35,9 +26,8 @@ export default class Author extends User {
     image: Image,
     tags: Tags,
   ): Article {
-    let article = new Article("", content, image, super.name.full(), tags, [], new ArticleDate())
-
-    this._articles.push(article)
+    let slug = new Slug(content.title)
+    let article = new Article(slug, content, image, super.name.full(), tags)
 
     return article
   }
