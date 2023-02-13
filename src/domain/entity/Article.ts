@@ -1,52 +1,53 @@
 import ArticleDate from "../valueobject/ArticleDate";
+import { ArticleSnapshots } from "../valueobject/ArticleSnapshot";
 import Content from "../valueobject/Content";
+import Slug from "../valueobject/Slug";
 import { Tags } from "../valueobject/Tag";
 import Image from "./Image";
 
 export default class Article {
-  private _slug: string;
+  private _slug: Slug;
   private _content: Content;
   private _image: Image;
-  private _author: string;
-  private _tags: Tags;
-  private _relatedArticles: Articles;
-  private _isPublished: boolean;
-  private _date: ArticleDate;
+  private _authorName: string;
+  private _tags: Tags = [];
+  private _relatedArticles: ArticleSnapshots = [];
+  private _isPublished: boolean = false;
+  private _date: ArticleDate = new ArticleDate();
 
   constructor(
-    slug: string,
+    slug: Slug,
     content: Content,
     image: Image,
-    author: string,
-    tags: Tags,
-    relatedArticles: Articles,
-    date: ArticleDate
+    authorName: string,
+    tags?: Tags,
+    relatedArticles?: ArticleSnapshots,
+    isPublished?: boolean,
+    date?: ArticleDate
   ) {
-    if (author === "") {
-      throw new Error("author is required");
+    if (authorName === "") {
+      throw new Error("author name cannot be empty");
+    }
+    if (tags !== undefined) {
+      this._tags = tags;
+    }
+    if (relatedArticles !== undefined) {
+      this._relatedArticles = relatedArticles;
+    }
+    if (isPublished !== undefined) {
+      this._isPublished = isPublished;
+    }
+    if (date !== undefined) {
+      this._date = date
     }
 
     this._slug = slug
-    if (this._slug === "") {
-      this._slug = this.generateSlug(content.title);
-    }
     this._content = content;
     this._image = image;
-    this._author = author;
-    this._tags = tags;
-    this._relatedArticles = relatedArticles;
-    this._isPublished = false;
-    this._date = date
+    this._authorName = authorName;
   }
 
-  private generateSlug(title: string): string {
-    return (
-      title.toLowerCase().replace(/\s+/g, "-") + "-" +
-      Buffer.from(Date.now().toString()).toString('base64')
-    );
-  }
-
-  public get slug(): string {
+  public get slug(): Slug {
     return this._slug;
   }
 
@@ -58,15 +59,15 @@ export default class Article {
     return this._image;
   }
 
-  public get author(): string {
-    return this._author;
+  public get authorName(): string {
+    return this._authorName;
   }
 
   public get tags(): Tags {
     return this._tags;
   }
 
-  public get relatedArticles(): Articles {
+  public get relatedArticles(): ArticleSnapshots {
     return this._relatedArticles.slice(0, 4);
   }
 
@@ -80,6 +81,10 @@ export default class Article {
 
   public publish(): void {
     this._isPublished = true;
+  }
+
+  public unpublish(): void {
+    this._isPublished = false;
   }
 }
 

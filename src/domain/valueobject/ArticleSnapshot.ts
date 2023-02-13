@@ -51,3 +51,5 @@ export default class ArticleSnapshot {
     return this._date
   }
 }
+
+export type ArticleSnapshots = ArticleSnapshot[]
