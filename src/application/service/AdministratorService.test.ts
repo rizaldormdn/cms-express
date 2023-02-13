@@ -4,6 +4,7 @@ import Name from "../../domain/valueobject/Name";
 import AdministratorService from "./AdministratorService"
 import Password from "../../domain/valueobject/Password";
 import Email from "../../domain/valueobject/Email";
+import EmailService from "./EmailService";
 
 describe("Administrator service", () => {
   let userRepository: UserRepository = {
@@ -14,11 +15,16 @@ describe("Administrator service", () => {
     updateAuthor: jest.fn(),
     deleteAuthor: jest.fn()
   };
-  let administratorService = new AdministratorService(userRepository)
+  let emailService: EmailService = {
+    sendEmailConfirmation: jest.fn()
+  }
+  let administratorService = new AdministratorService(userRepository, emailService)
 
   let email: Email = new Email("test@example.com");
   let name: Name = new Name("John Doe");
   let newName = new Name("John", "Cena")
+  let authorEmail = new Email("author@example.com");
+  let authorName = new Name("John", "Cena")
   let administrator: Administrator = new Administrator(email, name, new Password());
 
   it("should be defined", () => {
@@ -67,12 +73,10 @@ describe("Administrator service", () => {
 
   it("should add an author", async () => {
     userRepository.saveAuthor = jest.fn().mockResolvedValueOnce(() => Promise.resolve())
-    
-    let email = new Email("author@example.com");
-    let name = new Name("John", "Cena")
+    emailService.sendEmailConfirmation = jest.fn().mockResolvedValueOnce(() => Promise.resolve())
 
     try {
-      let author = await administratorService.addAuthor(administrator, email, name)
+      let author = await administratorService.addAuthor(administrator, authorEmail, authorName)
 
       expect(author).toBeDefined()
     } catch(err) {
@@ -80,14 +84,24 @@ describe("Administrator service", () => {
     }
   })
 
-  it("should throw an error if failed add an author", async () => {
+  it("should throw an error if failed save an author", async () => {
     userRepository.saveAuthor = jest.fn().mockRejectedValueOnce(() => Promise.reject(new Error()))
-    
-    let email = new Email("author@example.com");
-    let name = new Name("John", "Cena")
 
     try {
-      let author = await administratorService.addAuthor(administrator, email, name)
+      let author = await administratorService.addAuthor(administrator, authorEmail, authorName)
+
+      expect(author).toBeUndefined()
+    } catch(err) {
+      expect(err).toBeDefined()
+    }
+  })
+
+  it("should throw an error if failed send an email confirmation", async () => {
+    userRepository.saveAuthor = jest.fn().mockResolvedValueOnce(() => Promise.resolve())
+    emailService.sendEmailConfirmation = jest.fn().mockRejectedValueOnce(() => Promise.reject(new Error()))
+
+    try {
+      let author = await administratorService.addAuthor(administrator, authorEmail, authorName)
 
       expect(author).toBeUndefined()
     } catch(err) {
