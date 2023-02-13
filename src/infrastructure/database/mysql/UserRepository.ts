@@ -1,6 +1,6 @@
 import { Connection } from "mysql2";
-import Administrator from "../../../domain/aggregate/Administrator";
-import Author from "../../../domain/aggregate/Author";
+import Administrator from "../../../domain/entity/Administrator";
+import Author from "../../../domain/entity/Author";
 import * as UserRepositoryInterface from "../../../domain/repository/UserRepository";
 import Email from "../../../domain/valueobject/Email";
 import Name from "../../../domain/valueobject/Name";
@@ -50,7 +50,7 @@ export default class UserRepository implements UserRepositoryInterface.default {
 					administrator.name.last,
 					administrator.password.salt,
 					administrator.password.hashedPassword,
-					administrator.email,
+					administrator.email.string(),
 				],
 				(err: any | null, result: any) => {
 					if (err) reject(err)

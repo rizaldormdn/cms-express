@@ -1,7 +1,9 @@
 import { Connection } from "mysql2";
-import Article, { Articles } from "../../../domain/aggregate/Article";
+import Article from "../../../domain/aggregate/Article";
 import * as ArticleRepositoryInterface from "../../../domain/repository/ArticleRepository";
-import Author from "../../../domain/aggregate/Author";
+import Author from "../../../domain/entity/Author";
+import { ArticleSnapshots } from "../../../domain/valueobject/ArticleSnapshot";
+import Slug from "../../../domain/valueobject/Slug";
 
 export class ArticleRepository implements ArticleRepositoryInterface.default {
 	private _connection: Connection;
@@ -10,12 +12,16 @@ export class ArticleRepository implements ArticleRepositoryInterface.default {
 		this._connection = connection;
 	}
 
-	getArticle(slug: string): Promise<Article> {
-		return new Promise<Article>((resolve, reject) => {});
+	getFeaturedArticles(): Promise<ArticleSnapshots> {
+		return new Promise<ArticleSnapshots>((resolve, reject) => {});
 	}
 
-	getArticles(author: Author): Promise<Articles> {
-		return new Promise<Articles>((resolve, reject) => {});
+	getArticles(author: Author): Promise<ArticleSnapshots> {
+		return new Promise<ArticleSnapshots>((resolve, reject) => {});
+	}
+
+	getArticle(slug: Slug): Promise<Article> {
+		return new Promise<Article>((resolve, reject) => {});
 	}
 
 	saveArticle(article: Article): Promise<void> {
@@ -26,7 +32,7 @@ export class ArticleRepository implements ArticleRepositoryInterface.default {
 		return new Promise<void>((resolve, reject) => {});
 	}
 
-	deleteArticle(slug: string): Promise<void> {
+	deleteArticle(slug: Slug): Promise<void> {
 		return new Promise<void>((resolve, reject) => {});
 	}
 }
