@@ -1,5 +1,4 @@
 import { v4 as uuidv4 } from "uuid";
-import { Thumbnails } from "./Thumbnail";
 import Dimension from "../valueobject/Dimension"
 import ImageURL from "../valueobject/ImageURL";
 
@@ -9,7 +8,7 @@ export default class Image {
 	private _alt: string;
 	private _dimension: Dimension;
 
-	constructor(url: ImageURL, alt: string, dimension: Dimension, thumbnails: Thumbnails) {
+	constructor(url: ImageURL, alt: string, dimension: Dimension) {
 		if (alt === "") {
 			throw new Error("alt cannot be empty");
 		}
