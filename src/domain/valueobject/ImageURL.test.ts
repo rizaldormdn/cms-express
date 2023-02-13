@@ -7,4 +7,8 @@ describe("ImageURL", () => {
     expect(imageURL.original).toBe("http://example.com/original.jpg")
     expect(imageURL.thumbnail).toBe("http://example.com/thumbnail.jpg")
   })
+
+  test("original and thumbnail URL cannot be empty", () => {
+    expect(() => new ImageURL("", "")).toThrowError()
+  })
 })
