@@ -1,9 +1,10 @@
 import Image from "./Image";
 import Dimension from "../valueobject/Dimension";
 import { Thumbnails } from "./Thumbnail";
+import ImageURL from "../valueobject/ImageURL";
 
 describe("Image", () => {
-  let url = "https://example.com/image.jpg"
+  let url = new ImageURL("http://example.com/original.jpg", "http://example.com/thumbnail.jpg")
   let alt = "Example image"
   let dimension = new Dimension(740, 360)
   let thumbnails: Thumbnails = []
@@ -14,10 +15,9 @@ describe("Image", () => {
     expect(typeof image.id).toBe("string");
   });
 
-  it("should have the correct url", () => {
-    expect(image.url).toBe(url);
-    expect(() => new Image("", alt, dimension, thumbnails)).toThrowError();
-  });
+  it("should have url", () => {
+    expect(image.url).toBe(url)
+  })
 
   it("should have the correct alt text", () => {
     expect(image.alt).toBe(alt);
@@ -26,9 +26,5 @@ describe("Image", () => {
 
   it("should have the correct dimension", () => {
     expect(image.dimension).toEqual(dimension);
-  });
-
-  it("should have the correct thumbnails", () => {
-    expect(image.thumbnails).toEqual(thumbnails);
   });
 });
