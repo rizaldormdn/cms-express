@@ -1,4 +1,4 @@
-import Article from "../entity/Article";
+import Article from "../aggregate/Article";
 import Content from "../valueobject/Content";
 import Image from "../entity/Image";
 import User from "./User";

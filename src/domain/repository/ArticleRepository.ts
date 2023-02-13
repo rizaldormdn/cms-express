@@ -1,5 +1,5 @@
 import Author from '../aggregate/Author'
-import Article, { Articles } from '../entity/Article'
+import Article, { Articles } from '../aggregate/Article'
 
 export default interface ArticleRepository{
   getArticles(author: Author): Promise<Articles>

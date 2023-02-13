@@ -1,5 +1,5 @@
 import Author from "./Author";
-import Article from "../entity/Article";
+import Article from "../aggregate/Article";
 import Email from "../valueobject/Email";
 import Name from "../valueobject/Name";
 import Password from "../valueobject/Password";

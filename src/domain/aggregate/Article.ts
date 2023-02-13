@@ -3,7 +3,7 @@ import { ArticleSnapshots } from "../valueobject/ArticleSnapshot";
 import Content from "../valueobject/Content";
 import Slug from "../valueobject/Slug";
 import { Tags } from "../valueobject/Tag";
-import Image from "./Image";
+import Image from "../entity/Image";
 
 export default class Article {
   private _slug: Slug;

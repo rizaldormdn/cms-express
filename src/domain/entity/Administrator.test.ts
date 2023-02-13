@@ -2,7 +2,6 @@ import Email from "../valueobject/Email";
 import Name from "../valueobject/Name";
 import Password from "../valueobject/Password";
 import Administrator from "./Administrator";
-import User from "./User";
 
 describe("Administator", () => {
   let email: Email = new Email("test@example.com");
