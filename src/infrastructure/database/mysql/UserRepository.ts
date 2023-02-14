@@ -56,7 +56,25 @@ export default class UserRepository implements UserRepositoryInterface.default {
   }
 
   public saveAuthor(author: Author): Promise<void> {
-    return new Promise<void>(() => {});
+    return new Promise<void>((resolve, reject) => {
+      this._connection.query(
+        "INSERT INTO users (email, first_name, last_name, salt, hashed_password, is_administrator) VALUES (?, ?, ?, ?, ?)",
+        [
+          author.email.string(),
+          author.name.first,
+          author.name.last,
+          author.password.salt,
+          author.password.hashedPassword,
+          "FALSE",
+        ],
+        (err: any | null, result: any) => {
+          if (err) reject(err);
+          if (result.length > 0) {
+            resolve(result);
+          }
+        }
+      );
+    });
   }
 
   public updateAdministrator(administrator: Administrator): Promise<void> {

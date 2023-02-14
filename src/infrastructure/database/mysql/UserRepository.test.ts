@@ -1,17 +1,22 @@
 import mysql, { Connection } from "mysql2";
 import sinon, { SinonMock } from "sinon";
 import * as UserRepositoryDomain from "../../../domain/repository/UserRepository";
-import Email from "../../../domain/valueobject/Email";
 import UserRepository from "./UserRepository";
 import Name from "../../../domain/valueobject/Name";
 import Password from "../../../domain/valueobject/Password";
 import Author from "../../../domain/entity/Author";
+import Email from "../../../domain/valueobject/Email";
 
 describe("User Repository MySQL", () => {
-  let connection: Connection = mysql.createConnection({ host: "localhost" });
+  let connection: Connection = mysql.createConnection({
+    host: "localhost",
+  });
   let mock: SinonMock = sinon.mock(connection);
   let repository: UserRepositoryDomain.default = new UserRepository(connection);
   let email: Email = new Email("admin@example.com");
+  let name: Name = new Name("author", "last");
+  let password: Password = new Password("$2b$10$z1e0ySIYbA/5FXNzZy.Qge");
+  let author: Author = new Author(email, name, password);
 
   it("should return an administrator", async () => {
     mock
@@ -48,36 +53,36 @@ describe("User Repository MySQL", () => {
     }
   });
 
-  it("should return an author", async () => {
+  it("should return an insert/save author", async () => {
     mock
       .expects("query")
       .once()
       .withArgs(
-        "SELECT first_name, last_name, salt, hashed_password FROM users WHERE email = ? AND is_administrator IS FALSE LIMIT 1"
+        "INSERT INTO users (email, first_name, last_name, salt, hashed_password, is_administrator) VALUES (?, ?, ?, ?, ?)"
       )
       .callsArgWith(
         2,
         null,
         [
           {
-            first_name: "author",
-            last_name: "",
-            salt: "$2b$10$z1e0ySIYbA/5FXNzZy.Qge",
-            hashed_password:
-              "$2b$10$z1e0ySIYbA/5FXNzZy.Qgefti4GC8YwobSbO81EfD9JTuX/X1J1Xu",
+            email: author.email.string(),
+            first_name: author.name.first,
+            last_name: author.name.last,
+            salt: author.password.salt,
+            hashed_password: author.password.hashedPassword,
+            is_administrator: "FALSE",
           },
         ],
-        ["first_name", "last_name", "salt", "hashed_password"]
+        ["first_name", "last_name", "salt", "hashed_password", "email"]
       );
-
-    expect(await repository.getAuthor(email)).toBeDefined();
+    expect(await repository.saveAuthor(author)).toBeDefined();
   });
 
-  it("should return an error if failed get an author", async () => {
+  it("should return an error if failed get an insert/save author", async () => {
     mock.expects("query").once().callsArgWith(2, new Error(), null, null);
 
     try {
-      await repository.getAuthor(email);
+      await repository.saveAuthor(author);
     } catch (err) {
       expect(err).toBeInstanceOf(Error);
     }
