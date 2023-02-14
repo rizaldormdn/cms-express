@@ -35,7 +35,24 @@ export default class UserRepository implements UserRepositoryInterface.default {
   }
 
   public getAuthor(email: Email): Promise<Author> {
-    return new Promise<Author>(() => {});
+    return new Promise<Author>((resolve, reject) => {
+      this._connection.query(
+        "SELECT first_name, last_name, salt, hashed_password FROM users WHERE email = ? AND is_administrator IS FALSE LIMIT 1",
+        [email.string()],
+        (err: any | null, result: any) => {
+          if (err) reject(err);
+          if (result.length > 0) {
+            resolve(
+              new Author(
+                email,
+                new Name(result[0].first_name, result[0].last_name),
+                new Password(result[0].salt, result[0].hashed_password)
+              )
+            );
+          }
+        }
+      );
+    });
   }
 
   public saveAuthor(author: Author): Promise<void> {
