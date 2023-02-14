@@ -90,8 +90,6 @@ export default class UserRepository implements UserRepositoryInterface.default {
         ],
         (err: any | null, result: any) => {
           if (err) {
-            console.error(err);
-
             reject(err);
           }
 
