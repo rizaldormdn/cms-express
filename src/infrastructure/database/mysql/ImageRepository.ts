@@ -20,7 +20,7 @@ export default class ImageRepository implements ImageRepositoryInterface.default
     saveImage(image: Image): Promise<void> {
         return new Promise<void>((resolve, reject) => {
             this._connection.query(
-                "INSERT INTO users ( url, alt, dimension, thumbnails ) VALUES (url, alt, dimension, thumbnails) ",
+                "INSERT INTO users ( url, alt, dimension, thumbnails ) VALUES (?, ?, ?, ?) ",
                 [
                     image.url,
                     image.alt,
