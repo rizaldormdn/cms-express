@@ -4,7 +4,7 @@ import Name from "../../domain/valueobject/Name";
 import AdministratorService from "./AdministratorService"
 import Password from "../../domain/valueobject/Password";
 import Email from "../../domain/valueobject/Email";
-import EmailService from "./EmailService";
+import ConfirmationService from "./ConfirmationService";
 
 describe("Administrator service", () => {
   let userRepository: UserRepository = {
@@ -15,10 +15,10 @@ describe("Administrator service", () => {
     updateAuthor: jest.fn(),
     deleteAuthor: jest.fn()
   };
-  let emailService: EmailService = {
-    sendEmailConfirmation: jest.fn()
+  let confirmationService: ConfirmationService = {
+    sendConfirmation: jest.fn()
   }
-  let administratorService = new AdministratorService(userRepository, emailService)
+  let administratorService = new AdministratorService(userRepository, confirmationService)
 
   let email: Email = new Email("test@example.com");
   let name: Name = new Name("John Doe");
@@ -73,7 +73,7 @@ describe("Administrator service", () => {
 
   it("should add an author", async () => {
     userRepository.saveAuthor = jest.fn().mockResolvedValueOnce(() => Promise.resolve())
-    emailService.sendEmailConfirmation = jest.fn().mockResolvedValueOnce(() => Promise.resolve())
+    confirmationService.sendConfirmation = jest.fn().mockResolvedValueOnce(() => Promise.resolve())
 
     try {
       let author = await administratorService.addAuthor(administrator, authorEmail, authorName)
@@ -98,7 +98,7 @@ describe("Administrator service", () => {
 
   it("should throw an error if failed send an email confirmation", async () => {
     userRepository.saveAuthor = jest.fn().mockResolvedValueOnce(() => Promise.resolve())
-    emailService.sendEmailConfirmation = jest.fn().mockRejectedValueOnce(() => Promise.reject(new Error()))
+    confirmationService.sendConfirmation = jest.fn().mockRejectedValueOnce(() => Promise.reject(new Error()))
 
     try {
       let author = await administratorService.addAuthor(administrator, authorEmail, authorName)

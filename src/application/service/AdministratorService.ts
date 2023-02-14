@@ -4,15 +4,15 @@ import Name from "../../domain/valueobject/Name";
 import Password from "../../domain/valueobject/Password";
 import Email from "../../domain/valueobject/Email";
 import Author from "../../domain/entity/Author";
-import EmailService from "./EmailService";
+import ConfirmationService from "./ConfirmationService";
 
 export default class AdministratorService {
   private _userRepository: UserRepository
-  private _emailService: EmailService
+  private _confirmationService: ConfirmationService
 
-  constructor(userRepository: UserRepository, emailService: EmailService) {
+  constructor(userRepository: UserRepository, confirmationService: ConfirmationService) {
     this._userRepository = userRepository;
-    this._emailService = emailService;
+    this._confirmationService = confirmationService;
   }
 
   public changeName(administrator: Administrator, name: Name): Promise<void> {
@@ -44,7 +44,7 @@ export default class AdministratorService {
       let author = administrator.addAuthor(email, name)
 
       try {
-        await this._emailService.sendEmailConfirmation(email)
+        await this._confirmationService.sendConfirmation(author)
         await this._userRepository.saveAuthor(author)
 
         resolve(author)
