@@ -44,8 +44,9 @@ export default class UserRepository implements UserRepositoryInterface.default {
 		return new Promise<void>((resolve, reject) => {
 			
 			this._connection.query(
-				"UPDATE users SET first_name = ?, last_name = ?, salt = ?, hashed_password = ? WHERE email = ? AND is_administrator IS TRUE",
-				[		
+				"UPDATE users SET email = ?, first_name = ?, last_name = ?, salt = ?, hashed_password = ? WHERE email = ? AND is_administrator IS TRUE LIMIT 1",
+				[
+					administrator.email,					
 					administrator.name.first,
 					administrator.name.last,
 					administrator.password.salt,
@@ -66,9 +67,9 @@ export default class UserRepository implements UserRepositoryInterface.default {
 	}
 
 	public deleteAuthor(email: Email): Promise<void> {
-		return new Promise<void>((resolve, reject) => {
+		return new Promise<void>((resolve, reject) => { 
 			this._connection.query(
-				'DELETE FROM users WHERE email = ? AND is_administrator IS FALSE',
+				"DELETE FROM users WHERE is_administrator = FALSE AND email = ?",
 				[email.string()],
 				(err: any | null, result: any) => {
 					if (err) reject(err)
