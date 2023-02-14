@@ -45,9 +45,8 @@ export default class UserRepository implements UserRepositoryInterface.default {
   public updateAdministrator(administrator: Administrator): Promise<void> {
     return new Promise<void>((resolve, reject) => {
       this._connection.query(
-        "UPDATE users SET email = ?, first_name = ?, last_name = ?, salt = ?, hashed_password = ? WHERE email = ? AND is_administrator IS TRUE LIMIT 1",
+        "UPDATE users SET first_name = ?, last_name = ?, salt = ?, hashed_password = ? WHERE email = ? AND is_administrator IS TRUE",
         [
-          administrator.email,
           administrator.name.first,
           administrator.name.last,
           administrator.password.salt,
@@ -55,7 +54,11 @@ export default class UserRepository implements UserRepositoryInterface.default {
           administrator.email.string(),
         ],
         (err: any | null, result: any) => {
-          if (err) reject(err);
+          if (err) {
+            console.error(err);
+
+            reject(err);
+          }
 
           resolve(result);
         }
@@ -66,18 +69,22 @@ export default class UserRepository implements UserRepositoryInterface.default {
   public updateAuthor(author: Author): Promise<void> {
     return new Promise<void>((resolve, reject) => {
       this._connection.query(
-        `UPDATE users SET first_name = ?, last_name = ?, hashed_password = ? WHERE email = ? AND is_administrator IS false`,
+        `UPDATE users SET first_name = ?, last_name = ?, salt = ?, hashed_password = ? WHERE email = ? AND is_administrator IS false`,
         [
           author.name.first,
           author.name.last,
+          author.password.salt,
           author.password.hashedPassword,
           author.email.string(),
         ],
 
         (err: any | null, result: any) => {
           if (err) {
+            console.error(err);
+
             reject(err);
           }
+
           resolve(result);
         }
       );
