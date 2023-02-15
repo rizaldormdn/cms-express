@@ -14,6 +14,9 @@ export default class Article {
   private _relatedArticles: ArticleSnapshots = [];
   private _isPublished: boolean = false;
   private _date: ArticleDate = new ArticleDate();
+  updateTags: any;
+  updateImage: any;
+  updateContent: any;
 
   constructor(
     slug: Slug,
@@ -38,10 +41,10 @@ export default class Article {
       this._isPublished = isPublished;
     }
     if (date !== undefined) {
-      this._date = date
+      this._date = date;
     }
 
-    this._slug = slug
+    this._slug = slug;
     this._content = content;
     this._image = image;
     this._authorName = authorName;
