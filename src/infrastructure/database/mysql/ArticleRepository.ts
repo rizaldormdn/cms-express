@@ -1,4 +1,4 @@
-import { Connection } from "mysql";
+import { Connection } from "mysql2";
 import Article from "../../../domain/aggregate/Article";
 import * as ArticleRepositoryInterface from "../../../domain/repository/ArticleRepository";
 import Author from "../../../domain/entity/Author";
@@ -36,6 +36,7 @@ export default class ArticleRepository implements ArticleRepositoryInterface.def
           width,
           first_name,
           last_name,
+          email,
           tags,
           is_published,
           articles.created_at AS created_at,
@@ -72,7 +73,8 @@ export default class ArticleRepository implements ArticleRepositoryInterface.def
                 new Dimension(result[0].height, result[0].width),
                 result[0].image_id
               ),
-              new Name(result[0].first_name, result[0].last_name).full(), 
+              new Name(result[0].first_name, result[0].last_name).full(),
+              result[0].email,
               tags,
               [],
               result[0].is_published,
@@ -364,6 +366,7 @@ export default class ArticleRepository implements ArticleRepositoryInterface.def
           article.content,
           article.image,
           article.authorName,
+          article.authorEmail,
           article.tags,
           relatedArticles,
           article.isPublished,
@@ -376,7 +379,37 @@ export default class ArticleRepository implements ArticleRepositoryInterface.def
   }
 
   saveArticle(article: Article): Promise<void> {
-    return new Promise<void>((resolve, reject) => {});
+    return new Promise<void>((resolve, reject) => {
+      let tags = ""
+      for (let tag of article.tags) {
+        if (tags !== "") {
+          tags += ","
+        }
+        tags += tag
+      }
+
+      this._connection.query(
+        'INSERT INTO articles (slug, title, content, excerpt, image_id, author_email, tags) VALUES (?, ?, ?, ?, ?, ?, ?)',
+        [
+          article.slug.value,
+          article.content.title,
+          article.content.content,
+          article.content.excerpt,
+          article.image.id,
+          article.authorEmail,
+          tags
+        ],
+        (err: any | null, result: any) => {
+          if (err) {
+            console.error(err)
+
+            reject(err)
+          }
+
+          resolve(result);
+        }
+      )
+    });
   }
 
   updateArticle(article: Article): Promise<void> {
