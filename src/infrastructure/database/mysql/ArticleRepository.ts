@@ -20,6 +20,18 @@ export default class ArticleRepository implements ArticleRepositoryInterface.def
     this._connection = connection;
   }
 
+  private _tags(_tags: Tags): string {
+    let tags = ""
+    for (let tag of _tags) {
+      if (tags !== "") {
+        tags += ","
+      }
+      tags += tag
+    }
+
+    return tags
+  }
+
   private _getArticle(slug: Slug): Promise<Article> {
     return new Promise<Article>((resolve, reject) => {
       let query = `
@@ -380,14 +392,6 @@ export default class ArticleRepository implements ArticleRepositoryInterface.def
 
   saveArticle(article: Article): Promise<void> {
     return new Promise<void>((resolve, reject) => {
-      let tags = ""
-      for (let tag of article.tags) {
-        if (tags !== "") {
-          tags += ","
-        }
-        tags += tag
-      }
-
       this._connection.query(
         'INSERT INTO articles (slug, title, content, excerpt, image_id, author_email, tags) VALUES (?, ?, ?, ?, ?, ?, ?)',
         [
@@ -397,7 +401,7 @@ export default class ArticleRepository implements ArticleRepositoryInterface.def
           article.content.excerpt,
           article.image.id,
           article.authorEmail,
-          tags
+          this._tags(article.tags)
         ],
         (err: any | null, result: any) => {
           if (err) {
@@ -413,10 +417,47 @@ export default class ArticleRepository implements ArticleRepositoryInterface.def
   }
 
   updateArticle(article: Article): Promise<void> {
-    return new Promise<void>((resolve, reject) => {});
+    return new Promise<void>((resolve, reject) => {
+      this._connection.query(
+        'UPDATE articles SET content = ?, excerpt = ?, image_id = ?, tags = ?) VALUES (?, ?, ?, ?) WHERE slug = ? AND author_email = ?',
+        [
+          article.content.content,
+          article.content.excerpt,
+          article.image.id,
+          this._tags(article.tags),
+          article.slug.value,
+          article.authorEmail
+        ],
+        (err: any | null, result: any) => {
+          if (err) {
+            console.error(err)
+
+            reject(err)
+          }
+
+          resolve(result);
+        }
+      )
+    });
   }
 
   deleteArticle(slug: Slug): Promise<void> {
-    return new Promise<void>((resolve, reject) => {});
+    return new Promise<void>((resolve, reject) => {
+      this._connection.query(
+        'DELETE FROM articles WHERE slug = ?',
+        [
+          slug.value
+        ],
+        (err: any | null, result: any) => {
+          if (err) {
+            console.error(err)
+
+            reject(err)
+          }
+
+          resolve(result);
+        }
+      )
+    });
   }
 }
