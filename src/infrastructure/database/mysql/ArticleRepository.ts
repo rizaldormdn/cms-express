@@ -1,4 +1,4 @@
-import { Connection } from "mysql";
+import { Connection } from "mysql2";
 import Article from "../../../domain/aggregate/Article";
 import * as ArticleRepositoryInterface from "../../../domain/repository/ArticleRepository";
 import Author from "../../../domain/entity/Author";
