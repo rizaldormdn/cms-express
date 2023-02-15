@@ -19,7 +19,11 @@ export default class UserRepository implements UserRepositoryInterface.default {
         "SELECT first_name, last_name, salt, hashed_password FROM users WHERE email = ? AND is_administrator IS TRUE LIMIT 1",
         [email.string()],
         (err: any | null, result: any) => {
-          if (err) reject(err);
+          if (err) {
+            console.error(err);
+
+            reject(err);
+          }
           if (result.length > 0) {
             resolve(
               new Administrator(
@@ -40,7 +44,11 @@ export default class UserRepository implements UserRepositoryInterface.default {
         "SELECT first_name, last_name, salt, hashed_password FROM users WHERE email = ? AND is_administrator IS FALSE LIMIT 1",
         [email.string()],
         (err: any | null, result: any) => {
-          if (err) reject(err);
+          if (err) {
+            console.error(err);
+
+            reject(err);
+          }
           if (result.length > 0) {
             resolve(
               new Author(
@@ -68,7 +76,11 @@ export default class UserRepository implements UserRepositoryInterface.default {
           "FALSE",
         ],
         (err: any | null, result: any) => {
-          if (err) reject(err);
+          if (err) {
+            console.error(err);
+
+            reject(err);
+          }
           if (result.length > 0) {
             resolve(result);
           }
@@ -90,6 +102,8 @@ export default class UserRepository implements UserRepositoryInterface.default {
         ],
         (err: any | null, result: any) => {
           if (err) {
+            console.error(err);
+
             reject(err);
           }
 
@@ -130,7 +144,11 @@ export default class UserRepository implements UserRepositoryInterface.default {
         "DELETE FROM users WHERE is_administrator = FALSE AND email = ?",
         [email.string()],
         (err: any | null, result: any) => {
-          if (err) reject(err);
+          if (err) {
+            console.error(err);
+
+            reject(err);
+          }
 
           resolve(result);
         }
