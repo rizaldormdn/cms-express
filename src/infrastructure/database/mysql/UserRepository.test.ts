@@ -1,6 +1,6 @@
 import mysql, { Connection } from "mysql2";
 import sinon, { SinonMock } from "sinon";
-import * as UserRepositoryDomain from "../../../domain/repository/UserRepository";
+import * as UserRepositoryInterface from "../../../domain/repository/UserRepository";
 import UserRepository from "./UserRepository";
 import Name from "../../../domain/valueobject/Name";
 import Password from "../../../domain/valueobject/Password";
@@ -13,7 +13,7 @@ describe("User Repository MySQL", () => {
     host: "localhost",
   });
   let mock: SinonMock = sinon.mock(connection);
-  let repository: UserRepositoryDomain.default = new UserRepository(connection);
+  let repository: UserRepositoryInterface.default = new UserRepository(connection);
   let email: Email = new Email("admin@example.com");
   let name: Name = new Name("author", "last");
   let password: Password = new Password("$2b$10$z1e0ySIYbA/5FXNzZy.Qge");

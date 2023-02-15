@@ -1,4 +1,4 @@
-import { Connection } from "mysql2";
+import { Connection } from "mysql";
 import Article from "../../../domain/aggregate/Article";
 import * as ArticleRepositoryInterface from "../../../domain/repository/ArticleRepository";
 import Author from "../../../domain/entity/Author";
@@ -38,8 +38,8 @@ export default class ArticleRepository implements ArticleRepositoryInterface.def
           last_name,
           tags,
           is_published,
-          articles.created_at,
-          articles.updated_at
+          articles.created_at AS created_at,
+          articles.updated_at AS updated_at
         FROM articles
         JOIN images ON images.id = articles.image_id
         JOIN users ON users.email = articles.author_email
@@ -57,8 +57,10 @@ export default class ArticleRepository implements ArticleRepositoryInterface.def
           }
           if (result.length > 0) {
             let tags: Tags = []
-            for (let tag of result[0].tags.split(',')) {
-              tags.push(new Tag(tag))
+            if (result[0].tags.length > 1) {
+              for (let tag of result[0].tags.split(',')) {
+                tags.push(new Tag(tag))
+              }
             }
 
             resolve(new Article(
@@ -84,6 +86,10 @@ export default class ArticleRepository implements ArticleRepositoryInterface.def
 
   private _getRelatedArticle(article: Article): Promise<ArticleSnapshots> {
     return new Promise<ArticleSnapshots>((resolve, reject) => {
+      if (article.tags.length <= 0) {
+        resolve([])
+      }
+
       let tagsQuery = ''
       let tagValues: string[] = []
 
@@ -111,8 +117,8 @@ export default class ArticleRepository implements ArticleRepositoryInterface.def
           first_name,
           last_name,
           tags,
-          articles.created_at,
-          articles.updated_at
+          articles.created_at AS created_at,
+          articles.updated_at AS updated_at
         FROM articles
         JOIN images ON images.id = articles.image_id
         JOIN users ON users.email = articles.author_email
@@ -172,8 +178,8 @@ export default class ArticleRepository implements ArticleRepositoryInterface.def
           first_name,
           last_name,
           tags,
-          articles.created_at,
-          articles.updated_at
+          articles.created_at AS created_at,
+          articles.updated_at AS updated_at
         FROM articles
         JOIN images ON images.id = articles.image_id
         JOIN users ON users.email = articles.author_email
@@ -234,8 +240,8 @@ export default class ArticleRepository implements ArticleRepositoryInterface.def
           first_name,
           last_name,
           tags,
-          articles.created_at,
-          articles.updated_at
+          articles.created_at AS created_at,
+          articles.updated_at AS updated_at
         FROM articles
         JOIN images ON images.id = articles.image_id
         JOIN users ON users.email = articles.author_email
@@ -297,8 +303,8 @@ export default class ArticleRepository implements ArticleRepositoryInterface.def
           first_name,
           last_name,
           tags,
-          articles.created_at,
-          articles.updated_at
+          articles.created_at AS created_at,
+          articles.updated_at AS updated_at
         FROM articles
         JOIN images ON images.id = articles.image_id
         JOIN users ON users.email = articles.author_email
