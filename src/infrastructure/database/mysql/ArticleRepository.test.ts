@@ -1,4 +1,4 @@
-import mysql, { Connection } from "mysql";
+import mysql, { Connection } from "mysql2";
 import sinon, { SinonMock } from "sinon";
 import Specification from "../../../application/valueobject/Specification";
 import * as ArticleRepositoryInterface from "../../../domain/repository/ArticleRepository";
@@ -8,11 +8,17 @@ import Name from "../../../domain/valueobject/Name";
 import Password from "../../../domain/valueobject/Password";
 import Author from "../../../domain/entity/Author";
 import Slug from "../../../domain/valueobject/Slug";
+import Content from "../../../domain/valueobject/Content";
+import Dimension from "../../../domain/valueobject/Dimension";
+import Image from "../../../domain/entity/Image";
+import ImageURL from "../../../domain/valueobject/ImageURL";
+import Tag, { Tags } from "../../../domain/valueobject/Tag";
+import { ArticleSnapshots } from "../../../domain/valueobject/ArticleSnapshot";
+import ArticleDate from "../../../domain/valueobject/ArticleDate";
+import Article from "../../../domain/aggregate/Article";
 
 describe("ArticleRepository", () => {
-  let connection: Connection = mysql.createConnection({
-    host: "localhost",
-  });
+  let connection: Connection = mysql.createConnection({host: "localhost"});
   let mock: SinonMock = sinon.mock(connection);
   let articleRepository: ArticleRepositoryInterface.default = new ArticleRepository(connection);
 
@@ -21,7 +27,23 @@ describe("ArticleRepository", () => {
   let name: Name = new Name("John Doe");
   let password: Password = new Password("$2b$10$WCZ6j4PLICecyCYvBvL7We");
   let author: Author = new Author(email, name, password);
-  let slug = new Slug("This is title")
+  let title = "This is title"
+  let slug = new Slug(title)
+  let content = new Content(title, "This is content", "This is excerpt");
+  let dimension = new Dimension(1920, 1080);
+  let imageURL = new ImageURL("http://example.com/original.jpg", "http://example.com/thumbnail.jpg")
+  let image = new Image(imageURL, "A sample image", dimension);
+  let authorName = "John Doe"
+  let authorEmail = "john.doe@example.com"
+  let tags: Tags = [
+    new Tag("tag1"),
+    new Tag("tag2"),
+    new Tag("tag3"),
+  ]
+  let relatedArticles: ArticleSnapshots = []
+  let isPublished = true
+  let date = new ArticleDate()
+  let article = new Article(slug, content, image, authorName, authorEmail, tags, relatedArticles, isPublished, date);
 
   describe("get featured articles", () => {
     it("should return featured articles", async () => {
@@ -204,7 +226,7 @@ describe("ArticleRepository", () => {
       mock.expects("query").once().callsArgWith(2, new Error(), null, null);
   
       try {
-        expect(await articleRepository.getArticles(specification)).toBeUndefined()
+        expect(await articleRepository.getArticlesByAuthor(specification, author)).toBeUndefined()
       } catch (err) {
         expect(err).toBeInstanceOf(Error);
       }
@@ -226,6 +248,7 @@ describe("ArticleRepository", () => {
           width,
           first_name,
           last_name,
+          email,
           tags,
           is_published,
           articles.created_at AS created_at,
@@ -235,7 +258,7 @@ describe("ArticleRepository", () => {
         JOIN users ON users.email = articles.author_email
         WHERE slug = ? LIMIT 1
       `
-      let relatedArticlesQuery = `
+    let relatedArticlesQuery = `
         SELECT
           slug,
           title,
@@ -272,7 +295,7 @@ describe("ArticleRepository", () => {
         updated_at: new Date().toString()
       }
     ];
-    let expectedArticleColumns = ["slug", "title", "content", "excerpt", "image_id", "original_url", "thumbnail_url", "alt", "height", "width", "first_name", "last_name", "tags", "is_published", "created_at", "updated_at"]
+    let expectedArticleColumns = ["slug", "title", "content", "excerpt", "image_id", "original_url", "thumbnail_url", "alt", "height", "width", "first_name", "last_name", "email", "tags", "is_published", "created_at", "updated_at"]
     let expectedRelatedArticlesColumns = ["slug", "title", "excerpt", "thumbnail_url", "first_name", "last_name", "tags", "created_at", "updated_at"]
 
     it("should get an article", async () => {
@@ -385,6 +408,72 @@ describe("ArticleRepository", () => {
         expect(await articleRepository.getArticle(slug)).toBeUndefined()
       } catch(err) {
         expect(err).toBeInstanceOf(Error);
+      }
+    })
+  })
+
+  describe("save an article", () => {
+    it("should save an article", () => {
+      mock.expects("query").once().withArgs("INSERT INTO articles (slug, title, content, excerpt, image_id, author_email, tags) VALUES (?, ?, ?, ?, BIN_TO_UUID(?), ?, ?)");
+  
+      try {
+        articleRepository.saveArticle(article)
+      } catch (err) {
+        expect(err).toBeUndefined()
+      }
+    })
+
+    it("should return an error if failed save an article", async () => {
+      mock.expects("query").once().callsArgWith(2, new Error(), null, null);
+
+      try {
+        await articleRepository.saveArticle(article)
+      } catch (err) {
+        expect(err).toBeDefined()
+      }
+    })
+  })
+
+  describe("update an article", () => {
+    it("should update an article", () => {
+      mock.expects("query").once().withArgs("UPDATE articles SET content = ?, excerpt = ?, image_id = ?, tags = ?) VALUES (?, ?, BIN_TO_UUID(?), ?) WHERE slug = ? AND author_email = ?");
+  
+      try {
+        articleRepository.updateArticle(article)
+      } catch (err) {
+        expect(err).toBeUndefined()
+      }
+    })
+
+    it("should return an error if failed update an article", async () => {
+      mock.expects("query").once().callsArgWith(2, new Error(), null, null);
+
+      try {
+        await articleRepository.updateArticle(article)
+      } catch (err) {
+        expect(err).toBeDefined()
+      }
+    })
+  })
+
+  describe("delete an article", () => {
+    it("should delete an article", () => {
+      mock.expects("query").once().withArgs("DELETE FROM articles WHERE slug = ?");
+  
+      try {
+        articleRepository.deleteArticle(slug)
+      } catch (err) {
+        expect(err).toBeUndefined()
+      }
+    })
+
+    it("should return an error if failed delete an article", async () => {
+      mock.expects("query").once().callsArgWith(2, new Error(), null, null);
+
+      try {
+        await articleRepository.deleteArticle(slug)
+      } catch (err) {
+        expect(err).toBeDefined()
       }
     })
   })

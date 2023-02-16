@@ -20,6 +20,18 @@ export default class ArticleRepository implements ArticleRepositoryInterface.def
     this._connection = connection;
   }
 
+  private _tags(_tags: Tags): string {
+    let tags = ""
+    for (let tag of _tags) {
+      if (tags !== "") {
+        tags += ","
+      }
+      tags += tag
+    }
+
+    return tags
+  }
+
   private _getArticle(slug: Slug): Promise<Article> {
     return new Promise<Article>((resolve, reject) => {
       let query = `
@@ -36,6 +48,7 @@ export default class ArticleRepository implements ArticleRepositoryInterface.def
           width,
           first_name,
           last_name,
+          email,
           tags,
           is_published,
           articles.created_at AS created_at,
@@ -72,7 +85,8 @@ export default class ArticleRepository implements ArticleRepositoryInterface.def
                 new Dimension(result[0].height, result[0].width),
                 result[0].image_id
               ),
-              new Name(result[0].first_name, result[0].last_name).full(), 
+              new Name(result[0].first_name, result[0].last_name).full(),
+              result[0].email,
               tags,
               [],
               result[0].is_published,
@@ -364,6 +378,7 @@ export default class ArticleRepository implements ArticleRepositoryInterface.def
           article.content,
           article.image,
           article.authorName,
+          article.authorEmail,
           article.tags,
           relatedArticles,
           article.isPublished,
@@ -376,14 +391,73 @@ export default class ArticleRepository implements ArticleRepositoryInterface.def
   }
 
   saveArticle(article: Article): Promise<void> {
-    return new Promise<void>((resolve, reject) => {});
+    return new Promise<void>((resolve, reject) => {
+      this._connection.query(
+        'INSERT INTO articles (slug, title, content, excerpt, image_id, author_email, tags) VALUES (?, ?, ?, ?, BIN_TO_UUID(?), ?, ?)',
+        [
+          article.slug.value,
+          article.content.title,
+          article.content.content,
+          article.content.excerpt,
+          article.image.id,
+          article.authorEmail,
+          this._tags(article.tags)
+        ],
+        (err: any | null, result: any) => {
+          if (err) {
+            console.error(err)
+
+            reject(err)
+          }
+
+          resolve(result);
+        }
+      )
+    });
   }
 
   updateArticle(article: Article): Promise<void> {
-    return new Promise<void>((resolve, reject) => {});
+    return new Promise<void>((resolve, reject) => {
+      this._connection.query(
+        'UPDATE articles SET content = ?, excerpt = ?, image_id = ?, tags = ?) VALUES (?, ?, BIN_TO_UUID(?), ?) WHERE slug = ? AND author_email = ?',
+        [
+          article.content.content,
+          article.content.excerpt,
+          article.image.id,
+          this._tags(article.tags),
+          article.slug.value,
+          article.authorEmail
+        ],
+        (err: any | null, result: any) => {
+          if (err) {
+            console.error(err)
+
+            reject(err)
+          }
+
+          resolve(result);
+        }
+      )
+    });
   }
 
   deleteArticle(slug: Slug): Promise<void> {
-    return new Promise<void>((resolve, reject) => {});
+    return new Promise<void>((resolve, reject) => {
+      this._connection.query(
+        'DELETE FROM articles WHERE slug = ?',
+        [
+          slug.value
+        ],
+        (err: any | null, result: any) => {
+          if (err) {
+            console.error(err)
+
+            reject(err)
+          }
+
+          resolve(result);
+        }
+      )
+    });
   }
 }
