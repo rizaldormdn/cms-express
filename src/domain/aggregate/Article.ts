@@ -10,6 +10,7 @@ export default class Article {
   private _content: Content;
   private _image: Image;
   private _authorName: string;
+  private _authorEmail: string;
   private _tags: Tags = [];
   private _relatedArticles: ArticleSnapshots = [];
   private _isPublished: boolean = false;
@@ -23,6 +24,7 @@ export default class Article {
     content: Content,
     image: Image,
     authorName: string,
+    authorEmail: string,
     tags?: Tags,
     relatedArticles?: ArticleSnapshots,
     isPublished?: boolean,
@@ -30,6 +32,9 @@ export default class Article {
   ) {
     if (authorName === "") {
       throw new Error("author name cannot be empty");
+    }
+    if (authorEmail === "") {
+      throw new Error("author email cannot be empty");
     }
     if (tags !== undefined) {
       this._tags = tags;
@@ -48,6 +53,7 @@ export default class Article {
     this._content = content;
     this._image = image;
     this._authorName = authorName;
+    this._authorEmail = authorEmail;
   }
 
   public get slug(): Slug {
@@ -64,6 +70,10 @@ export default class Article {
 
   public get authorName(): string {
     return this._authorName;
+  }
+
+  public get authorEmail(): string {
+    return this._authorEmail;
   }
 
   public get tags(): Tags {

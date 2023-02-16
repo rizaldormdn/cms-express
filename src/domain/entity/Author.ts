@@ -27,7 +27,7 @@ export default class Author extends User {
     tags: Tags,
   ): Article {
     let slug = new Slug(content.title)
-    let article = new Article(slug, content, image, super.name.full(), tags)
+    let article = new Article(slug, content, image, super.name.full(), super.email.string(), tags)
 
     return article
   }

@@ -8,15 +8,19 @@ export default class Image {
 	private _alt: string;
 	private _dimension: Dimension;
 
-	constructor(url: ImageURL, alt: string, dimension: Dimension) {
+	constructor(url: ImageURL, alt: string, dimension: Dimension, id?: string) {
 		if (alt === "") {
 			throw new Error("alt cannot be empty");
 		}
-
+		
 		this._id = uuidv4();
 		this._url = url;
 		this._alt = alt;
 		this._dimension = dimension;
+
+		if (id !== undefined && id !== "") {
+			this._id = id
+		}
 	}
 
 	get id(): string {
