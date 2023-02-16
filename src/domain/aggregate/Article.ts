@@ -15,9 +15,6 @@ export default class Article {
   private _relatedArticles: ArticleSnapshots = [];
   private _isPublished: boolean = false;
   private _date: ArticleDate = new ArticleDate();
-  updateTags: any;
-  updateImage: any;
-  updateContent: any;
 
   constructor(
     slug: Slug,
