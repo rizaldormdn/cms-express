@@ -66,14 +66,13 @@ export default class UserRepository implements UserRepositoryInterface.default {
   public saveAuthor(author: Author): Promise<void> {
     return new Promise<void>((resolve, reject) => {
       this._connection.query(
-        "INSERT INTO users (email, first_name, last_name, salt, hashed_password, is_administrator) VALUES (?, ?, ?, ?, ?)",
+        "INSERT INTO users (email, first_name, last_name, salt, hashed_password) VALUES (?, ?, ?, ?, ?)",
         [
           author.email.string(),
           author.name.first,
           author.name.last,
           author.password.salt,
           author.password.hashedPassword,
-          "FALSE",
         ],
         (err: any | null, result: any) => {
           if (err) {
@@ -81,9 +80,8 @@ export default class UserRepository implements UserRepositoryInterface.default {
 
             reject(err);
           }
-          if (result.length > 0) {
-            resolve(result);
-          }
+          
+          resolve(result)
         }
       );
     });
@@ -116,7 +114,7 @@ export default class UserRepository implements UserRepositoryInterface.default {
   public updateAuthor(author: Author): Promise<void> {
     return new Promise<void>((resolve, reject) => {
       this._connection.query(
-        `UPDATE users SET first_name = ?, last_name = ?, salt = ?, hashed_password = ? WHERE email = ? AND is_administrator IS false`,
+        "UPDATE users SET first_name = ?, last_name = ?, salt = ?, hashed_password = ? WHERE email = ? AND is_administrator IS FALSE",
         [
           author.name.first,
           author.name.last,
@@ -124,7 +122,6 @@ export default class UserRepository implements UserRepositoryInterface.default {
           author.password.hashedPassword,
           author.email.string(),
         ],
-
         (err: any | null, result: any) => {
           if (err) {
             console.error(err);
