@@ -43,7 +43,7 @@ export default class Article {
       this._isPublished = isPublished;
     }
     if (date !== undefined) {
-      this._date = date
+      this._date = date;
     }
 
     this._slug = slug;
