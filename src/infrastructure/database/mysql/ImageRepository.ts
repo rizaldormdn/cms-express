@@ -12,20 +12,20 @@ export default class ImageRepository implements ImageRepositoryInterface.default
     this._connection = connection;
   }
 
-  getImages(author: Author): Promise<Images> {
+  getImages(): Promise<Images> {
     return new Promise<Images>((resolve, reject) => {
       this._connection.query(
-        "SELECT id, original_url, thumbnail_url, alt, height, width FROM images WHERE author = ?",
-        [author.name.full()],
+        "SELECT id, original_url, thumbnail_url, alt, height, width FROM images LIMIT ?",
+        [Number(process.env.LIMIT_IMAGES)],
         (err: any | null, result: any) => {
           if (err) {
             reject(err)
           } else {
-            const images: Images = result.map((rows: any) => {
-              return new Image(
-                new ImageURL(rows.original, rows.thumbnail),
-                rows.alt,
-                new Dimension(rows.height, rows.width)
+            const images: Images = result.map((id: any) => {
+              new Image(
+                new ImageURL(id.original, id.thumbnail),
+                id.alt,
+                new Dimension(id.height, id.width)
               )
             })
             resolve(images)
