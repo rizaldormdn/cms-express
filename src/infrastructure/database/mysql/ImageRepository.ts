@@ -19,33 +19,41 @@ export default class ImageRepository implements ImageRepositoryInterface.default
         [Number(process.env.LIMIT_IMAGES)],
         (err: any | null, result: any) => {
           if (err) {
+            console.error(err)
+
             reject(err)
-          } else {
-            const images: Images = result.map((id: any) => {
+          }
+          if (result.length > 0) {
+            resolve(result.map((image: any) => {
               new Image(
-                new ImageURL(id.original, id.thumbnail),
-                id.alt,
-                new Dimension(id.height, id.width)
+                new ImageURL(image.original, image.thumbnail),
+                image.alt,
+                new Dimension(image.height, image.width),
+                image.id
               )
-            })
-            resolve(images)
+            }))
           }
         })
     })
   }
 
-  getImage(uuid: string): Promise<Image> {
+  getImage(id: string): Promise<Image> {
     return new Promise<Image>((resolve, reject) => {
       this._connection.query(
-        "SELECT original_url, thumbnail_url, alt, height, width FROM images WHERE id = ?",
-        [uuid],
+        "SELECT original_url, thumbnail_url, alt, height, width FROM images WHERE BIN_TO_UUID(id) = ? LIMIT 1",
+        [id],
         (err: any | null, result: any) => {
-          if (err) reject(err)
+          if (err) {
+            console.error(err)
+
+            reject(err)
+          }
           if (result.length > 0) {
             resolve(new Image(
               new ImageURL(result[0].original, result[0].thumbnail),
               result[0].alt,
               new Dimension(result[0].height, result[0].width),
+              id
             ))
           }
         })
@@ -65,10 +73,13 @@ export default class ImageRepository implements ImageRepositoryInterface.default
           image.dimension.width,
         ],
         (err: any | null, result: any) => {
-          if (err) reject(err);
-          if (result.length > 0) {
-            resolve(result)
+          if (err) {
+            console.error(err)
+
+            reject(err)
           }
+          
+          resolve(result)
         }
       );
     })
@@ -76,28 +87,40 @@ export default class ImageRepository implements ImageRepositoryInterface.default
 
   updateImage(image: Image): Promise<void> {
     return new Promise<void>((resolve, reject) => {
-      this._connection.query("UPDATE images SET original_url = ?, thumbnail_url = ?, alt = ?, height = ?, width = ?",
+      this._connection.query(
+        "UPDATE images SET original_url = ?, thumbnail_url = ?, alt = ?, height = ?, width = ? WHERE BIN_TO_UUID(id) = ?",
         [
           image.url.original,
           image.url.thumbnail,
           image.alt,
           image.dimension.height,
-          image.dimension.width
+          image.dimension.width,
+          image.id
         ],
         (err: any | null, result: any) => {
-          if (err) reject(err)
+          if (err) {
+            console.error(err)
+
+            reject(err)
+          }
+
           resolve(result)
         }
       )
     })
   }
 
-  deleteImage(uuid: string): Promise<void> {
+  deleteImage(id: string): Promise<void> {
     return new Promise<void>((resolve, reject) => {
-      this._connection.query("DELETE FROM images WHERE id = ?",
-        [uuid],
+      this._connection.query("DELETE FROM images WHERE BIN_TO_UUID(id) = ?",
+        [id],
         (err: any | null, result: any) => {
-          if (err) reject(err)
+          if (err) {
+            console.error(err)
+
+            reject(err)
+          }
+
           resolve(result)
         })
     })
