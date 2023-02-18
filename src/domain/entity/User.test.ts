@@ -2,6 +2,7 @@ import User from "./User";
 import Email from "../valueobject/Email";
 import Name from "../valueobject/Name";
 import Password from "../valueobject/Password";
+import ResetPasswordToken from "../valueobject/ResetPasswordToken";
 
 describe("aggregate user", () => {
   let email: Email = new Email("test@example.com");
@@ -52,5 +53,18 @@ describe("aggregate user", () => {
     user.updatePassword(newPassword)
 
     expect(user.password.verify("password123")).toBeTruthy()
+  })
+
+  it("could have a reset password token", () => {
+    let resetPasswordToken = new ResetPasswordToken()
+    let user: User = new User(email, name, password, resetPasswordToken);
+
+    expect(user.resetPasswordToken).toBeDefined();
+  })
+
+  it("could add a reset password token", () => {
+    user.addResetPasswordToken(new ResetPasswordToken())
+
+    expect(user.resetPasswordToken).toBeDefined();
   })
 });
