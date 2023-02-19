@@ -12,13 +12,21 @@ import Slug from "../../src/domain/valueobject/Slug";
 import ArticleDate from "../../src/domain/valueobject/ArticleDate";
 import ArticleSnapshot from "../../src/domain/valueobject/ArticleSnapshot";
 import Administrator from "../../src/domain/entity/Administrator";
+import ResetPasswordToken from "../../src/domain/valueobject/ResetPasswordToken";
+
+let now = new Date();
+
+now.setHours(new Date().getHours() + 1)
 
 export const email: Email = new Email("test@example.com");
 export const authorEmail: Email = new Email("author@example.com");
 export const name: Name = new Name("John Doe");
 export const authorName = "John Doe"
 export const password: Password = new Password("$2b$10$WCZ6j4PLICecyCYvBvL7We");
-export const author: Author = new Author(email, name, password);
+export const token = "abc123"
+export const tokenExpiry = now
+export const resetPasswordToken: ResetPasswordToken = new ResetPasswordToken(token, tokenExpiry)
+export const author: Author = new Author(email, name, password, resetPasswordToken);
 export const title = "This is title"
 export const excerpt = "This is excerpt."
 export const content = new Content(title, "<p>This is content.</p>", excerpt)
@@ -36,4 +44,4 @@ export const article: Article = author.addArticle(content, image, tags)
 export const slug = new Slug("this-is-title-abc123")
 export const articleDate = new ArticleDate()
 export const articleSnapshot = new ArticleSnapshot(slug, title, excerpt, imageThumbnailURL, authorName, tags, articleDate)
-export const administrator: Administrator = new Administrator(email, name, password);
+export const administrator: Administrator = new Administrator(email, name, password, resetPasswordToken);
