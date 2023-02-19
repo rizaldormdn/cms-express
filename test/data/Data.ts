@@ -11,8 +11,10 @@ import Tag, { Tags } from "../../src/domain/valueobject/Tag";
 import Slug from "../../src/domain/valueobject/Slug";
 import ArticleDate from "../../src/domain/valueobject/ArticleDate";
 import ArticleSnapshot from "../../src/domain/valueobject/ArticleSnapshot";
+import Administrator from "../../src/domain/entity/Administrator";
 
 export const email: Email = new Email("test@example.com");
+export const authorEmail: Email = new Email("author@example.com");
 export const name: Name = new Name("John Doe");
 export const authorName = "John Doe"
 export const password: Password = new Password("$2b$10$WCZ6j4PLICecyCYvBvL7We");
@@ -33,3 +35,4 @@ export const article: Article = author.addArticle(content, image, tags)
 export const slug = new Slug("this-is-title-abc123")
 export const articleDate = new ArticleDate()
 export const articleSnapshot = new ArticleSnapshot(slug, title, excerpt, imageThumbnailURL, authorName, tags, articleDate)
+export const administrator: Administrator = new Administrator(email, name, password);
