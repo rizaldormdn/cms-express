@@ -1,13 +1,10 @@
 import User from "./User";
-import Email from "../valueobject/Email";
 import Name from "../valueobject/Name";
 import Password from "../valueobject/Password";
 import ResetPasswordToken from "../valueobject/ResetPasswordToken";
+import { email, name, password } from "../../../test/data/Data"
 
 describe("aggregate user", () => {
-  let email: Email = new Email("test@example.com");
-  let name: Name = new Name("John", "Doe");
-  let password: Password = new Password("$2b$10$WCZ6j4PLICecyCYvBvL7We");
   let user: User = new User(email, name, password);
 
   test('email local of "test" should be "test"', () => {
