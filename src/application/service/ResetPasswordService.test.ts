@@ -1,16 +1,14 @@
 import UserRepository from "../../domain/repository/UserRepository";
 import ResetPasswordService from "./ResetPasswordService";
 import Author from "../../domain/entity/Author";
-import Administrator from "../../domain/entity/Administrator";
-import { email, name, author, password, token, administrator } from "../../../test/data/Data"
+import { email, name, author, password, token } from "../../../src/testdata"
 
 describe("ResetPasswordService", () => {
   let userRepository: UserRepository = {
     getAdministrator: jest.fn(),
     getAuthor: jest.fn(),
     saveAuthor: jest.fn(),
-    updateAdministrator: jest.fn(),
-    updateAuthor: jest.fn(),
+    updateUser: jest.fn(),
     deleteAuthor: jest.fn()
   };
   let resetPasswordService = new ResetPasswordService(userRepository);
@@ -21,10 +19,10 @@ describe("ResetPasswordService", () => {
 
   describe("it could reset author password", () => {
     test("success", () => {
-      userRepository.updateAuthor = jest.fn().mockResolvedValueOnce(() => Promise.resolve())
+      userRepository.updateUser = jest.fn().mockResolvedValueOnce(() => Promise.resolve())
 
       try {
-        resetPasswordService.resetAuthorPassword(author, password, token)
+        resetPasswordService.resetPassword(author, password, token)
       } catch (err) {
         expect(err).toBeUndefined()
       }
@@ -34,7 +32,7 @@ describe("ResetPasswordService", () => {
       let author: Author = new Author(email, name, password);
 
       try {
-        await resetPasswordService.resetAuthorPassword(author, password, token)
+        await resetPasswordService.resetPassword(author, password, token)
       } catch (err) {
         expect(err).toBeDefined()
       }
@@ -42,57 +40,17 @@ describe("ResetPasswordService", () => {
 
     test("cannot verify a wrong token", async () => {
       try {
-        await resetPasswordService.resetAuthorPassword(author, password, "wrongtoken")
+        await resetPasswordService.resetPassword(author, password, "wrongtoken")
       } catch (err) {
         expect(err).toBeDefined()
       }
     })
 
     test("failed update author", async () => {
-      userRepository.updateAuthor = jest.fn().mockRejectedValueOnce(() => Promise.reject(new Error()))
+      userRepository.updateUser = jest.fn().mockRejectedValueOnce(() => Promise.reject(new Error()))
 
       try {
-        await resetPasswordService.resetAuthorPassword(author, password, token)
-      } catch (err) {
-        expect(err).toBeDefined()
-      }
-    })
-  })
-
-  describe("it could reset administrator password", () => {
-    test("success", () => {
-      userRepository.updateAdministrator = jest.fn().mockResolvedValueOnce(() => Promise.resolve())
-
-      try {
-        resetPasswordService.resetAdministratorPassword(administrator, password, token)
-      } catch (err) {
-        expect(err).toBeUndefined()
-      }
-    })
-
-    test("reset password token cannot be empty", async () => {
-      let administrator: Administrator = new Administrator(email, name, password);
-
-      try {
-        await resetPasswordService.resetAdministratorPassword(administrator, password, token)
-      } catch (err) {
-        expect(err).toBeDefined()
-      }
-    })
-
-    test("cannot verify a wrong token", async () => {
-      try {
-        await resetPasswordService.resetAdministratorPassword(administrator, password, "wrongtoken")
-      } catch (err) {
-        expect(err).toBeDefined()
-      }
-    })
-
-    test("failed update administrator", async () => {
-      userRepository.updateAdministrator = jest.fn().mockRejectedValueOnce(() => Promise.reject(new Error()))
-
-      try {
-        await resetPasswordService.resetAdministratorPassword(administrator, password, token)
+        await resetPasswordService.resetPassword(author, password, token)
       } catch (err) {
         expect(err).toBeDefined()
       }

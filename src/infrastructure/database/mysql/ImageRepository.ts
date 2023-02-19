@@ -1,5 +1,4 @@
 import { Connection } from "mysql2";
-import Author from "../../../domain/entity/Author";
 import Image, { Images } from "../../../domain/entity/Image";
 import * as ImageRepositoryInterface from "../../../domain/repository/ImageRepository"
 import Dimension from "../../../domain/valueobject/Dimension";

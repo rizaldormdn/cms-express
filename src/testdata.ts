@@ -1,18 +1,18 @@
-import Email from "../../src/domain/valueobject/Email";
-import Name from "../../src/domain/valueobject/Name";
-import Password from "../../src/domain/valueobject/Password";
-import Author from "../../src/domain/entity/Author";
-import Content from "../../src/domain/valueobject/Content";
-import Dimension from "../../src/domain/valueobject/Dimension";
-import ImageURL from "../../src/domain/valueobject/ImageURL";
-import Image from "../../src/domain/entity/Image";
-import Article from "../../src/domain/aggregate/Article";
-import Tag, { Tags } from "../../src/domain/valueobject/Tag";
-import Slug from "../../src/domain/valueobject/Slug";
-import ArticleDate from "../../src/domain/valueobject/ArticleDate";
-import ArticleSnapshot from "../../src/domain/valueobject/ArticleSnapshot";
-import Administrator from "../../src/domain/entity/Administrator";
-import ResetPasswordToken from "../../src/domain/valueobject/ResetPasswordToken";
+import Email from "./domain/valueobject/Email";
+import Name from "./domain/valueobject/Name";
+import Password from "./domain/valueobject/Password";
+import Author from "./domain/entity/Author";
+import Content from "./domain/valueobject/Content";
+import Dimension from "./domain/valueobject/Dimension";
+import ImageURL from "./domain/valueobject/ImageURL";
+import Image from "./domain/entity/Image";
+import Article from "./domain/aggregate/Article";
+import Tag, { Tags } from "./domain/valueobject/Tag";
+import Slug from "./domain/valueobject/Slug";
+import ArticleDate from "./domain/valueobject/ArticleDate";
+import ArticleSnapshot from "./domain/valueobject/ArticleSnapshot";
+import Administrator from "./domain/entity/Administrator";
+import ResetPasswordToken from "./domain/valueobject/ResetPasswordToken";
 
 let now = new Date();
 
