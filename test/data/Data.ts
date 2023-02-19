@@ -25,7 +25,8 @@ export const content = new Content(title, "<p>This is content.</p>", excerpt)
 export const dimension = new Dimension(1920, 1080)
 export const imageThumbnailURL = "http://example.com/thumbnail.jpg"
 export const imageURL = new ImageURL("http://example.com/original.jpg", imageThumbnailURL)
-export const image = new Image(imageURL, "A sample image", dimension)
+export const alt = "A sample image"
+export const image = new Image(imageURL, alt, dimension)
 export const tags: Tags = [
   new Tag("tag1"),
   new Tag("tag2"),
