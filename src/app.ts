@@ -10,7 +10,7 @@ const connection: Connection = mysql.createConnection({
 	password: process.env.DB_USERPASS,
 	database: process.env.DB_NAME,
 });
-const router: ExpressRouter = Router();
+const router: ExpressRouter = Router(connection);
 const server: Server = new Server(router);
 
 server.run(Number(process.env.SERVER_PORT));
