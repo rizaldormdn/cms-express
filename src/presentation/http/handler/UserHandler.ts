@@ -1,77 +1,79 @@
 import { Request, Response, Router } from "express";
 import UserRepository from "../../../infrastructure/database/mysql/UserRepository";
 import mysql, { Connection } from "mysql2";
-import Email from "../../../domain/valueobject/Email";
 require("dotenv").config();
 
 export default (connection: Connection): Router => {
-	const router = Router();
+  const router = Router();
 
-	router.post("/login", (req, res) => {
-		const { email, password } = req.body;
+  let User = new UserRepository(connection);
 
-		try {
-			res.status(200).json({
-				status: "success",
-				message: "Login successful!",
-				data: { email },
-			}).end();
-		} catch (error) {
-			res
-				.status(400)
-				.json({
-					status: "error",
-					message: "Invalid Credential!",
-					data: { email, password },
-				})
-				.end();
-		}
-	});
+  router.post("/login", (req, res) => {
+    const { email, password } = req.body;
 
-	router.get("/me", (req: Request, res: Response) => {
-		let user = new UserRepository(connection);
-		let { email } = req.body;
-		user
-			.getAuthor(email)
-			.then((data) => {
-				res
-					.status(200)
-					.json({
-						status: "success get author",
-						data: {
-							method: req.method,
-							url: req.url,
-							data: data,
-						},
-					})
-					.end();
-			})
-			.catch((err) => {
-				res
-					.status(404)
-					.json({
-						status: "failed get author",
-						data: {
-							method: req.method,
-							url: req.url,
-							error: err,
-						},
-					})
-					.end();
-			});
+    try {
+      res
+        .status(200)
+        .json({
+          status: "success",
+          message: "Login successful!",
+          data: { email },
+        })
+        .end();
+    } catch (error) {
+      res
+        .status(400)
+        .json({
+          status: "error",
+          message: "Invalid Credential!",
+          data: { email, password },
+        })
+        .end();
+    }
+  });
 
-		res
-			.status(200)
-			.json({
-				status: "success",
-				message: "server is alive",
-				data: {
-					method: req.method,
-					url: req.url,
-				},
-			})
-			.end();
-	});
+  router.get("/me", async (req: Request, res: Response) => {
+    let { email } = req.body;
 
-	return router;
+    try {
+      let user = await User.getAuthor(email);
+      res
+        .status(200)
+        .json({
+          status: "success get author",
+          data: {
+            method: req.method,
+            url: req.url,
+            data: user,
+          },
+        })
+        .end();
+    } catch (error) {
+      res
+        .status(404)
+        .json({
+          status: "failed get author",
+          data: {
+            method: req.method,
+            url: req.url,
+            error: error,
+          },
+        })
+        .end();
+    }
+
+    res
+      .status(200)
+      .json({
+        status: "success",
+        message: "server is alive",
+        data: {
+          method: req.method,
+          url: req.url,
+        },
+      })
+      .end();
+  });
+
+  return router;
 };
