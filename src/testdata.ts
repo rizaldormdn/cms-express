@@ -20,7 +20,7 @@ now.setHours(new Date().getHours() + 1)
 
 export const email: Email = new Email("test@example.com");
 export const authorEmail: Email = new Email("author@example.com");
-export const name: Name = new Name("John Doe");
+export const name: Name = new Name("John", "Doe");
 export const authorName = "John Doe"
 export const password: Password = new Password("$2b$10$WCZ6j4PLICecyCYvBvL7We");
 export const token = "abc123"

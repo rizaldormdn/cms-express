@@ -1,4 +1,4 @@
-import { image, imageURL, dimension, alt } from "../../../test/data/Data"
+import { image, imageURL, dimension, alt } from "../../testdata"
 import Image from "./Image";
 
 describe("Image", () => {

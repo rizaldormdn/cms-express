@@ -1,5 +1,5 @@
 import Password from "../valueobject/Password";
-import { author, content, image, tags } from "../../../test/data/Data"
+import { author, content, image, tags } from "../../testdata"
 
 describe("aggregate author", () => {
   it("should add a password", () => {

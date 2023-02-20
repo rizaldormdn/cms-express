@@ -11,8 +11,7 @@ describe("Administrator service", () => {
     getAdministrator: jest.fn(),
     getAuthor: jest.fn(),
     saveAuthor: jest.fn(),
-    updateAdministrator: jest.fn(),
-    updateAuthor: jest.fn(),
+    updateUser: jest.fn(),
     deleteAuthor: jest.fn()
   };
   let confirmationService: ConfirmationService = {
@@ -32,7 +31,7 @@ describe("Administrator service", () => {
   })
 
   it("should change name", async () => {
-    userRepository.updateAdministrator = jest.fn().mockResolvedValueOnce(() => Promise.resolve())
+    userRepository.updateUser = jest.fn().mockResolvedValueOnce(() => Promise.resolve())
   
     try {
       await administratorService.changeName(administrator, newName)
@@ -42,7 +41,7 @@ describe("Administrator service", () => {
   })
 
   it("should throw an error if failed change name", async () => {
-    userRepository.updateAdministrator = jest.fn().mockRejectedValueOnce(() => Promise.reject(new Error()))
+    userRepository.updateUser = jest.fn().mockRejectedValueOnce(() => Promise.reject(new Error()))
 
     try {
       await administratorService.changeName(administrator, newName)
@@ -52,7 +51,7 @@ describe("Administrator service", () => {
   })
 
   it("should update password", async () => {
-    userRepository.updateAdministrator = jest.fn().mockResolvedValueOnce(() => Promise.resolve())
+    userRepository.updateUser = jest.fn().mockResolvedValueOnce(() => Promise.resolve())
 
     try {
       await administratorService.updatePassword(administrator, new Password())
@@ -62,7 +61,7 @@ describe("Administrator service", () => {
   })
 
   it("should throw an error if failed update password", async () => {
-    userRepository.updateAdministrator = jest.fn().mockRejectedValueOnce(() => Promise.reject(new Error()))
+    userRepository.updateUser = jest.fn().mockRejectedValueOnce(() => Promise.reject(new Error()))
 
     try {
       await administratorService.updatePassword(administrator, new Password())

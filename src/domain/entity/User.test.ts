@@ -2,9 +2,9 @@ import User from "./User";
 import Name from "../valueobject/Name";
 import Password from "../valueobject/Password";
 import ResetPasswordToken from "../valueobject/ResetPasswordToken";
-import { email, name, password } from "../../../test/data/Data"
+import { email, name, password } from "../../testdata"
 
-describe("aggregate user", () => {
+describe("User", () => {
   let user: User = new User(email, name, password);
 
   test('email local of "test" should be "test"', () => {

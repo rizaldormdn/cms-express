@@ -1,4 +1,4 @@
-import { administrator, authorEmail, name } from "../../../test/data/Data"
+import { administrator, authorEmail, name } from "../../testdata"
 
 describe("Administator", () => {
   it("should create an author", () => {

@@ -1,4 +1,4 @@
-import { slug, title, excerpt, imageThumbnailURL, authorName, tags, articleDate, articleSnapshot } from "../../../test/data/Data"
+import { slug, title, excerpt, imageThumbnailURL, authorName, tags, articleDate, articleSnapshot } from "../../testdata"
 import ArticleDate from "./ArticleDate"
 import ArticleSnapshot from "./ArticleSnapshot"
 
