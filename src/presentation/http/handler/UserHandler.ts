@@ -1,8 +1,9 @@
+require("dotenv").config();
 import { Request, Response, Router } from "express";
 import UserRepository from "../../../infrastructure/database/mysql/UserRepository";
 import { Connection } from "mysql2";
+import Middleware from "./Middleware";
 
-require("dotenv").config();
 
 export default (connection: Connection): Router => {
   const router = Router();
@@ -33,11 +34,10 @@ export default (connection: Connection): Router => {
     }
   });
 
-  router.get("/me", async (req: Request, res: Response) => {
-    let { email } = req.body;
+  router.get("/me", Middleware.authentication, async (req: Request, res: Response): Promise<void>  => {
 
     try {
-      let user = await userRepository.getAuthor(email);
+      let user = await userRepository.getAuthor(res.locals.user.email);
 
       res
         .status(200)
