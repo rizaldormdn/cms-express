@@ -1,12 +1,13 @@
 import { Request, Response, Router } from "express";
 import UserRepository from "../../../infrastructure/database/mysql/UserRepository";
-import mysql, { Connection } from "mysql2";
+import { Connection } from "mysql2";
+
 require("dotenv").config();
 
 export default (connection: Connection): Router => {
   const router = Router();
 
-  let User = new UserRepository(connection);
+  let userRepository = new UserRepository(connection);
 
   router.post("/login", (req, res) => {
     const { email, password } = req.body;
@@ -16,7 +17,7 @@ export default (connection: Connection): Router => {
         .status(200)
         .json({
           status: "success",
-          message: "Login successful!",
+          message: "Login successfull!",
           data: { email },
         })
         .end();
@@ -36,15 +37,19 @@ export default (connection: Connection): Router => {
     let { email } = req.body;
 
     try {
-      let user = await User.getAuthor(email);
+      let user = await userRepository.getAuthor(email);
+
       res
         .status(200)
         .json({
-          status: "success get author",
+          status: "success", // "success" / "fail" / "error"
+          message: "success get author",
           data: {
-            method: req.method,
-            url: req.url,
-            data: user,
+            name: {
+              first: user.name.first,
+              last: user.name.last
+            },
+            email: user.email.string(),
           },
         })
         .end();
@@ -52,27 +57,10 @@ export default (connection: Connection): Router => {
       res
         .status(404)
         .json({
-          status: "failed get author",
-          data: {
-            method: req.method,
-            url: req.url,
-            error: error,
-          },
+          status: "fail"
         })
         .end();
     }
-
-    res
-      .status(200)
-      .json({
-        status: "success",
-        message: "server is alive",
-        data: {
-          method: req.method,
-          url: req.url,
-        },
-      })
-      .end();
   });
 
   return router;
