@@ -37,7 +37,7 @@ export default (connection: Connection): Router => {
   router.get("/me", Middleware.authentication, async (req: Request, res: Response): Promise<void>  => {
 
     try {
-      let user = await userRepository.getAuthor(res.locals.user.email);
+      let user = res.locals.user;
       console.log(200);
       
       res
