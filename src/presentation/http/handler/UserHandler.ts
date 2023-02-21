@@ -38,7 +38,8 @@ export default (connection: Connection): Router => {
 
     try {
       let user = await userRepository.getAuthor(res.locals.user.email);
-
+      console.log(200);
+      
       res
         .status(200)
         .json({
@@ -55,9 +56,9 @@ export default (connection: Connection): Router => {
         .end();
     } catch (error) {
       res
-        .status(404)
+        .status(403)
         .json({
-          status: "fail"
+          status: "error"
         })
         .end();
     }
