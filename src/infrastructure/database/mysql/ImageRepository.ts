@@ -49,7 +49,7 @@ export default class ImageRepository implements ImageRepositoryInterface.default
           }
           if (result.length > 0) {
             resolve(new Image(
-              new ImageURL(result[0].original, result[0].thumbnail),
+              new ImageURL(result[0].original_url, result[0].thumbnail_url),
               result[0].alt,
               new Dimension(result[0].height, result[0].width),
               id
