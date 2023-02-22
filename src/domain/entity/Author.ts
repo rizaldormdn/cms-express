@@ -7,14 +7,16 @@ import Name from "../valueobject/Name";
 import Password from "../valueobject/Password";
 import { Tags } from "../valueobject/Tag";
 import Slug from "../valueobject/Slug";
+import ResetPasswordToken from "../valueobject/ResetPasswordToken";
 
 export default class Author extends User {
   constructor(
     email: Email,
     name: Name,
     password: Password,
+    resetPasswordToken?: ResetPasswordToken
   ) {
-    super(email, name, password);
+    super(email, name, password, resetPasswordToken);
   }
 
   public addPassword(password: Password) {

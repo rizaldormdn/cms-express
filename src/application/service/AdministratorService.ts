@@ -20,7 +20,7 @@ export default class AdministratorService {
       administrator.changeName(name)
     
       try {
-        resolve(await this._userRepository.updateAdministrator(administrator))
+        resolve(await this._userRepository.updateUser(administrator))
       } catch (err) {
         reject(err)
       }
@@ -32,7 +32,7 @@ export default class AdministratorService {
       administrator.updatePassword(password)
 
       try {
-        resolve(await this._userRepository.updateAdministrator(administrator))
+        resolve(await this._userRepository.updateUser(administrator))
       } catch (err) {
         reject(err)
       }

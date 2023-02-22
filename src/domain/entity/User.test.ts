@@ -1,12 +1,10 @@
 import User from "./User";
-import Email from "../valueobject/Email";
 import Name from "../valueobject/Name";
 import Password from "../valueobject/Password";
+import ResetPasswordToken from "../valueobject/ResetPasswordToken";
+import { email, name, password } from "../../testdata"
 
-describe("aggregate user", () => {
-  let email: Email = new Email("test@example.com");
-  let name: Name = new Name("John", "Doe");
-  let password: Password = new Password("$2b$10$WCZ6j4PLICecyCYvBvL7We");
+describe("User", () => {
   let user: User = new User(email, name, password);
 
   test('email local of "test" should be "test"', () => {
@@ -52,5 +50,18 @@ describe("aggregate user", () => {
     user.updatePassword(newPassword)
 
     expect(user.password.verify("password123")).toBeTruthy()
+  })
+
+  it("could have a reset password token", () => {
+    let resetPasswordToken = new ResetPasswordToken()
+    let user: User = new User(email, name, password, resetPasswordToken);
+
+    expect(user.resetPasswordToken).toBeDefined();
+  })
+
+  it("could add a reset password token", () => {
+    user.addResetPasswordToken(new ResetPasswordToken())
+
+    expect(user.resetPasswordToken).toBeDefined();
   })
 });

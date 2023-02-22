@@ -1,0 +1,67 @@
+import { Request, Response, Router } from "express";
+import UserRepository from "../../../infrastructure/database/mysql/UserRepository";
+import { Connection } from "mysql2";
+
+require("dotenv").config();
+
+export default (connection: Connection): Router => {
+  const router = Router();
+
+  let userRepository = new UserRepository(connection);
+
+  router.post("/login", (req, res) => {
+    const { email, password } = req.body;
+
+    try {
+      res
+        .status(200)
+        .json({
+          status: "success",
+          message: "Login successfull!",
+          data: { email },
+        })
+        .end();
+    } catch (error) {
+      res
+        .status(400)
+        .json({
+          status: "error",
+          message: "Invalid Credential!",
+          data: { email, password },
+        })
+        .end();
+    }
+  });
+
+  router.get("/me", async (req: Request, res: Response) => {
+    let { email } = req.body;
+
+    try {
+      let user = await userRepository.getAuthor(email);
+
+      res
+        .status(200)
+        .json({
+          status: "success", // "success" / "fail" / "error"
+          message: "success get author",
+          data: {
+            name: {
+              first: user.name.first,
+              last: user.name.last
+            },
+            email: user.email.string(),
+          },
+        })
+        .end();
+    } catch (error) {
+      res
+        .status(404)
+        .json({
+          status: "fail"
+        })
+        .end();
+    }
+  });
+
+  return router;
+};

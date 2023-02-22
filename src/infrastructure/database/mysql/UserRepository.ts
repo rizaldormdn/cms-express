@@ -1,6 +1,7 @@
 import { Connection } from "mysql2";
 import Administrator from "../../../domain/entity/Administrator";
 import Author from "../../../domain/entity/Author";
+import User from "../../../domain/entity/User";
 import * as UserRepositoryInterface from "../../../domain/repository/UserRepository";
 import Email from "../../../domain/valueobject/Email";
 import Name from "../../../domain/valueobject/Name";
@@ -66,14 +67,13 @@ export default class UserRepository implements UserRepositoryInterface.default {
   public saveAuthor(author: Author): Promise<void> {
     return new Promise<void>((resolve, reject) => {
       this._connection.query(
-        "INSERT INTO users (email, first_name, last_name, salt, hashed_password, is_administrator) VALUES (?, ?, ?, ?, ?)",
+        "INSERT INTO users (email, first_name, last_name, salt, hashed_password) VALUES (?, ?, ?, ?, ?)",
         [
           author.email.string(),
           author.name.first,
           author.name.last,
           author.password.salt,
           author.password.hashedPassword,
-          "FALSE",
         ],
         (err: any | null, result: any) => {
           if (err) {
@@ -81,50 +81,26 @@ export default class UserRepository implements UserRepositoryInterface.default {
 
             reject(err);
           }
-          if (result.length > 0) {
-            resolve(result);
-          }
+          
+          resolve(result)
         }
       );
     });
   }
 
-  public updateAdministrator(administrator: Administrator): Promise<void> {
+  public updateUser(user: User): Promise<void> {
     return new Promise<void>((resolve, reject) => {
       this._connection.query(
-        "UPDATE users SET first_name = ?, last_name = ?, salt = ?, hashed_password = ? WHERE email = ? AND is_administrator IS TRUE",
+        "UPDATE users SET first_name = ?, last_name = ?, salt = ?, hashed_password = ?, token = ?, token_expiry = ? WHERE email = ?",
         [
-          administrator.name.first,
-          administrator.name.last,
-          administrator.password.salt,
-          administrator.password.hashedPassword,
-          administrator.email.string(),
+          user.name.first,
+          user.name.last,
+          user.password.salt,
+          user.password.hashedPassword,
+          String(user.resetPasswordToken?.token),
+          user.resetPasswordToken?.tokenExpiry,
+          user.email.string(),
         ],
-        (err: any | null, result: any) => {
-          if (err) {
-            console.error(err);
-
-            reject(err);
-          }
-
-          resolve(result);
-        }
-      );
-    });
-  }
-
-  public updateAuthor(author: Author): Promise<void> {
-    return new Promise<void>((resolve, reject) => {
-      this._connection.query(
-        `UPDATE users SET first_name = ?, last_name = ?, salt = ?, hashed_password = ? WHERE email = ? AND is_administrator IS false`,
-        [
-          author.name.first,
-          author.name.last,
-          author.password.salt,
-          author.password.hashedPassword,
-          author.email.string(),
-        ],
-
         (err: any | null, result: any) => {
           if (err) {
             console.error(err);

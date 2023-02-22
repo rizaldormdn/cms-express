@@ -4,10 +4,13 @@ CREATE TABLE IF NOT EXISTS `users` (
   `last_name` varchar(256) NOT NULL,
   `salt` varchar(32) NOT NULL,
   `hashed_password` varchar(64) NOT NULL,
+  `token` varchar(128),
+  `token_expiry` datetime,
   `is_administrator` boolean,
   `created_at` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `updated_at` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`email`),
+  UNIQUE (`token`),
   INDEX `idx_is_administrator` (`is_administrator`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
