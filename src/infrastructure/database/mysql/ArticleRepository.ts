@@ -1,17 +1,17 @@
 import { Connection } from "mysql2";
-import Article from "../../../domain/aggregate/Article";
-import * as ArticleRepositoryInterface from "../../../domain/repository/ArticleRepository";
-import Author from "../../../domain/entity/Author";
-import ArticleSnapshot, { ArticleSnapshots } from "../../../domain/valueobject/ArticleSnapshot";
-import Slug from "../../../domain/valueobject/Slug";
-import Content from "../../../domain/valueobject/Content";
-import Image from "../../../domain/entity/Image";
-import Name from "../../../domain/valueobject/Name";
-import Tag, { Tags } from "../../../domain/valueobject/Tag";
-import ArticleDate from "../../../domain/valueobject/ArticleDate";
 import Specification from "../../../application/valueobject/Specification";
-import ImageURL from "../../../domain/valueobject/ImageURL";
+import Article from "../../../domain/aggregate/Article";
+import Author from "../../../domain/entity/Author";
+import Image from "../../../domain/entity/Image";
+import * as ArticleRepositoryInterface from "../../../domain/repository/ArticleRepository";
+import ArticleDate from "../../../domain/valueobject/ArticleDate";
+import ArticleSnapshot, { ArticleSnapshots } from "../../../domain/valueobject/ArticleSnapshot";
+import Content from "../../../domain/valueobject/Content";
 import Dimension from "../../../domain/valueobject/Dimension";
+import ImageURL from "../../../domain/valueobject/ImageURL";
+import Name from "../../../domain/valueobject/Name";
+import Slug from "../../../domain/valueobject/Slug";
+import Tag, { Tags } from "../../../domain/valueobject/Tag";
 
 export default class ArticleRepository implements ArticleRepositoryInterface.default {
   private _connection: Connection;
@@ -121,7 +121,7 @@ export default class ArticleRepository implements ArticleRepositoryInterface.def
           tagValues.push(`%,${article.tags[i].value},%`)
         }
       }
-  
+
       let query = `
         SELECT
           slug,
@@ -157,7 +157,7 @@ export default class ArticleRepository implements ArticleRepositoryInterface.def
               for (let tag of entry.tags.split(',')) {
                 tags.push(new Tag(tag))
               }
-  
+
               let relatedArticle = new ArticleSnapshot(
                 new Slug().rebuild(entry.slug),
                 entry.title,
@@ -170,7 +170,7 @@ export default class ArticleRepository implements ArticleRepositoryInterface.def
                   new Date(entry.updated_at)
                 )
               )
-    
+
               relatedArticles.push(relatedArticle)
             }
 
@@ -217,7 +217,7 @@ export default class ArticleRepository implements ArticleRepositoryInterface.def
               for (let tag of entry.tags.split(',')) {
                 tags.push(new Tag(tag))
               }
-  
+
               let featuredArticle = new ArticleSnapshot(
                 new Slug().rebuild(entry.slug),
                 entry.title,
@@ -230,7 +230,7 @@ export default class ArticleRepository implements ArticleRepositoryInterface.def
                   new Date(entry.updated_at)
                 )
               )
-    
+
               featuredArticles.push(featuredArticle)
             }
 
@@ -269,7 +269,7 @@ export default class ArticleRepository implements ArticleRepositoryInterface.def
         (err: any | null, result: any) => {
           if (err) {
             console.error(err);
-  
+
             reject(err);
           }
           if (result.length > 0) {
@@ -280,7 +280,7 @@ export default class ArticleRepository implements ArticleRepositoryInterface.def
               for (let tag of entry.tags.split(',')) {
                 tags.push(new Tag(tag))
               }
-  
+
               let featuredArticle = new ArticleSnapshot(
                 new Slug().rebuild(entry.slug),
                 entry.title,
@@ -293,7 +293,7 @@ export default class ArticleRepository implements ArticleRepositoryInterface.def
                   new Date(entry.updated_at)
                 )
               )
-    
+
               featuredArticles.push(featuredArticle)
             }
 
@@ -343,7 +343,7 @@ export default class ArticleRepository implements ArticleRepositoryInterface.def
               for (let tag of entry.tags.split(',')) {
                 tags.push(new Tag(tag))
               }
-  
+
               let featuredArticle = new ArticleSnapshot(
                 new Slug().rebuild(entry.slug),
                 entry.title,
@@ -356,7 +356,7 @@ export default class ArticleRepository implements ArticleRepositoryInterface.def
                   new Date(entry.updated_at)
                 )
               )
-    
+
               featuredArticles.push(featuredArticle)
             }
 
@@ -384,7 +384,7 @@ export default class ArticleRepository implements ArticleRepositoryInterface.def
           article.isPublished,
           article.date,
         ))
-      } catch(err) {
+      } catch (err) {
         reject(err);
       }
     });
