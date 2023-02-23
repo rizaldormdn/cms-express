@@ -32,32 +32,40 @@ describe("UserRepository", () => {
           ["first_name", "last_name", "salt", "hashed_password", "is_administrator"]
         );
   
-      expect(await userRepository.getUser(email)).toBeDefined();
+      try {
+        expect(await userRepository.getUser(email)).toBeDefined();
+      } catch(err) {
+        expect(err).toBeUndefined()
+      }
     });
   
     it("should return an author", async () => {
       mock
-      .expects("query")
-      .once()
-      .withArgs(
-        "SELECT first_name, last_name, salt, hashed_password, is_administrator FROM users WHERE email = ? LIMIT 1"
-      )
-      .callsArgWith(
-        2,
-        null,
-        [
-          {
-            first_name: "Admin",
-            last_name: "",
-            salt: "$2b$10$z1e0ySIYbA/5FXNzZy.Qge",
-            hashed_password: "$2b$10$z1e0ySIYbA/5FXNzZy.Qgefti4GC8YwobSbO81EfD9JTuX/X1J1Xu",
-            is_administrator: false
-          },
-        ],
-        ["first_name", "last_name", "salt", "hashed_password", "is_administrator"]
-      );
+        .expects("query")
+        .once()
+        .withArgs(
+          "SELECT first_name, last_name, salt, hashed_password, is_administrator FROM users WHERE email = ? LIMIT 1"
+        )
+        .callsArgWith(
+          2,
+          null,
+          [
+            {
+              first_name: "Admin",
+              last_name: "",
+              salt: "$2b$10$z1e0ySIYbA/5FXNzZy.Qge",
+              hashed_password: "$2b$10$z1e0ySIYbA/5FXNzZy.Qgefti4GC8YwobSbO81EfD9JTuX/X1J1Xu",
+              is_administrator: false
+            },
+          ],
+          ["first_name", "last_name", "salt", "hashed_password", "is_administrator"]
+        );
   
-    expect(await userRepository.getUser(email)).toBeDefined();
+      try {
+        expect(await userRepository.getUser(email)).toBeDefined();
+      } catch(err) {
+        expect(err).toBeUndefined()
+      }
     })
   
     it("should return an error if failed get an user", async () => {

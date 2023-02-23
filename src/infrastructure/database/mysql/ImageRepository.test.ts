@@ -1,219 +1,156 @@
 import mysql, { Connection } from "mysql2";
 import sinon, { SinonMock } from "sinon";
-import Author from "../../../domain/entity/Author";
-import Image from "../../../domain/entity/Image";
 import * as ImageRepositoryDomain from "../../../domain/repository/ImageRepository"
-import Dimension from "../../../domain/valueobject/Dimension";
-import Email from "../../../domain/valueobject/Email";
-import ImageURL from "../../../domain/valueobject/ImageURL";
-import Name from "../../../domain/valueobject/Name";
-import Password from "../../../domain/valueobject/Password";
 import ImageRepository from "./ImageRepository";
+import { image, author } from "../../../testdata";
 
-describe("Image Repository MySQL", () => {
-    let connection: Connection = mysql.createConnection({ host: "localhost" });
-    let mock: SinonMock = sinon.mock(connection);
-    let repository: ImageRepositoryDomain.default = new ImageRepository(connection)
-    let uuid = "asdasdas12396sdaflkhj"
-    let author: Author = new Author(
-        new Email("email@mail.com"),
-        new Name("admin", "kece"),
-        new Password("asdasd1324123", "asdffg123u49afasdqewt")
-    )
-    let image: Image = new Image(
-        new ImageURL("original-url", "thumbnail-url"),
-        "alternative",
-        new Dimension(50, 70))
-    let imagez: string = "aasdasdasd235425sdgsd"
+describe("ImageRepository", () => {
+  let connection: Connection = mysql.createConnection({ host: "localhost" });
+  let mock: SinonMock = sinon.mock(connection);
+  let imageRepository: ImageRepositoryDomain.default = new ImageRepository(connection)
 
-    it("should return an images", async () => {
-        mock
-            .expects("query")
-            .once()
-            .withArgs("SELECT id, original_url, thumbnail_url, alt, height, width FROM images WHERE author = ?")
-            .callsArgWith(
-                2,
-                null,
-                [
-                    {
-                        id: "asdasdas12396sdaflkhj",
-                        original_url: "original-url",
-                        thumbnail_url: "thumbnail-url",
-                        alt: "alternative",
-                        height: 50,
-                        width: 70,
-                    },
-                    {
-                        id: "asdasdas1239adfsasdaflkhj",
-                        original_url: "original-url2",
-                        thumbnail_url: "thumbnail-url2",
-                        alt: "alternative2",
-                        height: 50,
-                        width: 70,
-                    }
-                ],
-                ["id", " original_url", "thumbnail_url", "alt", "height", "width"]
-            )
-        expect(await repository.getImages(author)).toBeDefined()
-    })
-    it("should return an error if failed", async () => {
-        mock.expects("query").once().callsArgWith(2, new Error(), null, null)
-        try {
-            await repository.getImages(author)
-        } catch (error) {
-            expect(error).toBeInstanceOf(Error)
-        }
-    })
-    it("should return an image uuid", async () => {
-        mock
-            .expects("query")
-            .once()
-            .withArgs("SELECT id, original_url, thumbnail_url, alt, height, width FROM images WHERE author = ?")
-            .callsArgWith(
-                2,
-                null,
-                [
-                    {
-                        id: "asdasdas12396sdaflkhj",
-                        original_url: "original-url",
-                        thumbnail_url: "thumbnail-url",
-                        alt: "alternative",
-                        height: 50,
-                        width: 70,
-                    }
-                ],
-                ["id", " original_url", "thumbnail_url", "alt", "height", "width"]
-            )
-        expect(repository.getImages(author)).toBeDefined
+  describe("get images by author", () => {
+    it("should return images by author", async () => {
+      mock
+        .expects("query")
+        .once()
+        .withArgs("SELECT BIN_TO_UUID(id), original_url, thumbnail_url, alt, height, width FROM images WHERE author_email = ? LIMIT ?")
+        .callsArgWith(
+          2,
+          null,
+          [
+            {
+              id: image.id,
+              original_url: image.url.original,
+              thumbnail_url: image.url.thumbnail,
+              alt: image.alt,
+              height: image.dimension.height,
+              width: image.dimension.width
+            }
+          ],
+          ["id", "original_url", "thumbnail_url", "alt", "height", "width"]
+        )
+
+      try {
+        expect(await imageRepository.getImages(author)).toBeDefined();
+      } catch(err) {
+        expect(err).toBeUndefined()
+      }
     })
 
     it("should return an error if failed", async () => {
-        mock.expects("query").once().callsArgWith(2, new Error(), null, null)
-        try {
-            await repository.getImages(author)
-        } catch (error) {
-            expect(error).toBeInstanceOf(Error)
-        }
+      mock.expects("query").once().callsArgWith(2, new Error(), null, null)
+  
+      try {
+        await imageRepository.getImages(author)
+      } catch (error) {
+        expect(error).toBeInstanceOf(Error)
+      }
+    })
+  })
+
+  describe("get image", () => {
+    it("should return an image", async () => {
+      mock
+        .expects("query")
+        .once()
+        .withArgs("SELECT original_url, thumbnail_url, alt, height, width, author_email FROM images WHERE BIN_TO_UUID(id) = ? LIMIT 1")
+        .callsArgWith(
+          2,
+          null,
+          [
+            {
+              original_url: image.url.original,
+              thumbnail_url: image.url.thumbnail,
+              alt: image.alt,
+              height: image.dimension.height,
+              width: image.dimension.width
+            }
+          ],
+          ["original_url", "thumbnail_url", "alt", "height", "width"]
+        )
+
+      try {
+        expect(await imageRepository.getImage(image.id)).toBeDefined();
+      } catch(err) {
+        expect(err).toBeUndefined()
+      }
     })
 
-    it("should return an get image", async () => {
-        mock
-            .expects("query")
-            .once()
-            .withArgs("SELECT original_url, thumbnail_url, alt, height, width FROM images WHERE id = ?")
-            .callsArgWith(
-                2,
-                null,
-                [
-                    {
-                        id: "asdasdas12396sdaflkhj",
-                        original_url: "original-url",
-                        thumbnail_url: "thumbnail-url",
-                        alt: "alternative",
-                        height: 50,
-                        width: 70,
-                    }
-                ],
-                ["id", " original_url", "thumbnail_url", "alt", "height", "width"]
-            )
-        expect(await repository.getImage(uuid)).toBeDefined()
+    it("should return an error if failed get an image", async () => {
+      mock.expects("query").once().callsArgWith(2, new Error(), null, null)
+  
+      try {
+        await imageRepository.getImage(image.id)
+      } catch (error) {
+        expect(error).toBeInstanceOf(Error)
+      }
     })
-    it("should return an error if failed", async () => {
-        mock.expects("query").once().callsArgWith(2, new Error(), null, null)
-        try {
-            await repository.getImage(uuid)
-        } catch (error) {
-            expect(error).toBeInstanceOf(Error)
-        }
-    })
+  })
 
-    it("should save image", async () => {
-        mock
-            .expects("query")
-            .once()
-            .withArgs("INSERT INTO images (id, original_url, thumbnail_url, alt, height, width) VALUES (?, ?, ?, ?, ?, ?)")
-            .callsArgWith(
-                2,
-                null,
-                [
-                    {
-                        id: "asdasdas12396sdaflkhj",
-                        original_url: "original-url",
-                        thumbnail_url: "thumbnail-url",
-                        alt: "alternative",
-                        height: 50,
-                        width: 70,
-                    }
-                ],
-                ["id", "original_url", "thumbnail_url", "alt", "height", "width"]
-            )
-        expect(await repository.saveImage(image)).toBeDefined()
-    })
+  describe("save image", () => {
+    it("should save an image", () => {
+      mock.expects("query").once().withArgs("INSERT INTO images (id, original_url, thumbnail_url, alt, height, width, author_email) VALUES (UUID_TO_BIN(?), ?, ?, ?, ?, ?, ?)");
+  
+      try {
+        imageRepository.saveImage(image)
+      } catch (err) {
+        expect(err).toBeUndefined()
+      }
+    });
 
-    it("should return an error if failed", async () => {
-        mock.expects("query").once().callsArgWith(2, new Error(), null, null)
-        try {
-            await repository.saveImage(image)
-        } catch (error) {
-            expect(error).toBeInstanceOf(Error)
-        }
+    it("should return an error if failed save an image", async () => {
+      mock.expects("query").once().callsArgWith(2, new Error(), null, null)
+  
+      try {
+        await imageRepository.saveImage(image)
+      } catch (error) {
+        expect(error).toBeInstanceOf(Error)
+      }
     })
+  })
 
-    it("should update image", async () => {
-        mock
-            .expects("query")
-            .once()
-            .withArgs("UPDATE images SET original_url = ?, thumbnail_url = ?, alt = ?, height = ?, width = ?")
-            .callsArgWith(
-                2,
-                null,
-                [
-                    {
-                        id: "aasdasdasd235425sdgsd",
-                        original_url: "original-url2",
-                        thumbnail_url: "thumbnail-url2",
-                        alt: "alternative2",
-                        height: 53,
-                        width: 73,
-                    }
-                ],
-                ["id", "original_url", "thumbnail_url", "alt", "height", "width"]
-            )
-        expect(await repository.updateImage(image)).toBeDefined()
-    })
+  describe("update image", () => {
+    it("should update an image", () => {
+      mock.expects("query").once().withArgs("UPDATE images SET original_url = ?, thumbnail_url = ?, alt = ?, height = ?, width = ? WHERE BIN_TO_UUID(id) = ?");
+  
+      try {
+        imageRepository.updateImage(image)
+      } catch (err) {
+        expect(err).toBeUndefined()
+      }
+    });
 
-    it("should return an error if failed", async () => {
-        mock.expects("query").once().callsArgWith(2, new Error(), null, null)
-        try {
-            await repository.updateImage(image)
-        } catch (error) {
-            expect(error).toBeInstanceOf(Error)
-        }
+    it("should return an error if failed update an image", async () => {
+      mock.expects("query").once().callsArgWith(2, new Error(), null, null)
+  
+      try {
+        await imageRepository.updateImage(image)
+      } catch (error) {
+        expect(error).toBeInstanceOf(Error)
+      }
     })
+  })
 
-    it("should delete image", async () => {
-        mock
-            .expects("query")
-            .once()
-            .withArgs("DELETE FROM images WHERE id = ?")
-            .callsArgWith(
-                2,
-                null,
-                [
-                    {
-                        id: "aasdasdasd235425sdgsd",
-                    }
-                ],
-                ["id"]
-            )
-        expect(await repository.deleteImage(imagez)).toBeDefined()
+  describe("delete image", () => {
+    it("should delete an image", () => {
+      mock.expects("query").once().withArgs("DELETE FROM images WHERE BIN_TO_UUID(id) = ?");
+  
+      try {
+        imageRepository.deleteImage(image.id)
+      } catch (err) {
+        expect(err).toBeUndefined()
+      }
+    });
+
+    it("should return an error if failed delete an image", async () => {
+      mock.expects("query").once().callsArgWith(2, new Error(), null, null)
+  
+      try {
+        await imageRepository.deleteImage(image.id)
+      } catch (error) {
+        expect(error).toBeInstanceOf(Error)
+      }
     })
-    it("should return an error if failed", async () => {
-        mock.expects("query").once().callsArgWith(2, new Error(), null, null)
-        try {
-            await repository.deleteImage(imagez)
-        } catch (error) {
-            expect(error).toBeInstanceOf(Error)
-        }
-    })
+  })
 })

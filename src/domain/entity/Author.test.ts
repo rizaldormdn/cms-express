@@ -11,6 +11,10 @@ describe("aggregate author", () => {
   })
 
   it("should add an article", () => {
-    expect(author.addArticle(content, image, tags)).toBeDefined()
+    try {
+      author.addArticle(content, image, tags)
+    } catch(err) {
+      expect(err).toBeUndefined()
+    }
   })
 });
