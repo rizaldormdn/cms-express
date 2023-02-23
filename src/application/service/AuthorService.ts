@@ -27,7 +27,7 @@ export default class AuthorService {
       author.changeName(name)
     
       try {
-        resolve(await this._userRepository.updateAuthor(author))
+        resolve(await this._userRepository.updateUser(author))
       } catch (err) {
         reject(err)
       }
@@ -39,7 +39,7 @@ export default class AuthorService {
       author.updatePassword(password)
 
       try {
-        resolve(await this._userRepository.updateAuthor(author))
+        resolve(await this._userRepository.updateUser(author))
       } catch (err) {
         reject(err)
       }
