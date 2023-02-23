@@ -8,8 +8,7 @@ import ConfirmationService from "./ConfirmationService";
 
 describe("Administrator service", () => {
   let userRepository: UserRepository = {
-    getAdministrator: jest.fn(),
-    getAuthor: jest.fn(),
+    getUser: jest.fn(),
     saveAuthor: jest.fn(),
     updateUser: jest.fn(),
     deleteAuthor: jest.fn()

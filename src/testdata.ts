@@ -27,6 +27,7 @@ export const token = "abc123"
 export const tokenExpiry = now
 export const resetPasswordToken: ResetPasswordToken = new ResetPasswordToken(token, tokenExpiry)
 export const author: Author = new Author(email, name, password, resetPasswordToken);
+export const authorWithoutResetPasswordToken: Author = new Author(email, name, password);
 export const title = "This is title"
 export const excerpt = "This is excerpt."
 export const content = new Content(title, "<p>This is content.</p>", excerpt)
