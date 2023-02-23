@@ -393,7 +393,7 @@ export default class ArticleRepository implements ArticleRepositoryInterface.def
   saveArticle(article: Article): Promise<void> {
     return new Promise<void>((resolve, reject) => {
       this._connection.query(
-        'INSERT INTO articles (slug, title, content, excerpt, image_id, author_email, tags) VALUES (?, ?, ?, ?, BIN_TO_UUID(?), ?, ?)',
+        'INSERT INTO articles (slug, title, content, excerpt, image_id, author_email, tags) VALUES (?, ?, ?, ?, UUID_TO_BIN(?), ?, ?)',
         [
           article.slug.value,
           article.content.title,
@@ -419,7 +419,7 @@ export default class ArticleRepository implements ArticleRepositoryInterface.def
   updateArticle(article: Article): Promise<void> {
     return new Promise<void>((resolve, reject) => {
       this._connection.query(
-        'UPDATE articles SET content = ?, excerpt = ?, image_id = ?, tags = ?) VALUES (?, ?, BIN_TO_UUID(?), ?) WHERE slug = ? AND author_email = ?',
+        'UPDATE articles SET content = ?, excerpt = ?, image_id = ?, tags = ?) VALUES (?, ?, UUID_TO_BIN(?), ?) WHERE slug = ? AND author_email = ?',
         [
           article.content.content,
           article.content.excerpt,
