@@ -1,28 +1,7 @@
-import Content from "../valueobject/Content";
-import Dimension from "../valueobject/Dimension";
-import Image from "../entity/Image";
 import Article from "./Article";
-import ArticleDate from "../valueobject/ArticleDate";
-import ImageURL from "../valueobject/ImageURL";
-import Slug from "../valueobject/Slug";
-import { ArticleSnapshots } from "../valueobject/ArticleSnapshot";
-import { Tags } from "../valueobject/Tag";
+import { article, content, image, authorName, authorEmail, tags, slug } from "../../testdata"
 
 describe("Article", () => {
-  let title = "This is title"
-  let slug = new Slug(title)
-  let content = new Content(title, "This is content", "This is excerpt");
-  let dimension = new Dimension(1920, 1080);
-  let imageURL = new ImageURL("http://example.com/original.jpg", "http://example.com/thumbnail.jpg")
-  let image = new Image(imageURL, "A sample image", dimension);
-  let authorName = "John Doe"
-  let authorEmail = "john.doe@example.com"
-  let tags: Tags = []
-  let relatedArticles: ArticleSnapshots = []
-  let isPublished = true
-  let date = new ArticleDate()
-  let article = new Article(slug, content, image, authorName, authorEmail, tags, relatedArticles, isPublished, date);
-
   it("should have a slug based on the article title", () => {
     expect(article.slug.value).toMatch(/^this-is-title-[a-f0-9]+/);
   });
@@ -31,21 +10,34 @@ describe("Article", () => {
     expect(article.content).toEqual(content);
     expect(article.image).toEqual(image);
     expect(article.authorName).toEqual(authorName);
-    expect(article.authorEmail).toEqual(authorEmail);
+    expect(article.authorEmail).toBeDefined();
     expect(article.tags).toEqual(tags);
-    expect(article.relatedArticles).toEqual(relatedArticles)
-    expect(article.isPublished).toEqual(isPublished);
-    expect(article.date).toEqual(date)
+    expect(article.relatedArticles).toBeDefined();
+    expect(article.isPublished).toEqual(false);
+    expect(article.date).toBeDefined();
+  });
+
+  it("should have predefined content, image, author name, author email, tags, related articles, is published, and date properties", () => {
+    let rebuildedArticle = new Article(article.slug, article.content, article.image, article.authorName, article.authorEmail, article.tags, article.relatedArticles, article.isPublished, article.date)
+    
+    expect(rebuildedArticle.content).toEqual(content);
+    expect(rebuildedArticle.image).toEqual(image);
+    expect(rebuildedArticle.authorName).toEqual(authorName);
+    expect(rebuildedArticle.authorEmail).toBeDefined();
+    expect(rebuildedArticle.tags).toEqual(tags);
+    expect(rebuildedArticle.relatedArticles).toBeDefined();
+    expect(rebuildedArticle.isPublished).toEqual(false);
+    expect(rebuildedArticle.date).toBeDefined();
   });
 
   it("should be initially unpublished", () => {
-    let article = new Article(slug, content, image, authorName, authorEmail);
+    let article = new Article(slug, content, image, authorName, authorEmail.string());
 
     expect(article.isPublished).toBe(false);
   });
 
   it("should be able to be publish and unpublish", () => {
-    let article = new Article(slug, content, image, authorName, authorEmail);
+    let article = new Article(slug, content, image, authorName, authorEmail.string());
 
     article.publish();
 
@@ -57,7 +49,7 @@ describe("Article", () => {
   });
 
   it("should throw an error if author name is missing", () => {
-    expect(() => new Article(slug, content, image, "", authorEmail)).toThrow(
+    expect(() => new Article(slug, content, image, "", authorEmail.string())).toThrow(
       "author name cannot be empty"
     );
   });

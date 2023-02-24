@@ -3,6 +3,7 @@ import Image, { Images } from "../../../domain/entity/Image";
 import * as ImageRepositoryInterface from "../../../domain/repository/ImageRepository"
 import Dimension from "../../../domain/valueobject/Dimension";
 import ImageURL from "../../../domain/valueobject/ImageURL";
+import Author from "../../../domain/entity/Author";
 
 export default class ImageRepository implements ImageRepositoryInterface.default {
   private _connection: Connection;
@@ -11,11 +12,14 @@ export default class ImageRepository implements ImageRepositoryInterface.default
     this._connection = connection;
   }
 
-  getImages(): Promise<Images> {
+  getImages(author: Author): Promise<Images> {
     return new Promise<Images>((resolve, reject) => {
       this._connection.query(
-        "SELECT id, original_url, thumbnail_url, alt, height, width FROM images LIMIT ?",
-        [Number(process.env.LIMIT_IMAGES)],
+        "SELECT BIN_TO_UUID(id), original_url, thumbnail_url, alt, height, width FROM images WHERE author_email = ? LIMIT ?",
+        [
+          author.email.string(),
+          Number(process.env.LIMIT_IMAGES)
+        ],
         (err: any | null, result: any) => {
           if (err) {
             console.error(err)
@@ -23,14 +27,19 @@ export default class ImageRepository implements ImageRepositoryInterface.default
             reject(err)
           }
           if (result.length > 0) {
-            resolve(result.map((image: any) => {
-              new Image(
-                new ImageURL(image.original, image.thumbnail),
-                image.alt,
-                new Dimension(image.height, image.width),
-                image.id
-              )
-            }))
+            let images: Images = []
+
+            for (let entry of result) {
+              images.push(new Image(
+                new ImageURL(entry.original, entry.thumbnail),
+                entry.alt,
+                new Dimension(entry.height, entry.width),
+                author.email.string(),
+                entry.id
+              ))
+            }
+
+            resolve(images)
           }
         })
     })
@@ -39,7 +48,7 @@ export default class ImageRepository implements ImageRepositoryInterface.default
   getImage(id: string): Promise<Image> {
     return new Promise<Image>((resolve, reject) => {
       this._connection.query(
-        "SELECT original_url, thumbnail_url, alt, height, width FROM images WHERE BIN_TO_UUID(id) = ? LIMIT 1",
+        "SELECT original_url, thumbnail_url, alt, height, width, author_email FROM images WHERE BIN_TO_UUID(id) = ? LIMIT 1",
         [id],
         (err: any | null, result: any) => {
           if (err) {
@@ -52,6 +61,7 @@ export default class ImageRepository implements ImageRepositoryInterface.default
               new ImageURL(result[0].original_url, result[0].thumbnail_url),
               result[0].alt,
               new Dimension(result[0].height, result[0].width),
+              result[0].author_email,
               id
             ))
           }
@@ -62,7 +72,7 @@ export default class ImageRepository implements ImageRepositoryInterface.default
   saveImage(image: Image): Promise<void> {
     return new Promise<void>((resolve, reject) => {
       this._connection.query(
-        "INSERT INTO images (id, original_url, thumbnail_url, alt, height, width) VALUES (?, ?, ?, ?, ?, ?)",
+        "INSERT INTO images (id, original_url, thumbnail_url, alt, height, width, author_email) VALUES (UUID_TO_BIN(?), ?, ?, ?, ?, ?, ?)",
         [
           image.id,
           image.url.original,
@@ -70,6 +80,7 @@ export default class ImageRepository implements ImageRepositoryInterface.default
           image.alt,
           image.dimension.height,
           image.dimension.width,
+          image.authorEmail
         ],
         (err: any | null, result: any) => {
           if (err) {

@@ -3,8 +3,8 @@ import Author from '../entity/Author'
 
 export default interface ImageRepository{
   getImages(author: Author): Promise<Images>
-  getImage(uuid: string): Promise<Image>
+  getImage(id: string): Promise<Image>
   saveImage(image: Image): Promise<void>
   updateImage(image: Image): Promise<void>
-  deleteImage(uuid: string): Promise<void>
+  deleteImage(id: string): Promise<void>
 }

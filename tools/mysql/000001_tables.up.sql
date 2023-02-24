@@ -21,9 +21,11 @@ CREATE TABLE IF NOT EXISTS `images` (
   `alt` varchar(256) NOT NULL,
   `height` int unsigned NOT NULL,
   `width` int unsigned NOT NULL,
+  `author_email` varchar(256) NOT NULL,
   `created_at` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `updated_at` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-  PRIMARY KEY (`id`)
+  PRIMARY KEY (`id`),
+  FOREIGN KEY (`author_email`) REFERENCES `users`(`email`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 CREATE TABLE IF NOT EXISTS `articles` (

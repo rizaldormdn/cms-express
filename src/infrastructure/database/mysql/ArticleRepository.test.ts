@@ -32,7 +32,7 @@ describe("ArticleRepository", () => {
   let content = new Content(title, "This is content", "This is excerpt");
   let dimension = new Dimension(1920, 1080);
   let imageURL = new ImageURL("http://example.com/original.jpg", "http://example.com/thumbnail.jpg")
-  let image = new Image(imageURL, "A sample image", dimension);
+  let image = new Image(imageURL, "A sample image", dimension, email.string());
   let authorName = "John Doe"
   let authorEmail = "john.doe@example.com"
   let tags: Tags = [
@@ -414,7 +414,7 @@ describe("ArticleRepository", () => {
 
   describe("save an article", () => {
     it("should save an article", () => {
-      mock.expects("query").once().withArgs("INSERT INTO articles (slug, title, content, excerpt, image_id, author_email, tags) VALUES (?, ?, ?, ?, BIN_TO_UUID(?), ?, ?)");
+      mock.expects("query").once().withArgs("INSERT INTO articles (slug, title, content, excerpt, image_id, author_email, tags) VALUES (?, ?, ?, ?, UUID_TO_BIN(?), ?, ?)");
   
       try {
         articleRepository.saveArticle(article)
@@ -436,7 +436,7 @@ describe("ArticleRepository", () => {
 
   describe("update an article", () => {
     it("should update an article", () => {
-      mock.expects("query").once().withArgs("UPDATE articles SET content = ?, excerpt = ?, image_id = ?, tags = ?) VALUES (?, ?, BIN_TO_UUID(?), ?) WHERE slug = ? AND author_email = ?");
+      mock.expects("query").once().withArgs("UPDATE articles SET content = ?, excerpt = ?, image_id = ?, tags = ?) VALUES (?, ?, UUID_TO_BIN(?), ?) WHERE slug = ? AND author_email = ?");
   
       try {
         articleRepository.updateArticle(article)
