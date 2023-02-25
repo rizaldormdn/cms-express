@@ -13,6 +13,7 @@ import ConfirmationService from "../../application/service/ConfirmationService";
 describe("UserHandler", () => {
   const userRepository: UserRepository = {
     getUser: jest.fn(),
+    getUserByToken: jest.fn(),
     saveAuthor: jest.fn(),
     updateUser: jest.fn(),
     deleteAuthor: jest.fn()

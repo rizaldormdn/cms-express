@@ -41,6 +41,32 @@ export default class UserRepository implements UserRepositoryInterface.default {
     });
   }
 
+  public getUserByToken(token: string): Promise<User> {
+    return new Promise<User>((resolve, reject) => {
+      this._connection.query(
+        "SELECT email, first_name, last_name, salt, hashed_password, token_expiry, is_administrator FROM users WHERE token = ? LIMIT 1",
+        [token],
+        (err: any | null, result: any) => {
+          if (err) {
+            console.error(err);
+
+            reject(err);
+          }
+          if (result.length > 0) {
+            resolve(
+              new Administrator(
+                new Email(result[0].email),
+                new Name(result[0].first_name, result[0].last_name),
+                new Password(result[0].salt, result[0].hashed_password),
+                new ResetPasswordToken(token, new Date(result[0].token_expiry))
+              )
+            );
+          }
+        }
+      );
+    });
+  }
+
   public saveAuthor(author: Author): Promise<void> {
     return new Promise<void>((resolve, reject) => {
       this._connection.query(

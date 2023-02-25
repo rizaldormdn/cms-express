@@ -52,6 +52,49 @@ describe("UserRepository", () => {
     });
   })
 
+  describe("get user by token", () => {
+    it("should return an user", async () => {
+      mock
+        .expects("query")
+        .once()
+        .withArgs(
+          "SELECT email, first_name, last_name, salt, hashed_password, token_expiry, is_administrator FROM users WHERE token = ? LIMIT 1"
+        )
+        .callsArgWith(
+          2,
+          null,
+          [
+            {
+              email: "admin@example.com",
+              first_name: "Admin",
+              last_name: "",
+              salt: "$2b$10$z1e0ySIYbA/5FXNzZy.Qge",
+              hashed_password: "$2b$10$z1e0ySIYbA/5FXNzZy.Qgefti4GC8YwobSbO81EfD9JTuX/X1J1Xu",
+              token_expiry: null,
+              is_administrator: true
+            },
+          ],
+          ["email", "first_name", "last_name", "salt", "hashed_password", "token_expiry", "is_administrator"]
+        );
+  
+      try {
+        expect(await userRepository.getUserByToken("")).toBeDefined();
+      } catch(err) {
+        expect(err).toBeUndefined()
+      }
+    });
+  
+    it("should return an error if failed get an user", async () => {
+      mock.expects("query").once().callsArgWith(2, new Error(), null, null);
+  
+      try {
+        await userRepository.getUserByToken("");
+      } catch (err) {
+        expect(err).toBeInstanceOf(Error);
+      }
+    });
+  })
+
   describe("save author", () => {
     it("should save an author", async () => {
       mock.expects("query").once().withArgs("INSERT INTO users (email, first_name, last_name, salt, hashed_password, token, token_expiry) VALUES (?, ?, ?, ?, ?, ?, ?)");

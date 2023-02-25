@@ -6,6 +6,7 @@ import { authorEmail, name, author, password, token } from "../../../src/testdat
 describe("ResetPasswordService", () => {
   let userRepository: UserRepository = {
     getUser: jest.fn(),
+    getUserByToken: jest.fn(),
     saveAuthor: jest.fn(),
     updateUser: jest.fn(),
     deleteAuthor: jest.fn()
