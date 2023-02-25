@@ -1,5 +1,6 @@
 import UserRepository from "../../domain/repository/UserRepository";
 import Password from "../../domain/valueobject/Password";
+import Email from "../../domain/valueobject/Email";
 import User from "../../domain/entity/User";
 
 export default class ResetPasswordService {
@@ -9,22 +10,24 @@ export default class ResetPasswordService {
     this._userRepository = userRepository;
   }
 
-  public resetPassword(user: User, newPassword: Password, token: string): Promise<void> {
+  public resetPassword(email: Email, newPassword: Password, token: string): Promise<void> {
     return new Promise<void>(async (resolve, reject) => {
-      if (!user.resetPasswordToken) {
-        reject(new Error("reset password token cannot be empty"));
-
-        return
-      }
-      if (!user.resetPasswordToken.verify(token)) {
-        reject(new Error("token is not valid"));
-
-        return
-      }
-
-      user.updatePassword(newPassword);
-
       try {
+        let user: User = await this._userRepository.getUser(email)
+
+        if (!user.resetPasswordToken) {
+          reject(new Error("reset password token cannot be empty"));
+  
+          return
+        }
+        if (!user.resetPasswordToken.verify(token)) {
+          reject(new Error("token is not valid"));
+  
+          return
+        }
+  
+        user.updatePassword(newPassword);
+
         await this._userRepository.updateUser(user);
 
         resolve()
