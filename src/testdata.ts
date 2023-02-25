@@ -16,8 +16,10 @@ import ResetPasswordToken from "./domain/valueobject/ResetPasswordToken";
 import User from "./domain/entity/User";
 
 let now = new Date();
+let old = new Date();
 
 now.setHours(new Date().getHours() + 1)
+old.setHours(new Date().getHours() - 1)
 
 export const email: Email = new Email("test@example.com");
 export const authorEmail: Email = new Email("author@example.com");
@@ -26,7 +28,9 @@ export const authorName = "John Doe"
 export const password: Password = new Password("$2b$10$LPWgQolfuVYRiZ9wQAtPnO", "$2b$10$LPWgQolfuVYRiZ9wQAtPnOKMcoi2EhwYTm..MmQLIKtJ/PpXtNZym");
 export const token = "abc123"
 export const tokenExpiry = now
+export const tokenExpired = old
 export const resetPasswordToken: ResetPasswordToken = new ResetPasswordToken(token, tokenExpiry)
+export const invalidResetPasswordToken: ResetPasswordToken = new ResetPasswordToken(token, tokenExpired)
 export const user: User = new User(email, name, password, resetPasswordToken, false);
 export const author: Author = new Author(authorEmail, name, password, resetPasswordToken);
 export const authorWithoutResetPasswordToken: Author = new Author(email, name, password);
