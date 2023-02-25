@@ -1,16 +1,18 @@
 require("dotenv").config();
 
-import Server from "./presentation/http/Server";
-import Router from "./presentation/http/Router";
-import { Router as ExpressRouter } from "express";
 import mysql, { Connection } from "mysql2";
+import Router from "./Router";
+import Server from "./Server";
 
 const connection: Connection = mysql.createConnection({
-	user: process.env.DB_USERNAME,
-	password: process.env.DB_USERPASS,
-	database: process.env.DB_NAME,
+  user: process.env.DB_USERNAME,
+  password: process.env.DB_USERPASS,
+  database: process.env.DB_NAME,
+  host: process.env.DB_HOST,
+  port: Number(process.env.DB_PORT)
 });
-const router: ExpressRouter = Router(connection);
-const server: Server = new Server(router);
 
-server.run(Number(process.env.SERVER_PORT));
+Server.run(
+  Number(process.env.PORT),
+  Router.run()
+)

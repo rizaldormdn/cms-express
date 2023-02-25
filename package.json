@@ -2,11 +2,11 @@
 	"name": "blog-cms-backend",
 	"version": "1.0.0",
 	"description": "CMS Backend System for Blog. Created for Salt Academy's project collaboration with its student.",
-	"main": "dist/App.js",
+	"main": "dist/app.js",
 	"scripts": {
 		"test": "jest",
-		"dev": "nodemon dist/App.js",
-		"prod": "tsc && node dist/App.js"
+		"dev": "tsc && nodemon dist/app.js",
+		"prod": "tsc && node dist/app.js"
 	},
 	"repository": {
 		"type": "git",
