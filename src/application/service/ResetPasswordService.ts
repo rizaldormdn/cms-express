@@ -20,7 +20,7 @@ export default class ResetPasswordService {
   
           return
         }
-        if (!user.resetPasswordToken.verify(token)) {
+        if (!user.resetPasswordToken.isValid()) {
           reject(new Error("token is not valid"));
   
           return

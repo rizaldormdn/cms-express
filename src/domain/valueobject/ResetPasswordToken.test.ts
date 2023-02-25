@@ -22,18 +22,12 @@ describe("ResetPasswordToken", () => {
 
     let resetPasswordToken = new ResetPasswordToken("abc123", tokenExpiry)
 
-    expect(() => resetPasswordToken.verify("abc123")).toThrowError()
-  })
-
-  it("could verify wrong token", () => {
-    let resetPasswordToken = new ResetPasswordToken()
-
-    expect(resetPasswordToken.verify("wrongtoken")).toBeFalsy()
+    expect(resetPasswordToken.isValid()).toBeFalsy()
   })
 
   it("could verify right token", () => {
     let resetPasswordToken = new ResetPasswordToken("abc123")
 
-    expect(resetPasswordToken.verify("abc123")).toBeTruthy()
+    expect(resetPasswordToken.isValid()).toBeTruthy()
   })
 })

@@ -27,11 +27,8 @@ export default class ResetPasswordToken {
     return this._tokenExpiry
   }
 
-  public verify(token: string): boolean {
+  public isValid(): boolean {
     if (new Date() > this._tokenExpiry) {
-      throw new Error('token is expired')
-    }
-    if (token !== this._token) {
       return false
     }
     return true
