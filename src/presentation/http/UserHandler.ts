@@ -7,12 +7,13 @@ import Email from "../../domain/valueobject/Email";
 import Status from "../../Status";
 import jwt from 'jsonwebtoken';
 import UserMapper from "./UserMapper";
+import Middleware from "../../Middleware";
 
 export default class UserHandler {
   public static router(userRepository: UserRepository): Router {
     const router: Router = Router();
 
-    router.use('/login', async (req: Request, res: Response) => {
+    router.post('/login', async (req: Request, res: Response) => {
       try {
         let email: Email = new Email(req.body.email)
         let user: User = await userRepository.getUser(email)
@@ -52,6 +53,15 @@ export default class UserHandler {
         }).end();
       }
 		})
+
+    router.get('/me', Middleware.authentication, (_: Request, res: Response) => {
+      res.status(200).json({
+        status: Status.Success,
+        data: {
+          user: res.locals.user
+        }
+      }).end();
+    })
 
     return router
   }

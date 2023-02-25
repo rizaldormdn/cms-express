@@ -1,5 +1,7 @@
 import express, { Express } from "express";
 import request from "supertest";
+import sinon from "sinon";
+import jwt from "jsonwebtoken";
 import UserRepository from "../../domain/repository/UserRepository";
 import Middleware from "../../Middleware";
 import Router from "../../Router";
@@ -64,4 +66,30 @@ describe("UserHandler", () => {
 		expect(res.body.status).toBe(Status.Error);
     expect(res.body.message).toBe("failed to login");
 	})
+
+  test('GET /me 200', async () => {
+    sinon.stub(jwt, 'verify');
+
+    let res = await request(app).get('/v1/me');
+
+    sinon.restore();
+
+    expect(res.statusCode).toBe(200);
+    expect(res.header['content-type']).toBe('application/json; charset=utf-8');
+    expect(res.body.status).toBe('success');
+    expect(res.body.data).toBeDefined();
+  })
+
+  test('GET /me 403', async () => {
+    sinon.stub(Middleware, 'authentication').rejects();
+
+    let res = await request(app).get('/v1/me');
+
+    sinon.restore();
+
+    expect(res.statusCode).toBe(403);
+    expect(res.header['content-type']).toBe('application/json; charset=utf-8');
+    expect(res.body.status).toBe('error');
+    expect(res.body.message).toBe('failed to verify the token');
+  })
 })

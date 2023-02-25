@@ -2,11 +2,12 @@ require('dotenv').config();
 
 import { Request, Response, NextFunction } from 'express';
 import jwt from 'jsonwebtoken';
+import Status from '../../../Status';
 
 export default class Middleware {
   public static authentication = (req: Request, res: Response, next: NextFunction) => {
     try {
-      let token = String(req.headers['authorization'])!.split(' ')[1];
+      let token = String(req.headers['authorization']).split(' ')[1];
 
       res.locals.user = jwt.verify(
         token,
@@ -18,7 +19,7 @@ export default class Middleware {
       console.error(err)
   
       res.status(403).json({
-        status: 'error',
+        status: Status.Error,
         message: 'failed to verify the token'
       }).end();
 
