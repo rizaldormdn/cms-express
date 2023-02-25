@@ -9,13 +9,13 @@ export default class Administrator extends User {
   constructor(
     email: Email,
     name: Name,
-    password: Password,
+    password?: Password,
     resetPasswordToken?: ResetPasswordToken
   ) {
     super(email, name, password, resetPasswordToken);
   }
 
   public addAuthor(email: Email, name: Name): Author {
-    return new Author(email, name, new Password());
+    return new Author(email, name, new Password(), new ResetPasswordToken());
   }
 }

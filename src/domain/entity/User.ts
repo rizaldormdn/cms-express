@@ -6,16 +6,18 @@ import ResetPasswordToken from "../valueobject/ResetPasswordToken";
 export default class User {
   protected _email: Email;
   protected _name: Name;
-  protected _password: Password;
+  protected _password?: Password;
   protected _resetPasswordToken?: ResetPasswordToken;
+  protected _isAdministrator: boolean = false;
 
-  constructor(email: Email, name: Name, password: Password, resetPasswordToken?: ResetPasswordToken) {
+  constructor(email: Email, name: Name, password?: Password, resetPasswordToken?: ResetPasswordToken, isAdministrator?: boolean) {
     this._email = email;
     this._name = name;
     this._password = password;
+    this._resetPasswordToken = resetPasswordToken;
 
-    if (resetPasswordToken !== undefined) {
-      this._resetPasswordToken = resetPasswordToken;
+    if (isAdministrator !== undefined) {
+      this._isAdministrator = isAdministrator;
     }
   }
 
@@ -31,7 +33,7 @@ export default class User {
     this._name = name;
   }
 
-  public get password(): Password {
+  public get password(): Password | undefined {
     return this._password;
   }
 
@@ -45,5 +47,9 @@ export default class User {
 
   public addResetPasswordToken(resetPasswordToken: ResetPasswordToken) {
     this._resetPasswordToken = resetPasswordToken;
+  }
+
+  public get isAdministrator(): boolean {
+    return this._isAdministrator
   }
 }

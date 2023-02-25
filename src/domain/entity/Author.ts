@@ -13,7 +13,7 @@ export default class Author extends User {
   constructor(
     email: Email,
     name: Name,
-    password: Password,
+    password?: Password,
     resetPasswordToken?: ResetPasswordToken
   ) {
     super(email, name, password, resetPasswordToken);

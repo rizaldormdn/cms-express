@@ -13,6 +13,7 @@ import ArticleDate from "./domain/valueobject/ArticleDate";
 import ArticleSnapshot, { ArticleSnapshots } from "./domain/valueobject/ArticleSnapshot";
 import Administrator from "./domain/entity/Administrator";
 import ResetPasswordToken from "./domain/valueobject/ResetPasswordToken";
+import User from "./domain/entity/User";
 
 let now = new Date();
 
@@ -26,6 +27,7 @@ export const password: Password = new Password("$2b$10$LPWgQolfuVYRiZ9wQAtPnO", 
 export const token = "abc123"
 export const tokenExpiry = now
 export const resetPasswordToken: ResetPasswordToken = new ResetPasswordToken(token, tokenExpiry)
+export const user: User = new User(email, name, password, resetPasswordToken, false);
 export const author: Author = new Author(authorEmail, name, password, resetPasswordToken);
 export const authorWithoutResetPasswordToken: Author = new Author(email, name, password);
 export const title = "This is title"

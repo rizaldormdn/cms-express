@@ -1,21 +1,37 @@
+import Administrator from "../../domain/entity/Administrator";
 import User from "../../domain/entity/User";
+import Email from "../../domain/valueobject/Email";
+import Name from "../../domain/valueobject/Name";
+import Password from "../../domain/valueobject/Password";
 
 export type UserJSON = {
   email: string;
-  name: string;
+  name: {
+    first: string;
+    last: string;
+    full: string;
+  };
+  is_administrator: boolean;
 }
 
 export default class UserMapper {
-  private _user: User
-
-  constructor(user: User) {
-    this._user = user;
+  public static toJSON(user: User): UserJSON {
+    return {
+      email: user.email.string(),
+      name: {
+        first: user.name.first,
+        last: user.name.last,
+        full: user.name.full()
+      },
+      is_administrator: user.isAdministrator
+    }
   }
 
-  public toJSON(): UserJSON {
-    return {
-      email: this._user.email.string(),
-      name: this._user.name.full()
-    }
+  public static toAdministrator(userJSON: UserJSON): Administrator {
+    return new Administrator(
+      new Email(userJSON.email),
+      new Name(userJSON.name.first, userJSON.name.last),
+      new Password()
+    )
   }
 }

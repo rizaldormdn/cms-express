@@ -2,11 +2,9 @@ import User from "./User";
 import Name from "../valueobject/Name";
 import Password from "../valueobject/Password";
 import ResetPasswordToken from "../valueobject/ResetPasswordToken";
-import { email, name, password } from "../../testdata"
+import { user, password, email, name } from "../../testdata"
 
 describe("User", () => {
-  let user: User = new User(email, name, password);
-
   test('email local of "test" should be "test"', () => {
     expect(user.email.local).toBe("test");
   });
@@ -49,7 +47,7 @@ describe("User", () => {
     newPassword.hash("password123")
     user.updatePassword(newPassword)
 
-    expect(user.password.verify("password123")).toBeTruthy()
+    expect(user.password!.verify("password123")).toBeTruthy()
   })
 
   it("could have a reset password token", () => {
@@ -63,5 +61,9 @@ describe("User", () => {
     user.addResetPasswordToken(new ResetPasswordToken())
 
     expect(user.resetPasswordToken).toBeDefined();
+  })
+
+  it("should have is administrator flag", () => {
+    expect(user.isAdministrator).toBeFalsy();
   })
 });

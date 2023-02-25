@@ -1,3 +1,5 @@
+require("dotenv").config();
+
 import crypto from "crypto";
 
 export default class ResetPasswordToken {

@@ -6,6 +6,7 @@ import * as UserRepositoryInterface from "../../../domain/repository/UserReposit
 import Email from "../../../domain/valueobject/Email";
 import Name from "../../../domain/valueobject/Name";
 import Password from "../../../domain/valueobject/Password";
+import ResetPasswordToken from "../../../domain/valueobject/ResetPasswordToken";
 
 export default class UserRepository implements UserRepositoryInterface.default {
   private _connection: Connection;
@@ -14,10 +15,10 @@ export default class UserRepository implements UserRepositoryInterface.default {
     this._connection = connection;
   }
 
-  public getUser(email: Email): Promise<Administrator | Author> {
-    return new Promise<Administrator | Author>((resolve, reject) => {
+  public getUser(email: Email): Promise<User> {
+    return new Promise<User>((resolve, reject) => {
       this._connection.query(
-        "SELECT first_name, last_name, salt, hashed_password, is_administrator FROM users WHERE email = ? LIMIT 1",
+        "SELECT first_name, last_name, salt, hashed_password, token, token_expiry, is_administrator FROM users WHERE email = ? LIMIT 1",
         [email.string()],
         (err: any | null, result: any) => {
           if (err) {
@@ -26,23 +27,14 @@ export default class UserRepository implements UserRepositoryInterface.default {
             reject(err);
           }
           if (result.length > 0) {
-            if (result[0].is_administrator) {
-              resolve(
-                new Administrator(
-                  email,
-                  new Name(result[0].first_name, result[0].last_name),
-                  new Password(result[0].salt, result[0].hashed_password)
-                )
-              );
-            } else {
-              resolve(
-                new Author(
-                  email,
-                  new Name(result[0].first_name, result[0].last_name),
-                  new Password(result[0].salt, result[0].hashed_password)
-                )
-              );
-            }
+            resolve(
+              new Administrator(
+                email,
+                new Name(result[0].first_name, result[0].last_name),
+                new Password(result[0].salt, result[0].hashed_password),
+                new ResetPasswordToken(result[0].token, new Date(result[0].token_expiry))
+              )
+            );
           }
         }
       );
@@ -52,13 +44,15 @@ export default class UserRepository implements UserRepositoryInterface.default {
   public saveAuthor(author: Author): Promise<void> {
     return new Promise<void>((resolve, reject) => {
       this._connection.query(
-        "INSERT INTO users (email, first_name, last_name, salt, hashed_password) VALUES (?, ?, ?, ?, ?)",
+        "INSERT INTO users (email, first_name, last_name, salt, hashed_password, token, token_expiry) VALUES (?, ?, ?, ?, ?, ?, ?)",
         [
           author.email.string(),
           author.name.first,
           author.name.last,
-          author.password.salt,
-          author.password.hashedPassword,
+          author.password!.salt,
+          author.password!.hashedPassword,
+          String(author.resetPasswordToken?.token),
+          author.resetPasswordToken?.tokenExpiry
         ],
         (err: any | null, result: any) => {
           if (err) {
@@ -80,8 +74,8 @@ export default class UserRepository implements UserRepositoryInterface.default {
         [
           user.name.first,
           user.name.last,
-          user.password.salt,
-          user.password.hashedPassword,
+          user.password!.salt,
+          user.password!.hashedPassword,
           String(user.resetPasswordToken?.token),
           user.resetPasswordToken?.tokenExpiry,
           user.email.string(),

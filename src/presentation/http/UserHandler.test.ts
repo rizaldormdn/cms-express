@@ -7,6 +7,8 @@ import Middleware from "../../Middleware";
 import Router from "../../Router";
 import Status from "../../Status";
 import { author } from "../../testdata"
+import AdministratorService from "../../application/service/AdministratorService";
+import ConfirmationService from "../../application/service/ConfirmationService";
 
 describe("UserHandler", () => {
   const userRepository: UserRepository = {
@@ -15,11 +17,15 @@ describe("UserHandler", () => {
     updateUser: jest.fn(),
     deleteAuthor: jest.fn()
   }
+  const confirmationService: ConfirmationService = {
+    sendConfirmation: jest.fn()
+  } 
+  const administratorService: AdministratorService = new AdministratorService(userRepository, confirmationService)
 	const app: Express = express();
 
 	app.use(express.json())
 	app.use(Middleware.cors);
-	app.use("/", Router.run(userRepository));
+	app.use("/", Router.run(userRepository, administratorService));
 
 	test("POST /v1/login 200", async () => {
     userRepository.getUser = jest.fn().mockResolvedValueOnce(author)
@@ -67,7 +73,7 @@ describe("UserHandler", () => {
     expect(res.body.message).toBe("failed to login");
 	})
 
-  test('GET /me 200', async () => {
+  test('GET /v1/me 200', async () => {
     sinon.stub(jwt, 'verify');
 
     let res = await request(app).get('/v1/me');
@@ -80,7 +86,7 @@ describe("UserHandler", () => {
     expect(res.body.data).toBeDefined();
   })
 
-  test('GET /me 403', async () => {
+  test('GET /v1/me 403', async () => {
     sinon.stub(Middleware, 'authentication').rejects();
 
     let res = await request(app).get('/v1/me');

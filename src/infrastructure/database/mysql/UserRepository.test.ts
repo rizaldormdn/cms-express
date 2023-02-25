@@ -10,12 +10,12 @@ describe("UserRepository", () => {
   let userRepository: UserRepositoryInterface.default = new UserRepository(connection);
 
   describe("get user", () => {
-    it("should return an administrator", async () => {
+    it("should return an user", async () => {
       mock
         .expects("query")
         .once()
         .withArgs(
-          "SELECT first_name, last_name, salt, hashed_password, is_administrator FROM users WHERE email = ? LIMIT 1"
+          "SELECT first_name, last_name, salt, hashed_password, token, token_expiry, is_administrator FROM users WHERE email = ? LIMIT 1"
         )
         .callsArgWith(
           2,
@@ -26,10 +26,12 @@ describe("UserRepository", () => {
               last_name: "",
               salt: "$2b$10$z1e0ySIYbA/5FXNzZy.Qge",
               hashed_password: "$2b$10$z1e0ySIYbA/5FXNzZy.Qgefti4GC8YwobSbO81EfD9JTuX/X1J1Xu",
+              token: "",
+              token_expiry: null,
               is_administrator: true
             },
           ],
-          ["first_name", "last_name", "salt", "hashed_password", "is_administrator"]
+          ["first_name", "last_name", "salt", "hashed_password", "token", "token_expiry", "is_administrator"]
         );
   
       try {
@@ -38,35 +40,6 @@ describe("UserRepository", () => {
         expect(err).toBeUndefined()
       }
     });
-  
-    it("should return an author", async () => {
-      mock
-        .expects("query")
-        .once()
-        .withArgs(
-          "SELECT first_name, last_name, salt, hashed_password, is_administrator FROM users WHERE email = ? LIMIT 1"
-        )
-        .callsArgWith(
-          2,
-          null,
-          [
-            {
-              first_name: "Admin",
-              last_name: "",
-              salt: "$2b$10$z1e0ySIYbA/5FXNzZy.Qge",
-              hashed_password: "$2b$10$z1e0ySIYbA/5FXNzZy.Qgefti4GC8YwobSbO81EfD9JTuX/X1J1Xu",
-              is_administrator: false
-            },
-          ],
-          ["first_name", "last_name", "salt", "hashed_password", "is_administrator"]
-        );
-  
-      try {
-        expect(await userRepository.getUser(email)).toBeDefined();
-      } catch(err) {
-        expect(err).toBeUndefined()
-      }
-    })
   
     it("should return an error if failed get an user", async () => {
       mock.expects("query").once().callsArgWith(2, new Error(), null, null);
@@ -81,10 +54,20 @@ describe("UserRepository", () => {
 
   describe("save author", () => {
     it("should save an author", async () => {
-      mock.expects("query").once().withArgs("INSERT INTO users (email, first_name, last_name, salt, hashed_password) VALUES (?, ?, ?, ?, ?)");
+      mock.expects("query").once().withArgs("INSERT INTO users (email, first_name, last_name, salt, hashed_password, token, token_expiry) VALUES (?, ?, ?, ?, ?, ?, ?)");
   
       try {
         userRepository.saveAuthor(author)
+      } catch (err) {
+        expect(err).toBeUndefined()
+      }
+    });
+
+    it("should save an author without reset password token", async () => {
+      mock.expects("query").once().withArgs("INSERT INTO users (email, first_name, last_name, salt, hashed_password, token, token_expiry) VALUES (?, ?, ?, ?, ?, ?, ?)");
+  
+      try {
+        userRepository.saveAuthor(authorWithoutResetPasswordToken)
       } catch (err) {
         expect(err).toBeUndefined()
       }
