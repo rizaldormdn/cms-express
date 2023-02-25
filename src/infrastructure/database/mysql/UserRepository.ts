@@ -28,14 +28,17 @@ export default class UserRepository implements UserRepositoryInterface.default {
           }
           if (result.length > 0) {
             resolve(
-              new Administrator(
+              new User(
                 email,
                 new Name(result[0].first_name, result[0].last_name),
                 new Password(result[0].salt, result[0].hashed_password),
-                new ResetPasswordToken(result[0].token, new Date(result[0].token_expiry))
+                new ResetPasswordToken(result[0].token, new Date(result[0].token_expiry)),
+                result[0].is_administrator
               )
             );
           }
+
+          reject(new Error('user not found'))
         }
       );
     });
@@ -54,14 +57,17 @@ export default class UserRepository implements UserRepositoryInterface.default {
           }
           if (result.length > 0) {
             resolve(
-              new Administrator(
+              new User(
                 new Email(result[0].email),
                 new Name(result[0].first_name, result[0].last_name),
                 new Password(result[0].salt, result[0].hashed_password),
-                new ResetPasswordToken(token, new Date(result[0].token_expiry))
+                new ResetPasswordToken(token, new Date(result[0].token_expiry)),
+                result[0].is_administrator
               )
             );
           }
+
+          reject(new Error('user not found'))
         }
       );
     });
@@ -107,6 +113,7 @@ export default class UserRepository implements UserRepositoryInterface.default {
           user.email.string(),
         ],
         (err: any | null, result: any) => {
+          console.log("HERE", err, result)
           if (err) {
             console.error(err);
 

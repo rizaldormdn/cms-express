@@ -4,6 +4,7 @@ import mysql, { Connection } from "mysql2";
 import nodemailer from "nodemailer";
 import AdministratorService from "./application/service/AdministratorService";
 import ConfirmationService from "./application/service/ConfirmationService";
+import ResetPasswordService from "./application/service/ResetPasswordService";
 import UserRepository from "./domain/repository/UserRepository";
 import UserRepositoryMySQL from "./infrastructure/database/mysql/UserRepository";
 import EmailConfirmationService from "./infrastructure/service/confirmation/EmailConfirmationService";
@@ -33,8 +34,9 @@ const emailConfirmationService: ConfirmationService = new EmailConfirmationServi
   },
 )
 const administratorService: AdministratorService = new AdministratorService(userRepository, emailConfirmationService)
+const resetPasswordService: ResetPasswordService = new ResetPasswordService(userRepository)
 
 Server.run(
   Number(process.env.PORT),
-  Router.run(userRepository, administratorService)
+  Router.run(userRepository, administratorService, resetPasswordService)
 )

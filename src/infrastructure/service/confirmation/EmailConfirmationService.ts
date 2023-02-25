@@ -3,7 +3,6 @@ require("dotenv").config();
 import { Transporter, SendMailOptions } from "nodemailer";
 import ConfirmationService from "../../../application/service/ConfirmationService";
 import Author from "../../../domain/entity/Author";
-import ResetPasswordToken from "../../../domain/valueobject/ResetPasswordToken";
 
 export default class EmailConfirmationService implements ConfirmationService {
   private _transporter: Transporter
@@ -16,8 +15,6 @@ export default class EmailConfirmationService implements ConfirmationService {
 
   public sendConfirmation(author: Author): Promise<void> {
     return new Promise<void>(async (resolve, reject) => {
-      author.addResetPasswordToken(new ResetPasswordToken())
-
       this._sendMailOptions.to = author.email.string()
       this._sendMailOptions.subject = process.env.EMAIL_CONFIRMATION_SUBJECT
       this._sendMailOptions.html = `<p>Please visit <a href="${process.env.RESET_PASSWORD_URL}?token=${author.resetPasswordToken!.token}" target="_blank">this link</a> to reset your password!</p>`

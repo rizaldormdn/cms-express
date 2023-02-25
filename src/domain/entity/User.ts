@@ -45,10 +45,6 @@ export default class User {
     return this._resetPasswordToken;
   }
 
-  public addResetPasswordToken(resetPasswordToken: ResetPasswordToken) {
-    this._resetPasswordToken = resetPasswordToken;
-  }
-
   public get isAdministrator(): boolean {
     return this._isAdministrator
   }

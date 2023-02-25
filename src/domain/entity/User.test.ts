@@ -57,12 +57,6 @@ describe("User", () => {
     expect(user.resetPasswordToken).toBeDefined();
   })
 
-  it("could add a reset password token", () => {
-    user.addResetPasswordToken(new ResetPasswordToken())
-
-    expect(user.resetPasswordToken).toBeDefined();
-  })
-
   it("should have is administrator flag", () => {
     expect(user.isAdministrator).toBeFalsy();
   })

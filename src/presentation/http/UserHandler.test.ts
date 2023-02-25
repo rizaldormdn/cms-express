@@ -9,6 +9,7 @@ import Status from "../../Status";
 import { author } from "../../testdata"
 import AdministratorService from "../../application/service/AdministratorService";
 import ConfirmationService from "../../application/service/ConfirmationService";
+import ResetPasswordService from "../../application/service/ResetPasswordService";
 
 describe("UserHandler", () => {
   const userRepository: UserRepository = {
@@ -22,11 +23,12 @@ describe("UserHandler", () => {
     sendConfirmation: jest.fn()
   } 
   const administratorService: AdministratorService = new AdministratorService(userRepository, confirmationService)
+  const resetPasswordService: ResetPasswordService = new ResetPasswordService(userRepository)
 	const app: Express = express();
 
 	app.use(express.json())
 	app.use(Middleware.cors);
-	app.use("/", Router.run(userRepository, administratorService));
+	app.use("/", Router.run(userRepository, administratorService, resetPasswordService));
 
 	test("POST /v1/login 200", async () => {
     userRepository.getUser = jest.fn().mockResolvedValueOnce(author)

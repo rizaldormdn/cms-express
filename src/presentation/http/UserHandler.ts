@@ -12,9 +12,16 @@ import AdministratorService from "../../application/service/AdministratorService
 import Administrator from "../../domain/entity/Administrator";
 import Author from "../../domain/entity/Author";
 import User from "../../domain/entity/User";
+import ResetPasswordService from "../../application/service/ResetPasswordService";
+import Password from "../../domain/valueobject/Password";
+import { password } from "../../testdata";
 
 export default class UserHandler {
-  public static router(userRepository: UserRepository, administratorService: AdministratorService): Router {
+  public static router(
+    userRepository: UserRepository,
+    administratorService: AdministratorService,
+    resetPasswordService: ResetPasswordService
+  ): Router {
     const router: Router = Router();
 
     router.post('/login', async (req: Request, res: Response) => {
@@ -83,6 +90,32 @@ export default class UserHandler {
         res.status(500).json({
           status: Status.Error,
           message: 'failed to register'
+        }).end();
+      }
+    })
+
+    router.post('/reset-password', async (req: Request, res: Response) => {
+      if (req.body.password !== req.body.password_confirmation) {
+        res.status(400).json({
+          status: Status.Error,
+          message: 'failed to confirm a password'
+        }).end();
+
+        return
+      }
+
+      try {
+        let newPassword: Password = new Password()
+
+        password.hash(req.body.password)
+
+        await resetPasswordService.resetPassword(req.body.token, newPassword)
+      } catch (err) {
+        console.error(err);
+  
+        res.status(500).json({
+          status: Status.Error,
+          message: 'failed to reset a password'
         }).end();
       }
     })
