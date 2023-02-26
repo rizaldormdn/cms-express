@@ -19,10 +19,6 @@ export default class Author extends User {
     super(email, name, password, resetPasswordToken);
   }
 
-  public addPassword(password: Password) {
-    super._password = password;
-  }
-
   public addArticle(
     content: Content,
     image: Image,
@@ -30,6 +26,23 @@ export default class Author extends User {
   ): Article {
     let slug = new Slug(content.title)
     let article = new Article(slug, content, image, super.name.full(), super.email.string(), tags)
+
+    return article
+  }
+
+  public updateArticle(
+    article: Article,
+    newContent: Content,
+    newImage: Image,
+    newTags: Tags,
+  ): Article {
+    if (this._email.string() !== article.authorEmail) {
+      throw new Error('permission denied')
+    }
+
+    article.updateContent(newContent)
+    article.updateImage(newImage)
+    article.updateTags(newTags)
 
     return article
   }

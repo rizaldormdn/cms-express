@@ -1,12 +1,12 @@
-import Author from "../../domain/entity/Author";
+import Author from "../entity/Author";
 import ArticleRepository  from "../../infrastructure/database/mysql/ArticleRepository";
-import Article from "../../domain/aggregate/Article";
-import Slug from "../../domain/valueobject/Slug";
-import Content from "../../domain/valueobject/Content";
-import Image from "../../domain/entity/Image";
-import { Tags } from "../../domain/valueobject/Tag";
+import Article from "../aggregate/Article";
+import Slug from "../valueobject/Slug";
+import Content from "../valueobject/Content";
+import Image from "../entity/Image";
+import { Tags } from "../valueobject/Tag";
 
-export default class AuthorService {
+export default class ArticleService {
   private _articleRepository: ArticleRepository;
 
   constructor(articleRepository: ArticleRepository) {
@@ -27,10 +27,13 @@ export default class AuthorService {
     }))
   }
 
-  public async updateArticle(article: Article): Promise<void> {
+  public async updateArticle(author: Author, slug: Slug, newContent: Content, newImage: Image, newTags: Tags): Promise<void> {
     return new Promise<void>(async (resolve, reject) => {
       try {
-        resolve(await this._articleRepository.updateArticle(article))
+        let article = await this._articleRepository.getArticle(slug)
+        let updatedArticle = author.updateArticle(article, newContent, newImage, newTags)
+  
+        resolve(await this._articleRepository.updateArticle(updatedArticle))
       } catch (err) {
         reject(err)
       }
