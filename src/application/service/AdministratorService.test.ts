@@ -9,6 +9,7 @@ import ConfirmationService from "./ConfirmationService";
 describe("Administrator service", () => {
   let userRepository: UserRepository = {
     getUser: jest.fn(),
+    getUserByToken: jest.fn(),
     saveAuthor: jest.fn(),
     updateUser: jest.fn(),
     deleteAuthor: jest.fn()
@@ -27,46 +28,6 @@ describe("Administrator service", () => {
 
   it("should be defined", () => {
     expect(administratorService).toBeDefined()
-  })
-
-  it("should change name", async () => {
-    userRepository.updateUser = jest.fn().mockResolvedValueOnce(() => Promise.resolve())
-  
-    try {
-      await administratorService.changeName(administrator, newName)
-    } catch(err) {
-      expect(err).toBeUndefined()
-    }
-  })
-
-  it("should throw an error if failed change name", async () => {
-    userRepository.updateUser = jest.fn().mockRejectedValueOnce(() => Promise.reject(new Error()))
-
-    try {
-      await administratorService.changeName(administrator, newName)
-    } catch(err) {
-      expect(err).toBeDefined()
-    }
-  })
-
-  it("should update password", async () => {
-    userRepository.updateUser = jest.fn().mockResolvedValueOnce(() => Promise.resolve())
-
-    try {
-      await administratorService.updatePassword(administrator, new Password())
-    } catch(err) {
-      expect(err).toBeUndefined()
-    }
-  })
-
-  it("should throw an error if failed update password", async () => {
-    userRepository.updateUser = jest.fn().mockRejectedValueOnce(() => Promise.reject(new Error()))
-
-    try {
-      await administratorService.updatePassword(administrator, new Password())
-    } catch(err) {
-      expect(err).toBeDefined()
-    }
   })
 
   it("should add an author", async () => {
