@@ -130,6 +130,35 @@ export default class ArticleHandler {
       }
     })
 
+    router.put('/articles/:slug', Middleware.authentication, async (req: Request, res: Response) => {
+      try {
+        let slug: Slug = new Slug().rebuild(req.params.slug)
+        let email: Email = new Email(res.locals.user.email);
+        let user: User = await userRepository.getUser(email)
+        let author: Author = new Author(user.email, user.name, user.password, user.resetPasswordToken)
+        let newContent: Content = new Content(req.body.title, req.body.content, req.body.excerpt)
+        let newImage: Image = await imageRepository.getImage(req.body.image_id)
+        let newTags: Tags = []
+
+        for (let tag of req.body.tags) {
+          newTags.push(new Tag(tag))
+        }
+
+        await articleService.updateArticle(author, slug, newContent, newImage, newTags)
+
+        res.status(200).json({
+          status: Status.Success
+        })
+      } catch(err) {
+        console.error(err)
+
+        res.status(500).json({
+          status: Status.Error,
+          message: 'failed to edit an article'
+        }).end()
+      }
+    })
+
     return router
   }
 }

@@ -436,7 +436,7 @@ describe("ArticleRepository", () => {
 
   describe("update an article", () => {
     it("should update an article", () => {
-      mock.expects("query").once().withArgs("UPDATE articles SET content = ?, excerpt = ?, image_id = ?, tags = ?) VALUES (?, ?, UUID_TO_BIN(?), ?) WHERE slug = ? AND author_email = ?");
+      mock.expects("query").once().withArgs("UPDATE articles SET title = ?, content = ?, excerpt = ?, image_id = UUID_TO_BIN(?), tags = ? WHERE slug = ? AND author_email = ?");
   
       try {
         articleRepository.updateArticle(article)

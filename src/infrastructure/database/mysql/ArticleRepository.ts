@@ -440,8 +440,9 @@ export default class ArticleRepository implements ArticleRepositoryInterface.def
   public updateArticle(article: Article): Promise<void> {
     return new Promise<void>((resolve, reject) => {
       this._connection.query(
-        'UPDATE articles SET content = ?, excerpt = ?, image_id = ?, tags = ?) VALUES (?, ?, UUID_TO_BIN(?), ?) WHERE slug = ? AND author_email = ?',
+        'UPDATE articles SET title = ?, content = ?, excerpt = ?, image_id = UUID_TO_BIN(?), tags = ? WHERE slug = ? AND author_email = ?',
         [
+          article.content.title,
           article.content.content,
           article.content.excerpt,
           article.image.id,
