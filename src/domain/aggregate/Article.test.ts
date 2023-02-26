@@ -59,4 +59,22 @@ describe("Article", () => {
       "author email cannot be empty"
     );
   });
+
+  it("should update content", () => {
+    article.updateContent(content)
+
+    expect(article.content).toBe(content);
+  })
+
+  it("should update image", () => {
+    article.updateImage(image)
+
+    expect(article.image).toBe(image);
+  })
+
+  it("should update tags", () => {
+    article.updateTags(tags)
+
+    expect(article.tags).toBe(tags);
+  })
 });
