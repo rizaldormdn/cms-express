@@ -17,6 +17,7 @@ import ImageRepository from "../../domain/repository/ImageRepository";
 import ArticleRepository from "../../domain/repository/ArticleRepository";
 import Specification from "../../application/valueobject/Specification";
 import { ArticleSnapshots } from "../../domain/valueobject/ArticleSnapshot";
+import Slug from "../../domain/valueobject/Slug";
 
 export default class ArticleHandler {
   public static router(
@@ -106,6 +107,25 @@ export default class ArticleHandler {
         res.status(500).json({
           status: Status.Error,
           message: 'failed to create an article'
+        }).end()
+      }
+    })
+
+    router.get('/articles/:slug', async (req: Request, res: Response) => {
+      try {
+        let slug: Slug = new Slug().rebuild(req.params.slug)
+        let article: Article = await articleRepository.getArticle(slug)
+
+        res.status(200).json({
+          status: Status.Success,
+          data: ArticleMapper.toJSON(article)
+        })
+      } catch(err) {
+        console.error(err)
+
+        res.status(500).json({
+          status: Status.Error,
+          message: 'failed to get an article'
         }).end()
       }
     })

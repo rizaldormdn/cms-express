@@ -104,7 +104,7 @@ export default class ArticleMapper {
       },
       tags: TagMapper.toJSON(article.tags),
       related_articles: ArticleSnapshotMapper.toJSON(article.relatedArticles),
-      is_published: article.isPublished,
+      is_published: Boolean(article.isPublished),
       date: {
         created_at: article.date.createdAt,
         updated_at: article.date.updatedAt
