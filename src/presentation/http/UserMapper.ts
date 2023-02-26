@@ -1,8 +1,16 @@
+import { AuthorSnapshots } from "../../application/valueobject/AuthorSnapshot";
 import Administrator from "../../domain/entity/Administrator";
 import User from "../../domain/entity/User";
 import Email from "../../domain/valueobject/Email";
 import Name from "../../domain/valueobject/Name";
 import Password from "../../domain/valueobject/Password";
+
+export type AuthorJSON = {
+  email: string;
+  name: string;
+}
+
+export type AuthorsJSON = AuthorJSON[]
 
 export type UserJSON = {
   email: string;
@@ -12,6 +20,21 @@ export type UserJSON = {
     full: string;
   };
   is_administrator: boolean;
+}
+
+export class AuthorMapper {
+  public static toJSON(authors: AuthorSnapshots): AuthorsJSON {
+    let authorsJSON: AuthorsJSON = []
+
+    for (let author of authors) {
+      authorsJSON.push({
+        email: author.email,
+        name: author.name
+      })
+    }
+
+    return authorsJSON
+  }
 }
 
 export default class UserMapper {

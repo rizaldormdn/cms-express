@@ -6,7 +6,7 @@ import Email from "../../domain/valueobject/Email";
 import Name from "../../domain/valueobject/Name";
 import Status from "../../Status";
 import jwt from 'jsonwebtoken';
-import UserMapper from "./UserMapper";
+import UserMapper, { AuthorMapper } from "./UserMapper";
 import Middleware from "../../Middleware";
 import AdministratorService from "../../application/service/AdministratorService";
 import Administrator from "../../domain/entity/Administrator";
@@ -15,6 +15,7 @@ import User from "../../domain/entity/User";
 import ResetPasswordService from "../../application/service/ResetPasswordService";
 import Password from "../../domain/valueobject/Password";
 import UserService from "../../application/service/UserService";
+import { AuthorSnapshots } from "../../application/valueobject/AuthorSnapshot";
 
 export default class UserHandler {
   public static router(
@@ -180,6 +181,23 @@ export default class UserHandler {
         res.status(500).json({
           status: Status.Error,
           message: 'failed to update a password'
+        }).end();
+      }
+    })
+
+    router.get('/authors', Middleware.authentication, async (_: Request, res: Response) => {
+      try {
+        let authors: AuthorSnapshots = await userRepository.getAuthors()
+
+        res.status(200).json({
+          status: Status.Success,
+          data: AuthorMapper.toJSON(authors)
+        }).end();
+      } catch (err) {
+        console.error(err)
+
+        res.status(500).json({
+          status: Status.Error,
         }).end();
       }
     })
