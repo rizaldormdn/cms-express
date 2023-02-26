@@ -5,11 +5,16 @@ import UserHandler from "./presentation/http/UserHandler";
 import AdministratorService from "./application/service/AdministratorService";
 import ResetPasswordService from "./application/service/ResetPasswordService";
 import UserService from "./application/service/UserService";
+import ArticleHandler from "./presentation/http/ArticleHandler";
+import ArticleService from "./domain/service/ArticleService";
+import ImageRepository from "./domain/repository/ImageRepository";
 
 export default class Router {
   public static run(
     userRepository: UserRepository,
+    imageRepository: ImageRepository,
     userService: UserService,
+    articleService: ArticleService,
     administratorService: AdministratorService,
     resetPasswordService: ResetPasswordService
   ): ExpressRouter {
@@ -21,6 +26,11 @@ export default class Router {
       userService,
       administratorService,
       resetPasswordService
+    ))
+    router.use('/v1', ArticleHandler.router(
+      userRepository,
+      imageRepository,
+      articleService
     ))
 
     return router

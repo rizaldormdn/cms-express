@@ -1,5 +1,5 @@
 import Author from "../entity/Author";
-import ArticleRepository  from "../../infrastructure/database/mysql/ArticleRepository";
+import ArticleRepository  from "../../domain/repository/ArticleRepository";
 import Article from "../aggregate/Article";
 import Slug from "../valueobject/Slug";
 import Content from "../valueobject/Content";
@@ -59,7 +59,7 @@ export default class ArticleService {
       try {
         let article = await this._articleRepository.getArticle(slug);
   
-        author.unpublishArticle(author)
+        author.unpublishArticle(article)
   
         resolve(await this._articleRepository.updateArticle(article));
       } catch (err) {

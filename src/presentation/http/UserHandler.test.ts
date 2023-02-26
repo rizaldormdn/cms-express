@@ -10,6 +10,9 @@ import { author } from "../../testdata"
 import AdministratorService from "../../application/service/AdministratorService";
 import ConfirmationService from "../../application/service/ConfirmationService";
 import ResetPasswordService from "../../application/service/ResetPasswordService";
+import UserService from "../../application/service/UserService";
+import ArticleService from "../../domain/service/ArticleService";
+import ArticleRepository from "../../domain/repository/ArticleRepository";
 
 describe("UserHandler", () => {
   const userRepository: UserRepository = {
@@ -19,6 +22,17 @@ describe("UserHandler", () => {
     updateUser: jest.fn(),
     deleteAuthor: jest.fn()
   }
+  const articleRepository: ArticleRepository = {
+    getFeaturedArticles: jest.fn(),
+    getArticles: jest.fn(),
+    getArticlesByAuthor: jest.fn(),
+    getArticle: jest.fn(),
+    saveArticle: jest.fn(),
+    updateArticle: jest.fn(),
+    deleteArticle: jest.fn(),
+  }
+  const userService: UserService = new UserService(userRepository);
+  const articleService: ArticleService = new ArticleService(articleRepository)
   const confirmationService: ConfirmationService = {
     sendConfirmation: jest.fn()
   } 
@@ -28,7 +42,7 @@ describe("UserHandler", () => {
 
 	app.use(express.json())
 	app.use(Middleware.cors);
-	app.use("/", Router.run(userRepository, administratorService, resetPasswordService));
+	app.use("/", Router.run(userRepository, userService, articleService, administratorService, resetPasswordService));
 
 	test("POST /v1/login 200", async () => {
     userRepository.getUser = jest.fn().mockResolvedValueOnce(author)
