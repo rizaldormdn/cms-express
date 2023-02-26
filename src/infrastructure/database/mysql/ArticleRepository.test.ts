@@ -26,7 +26,6 @@ describe("ArticleRepository", () => {
   let email: Email = new Email("test@example.com");
   let name: Name = new Name("John Doe");
   let password: Password = new Password("$2b$10$WCZ6j4PLICecyCYvBvL7We");
-  let author: Author = new Author(email, name, password);
   let title = "This is title"
   let slug = new Slug(title)
   let content = new Content(title, "This is content", "This is excerpt");
@@ -186,7 +185,7 @@ describe("ArticleRepository", () => {
         FROM articles
         JOIN images ON images.id = articles.image_id
         JOIN users ON users.email = articles.author_email
-        WHERE title LIKE ? AND author_email = ?
+        WHERE title LIKE ? AND articles.author_email = ?
         ORDER BY articles.updated_at DESC LIMIT ?, ?
       `
       let expected = [
@@ -216,7 +215,7 @@ describe("ArticleRepository", () => {
         );
   
       try {
-        expect(await articleRepository.getArticlesByAuthor(specification, author)).toBeDefined()
+        expect(await articleRepository.getArticlesByAuthor(specification, email)).toBeDefined()
       } catch(err) {
         expect(err).toBeUndefined()
       }
@@ -226,7 +225,7 @@ describe("ArticleRepository", () => {
       mock.expects("query").once().callsArgWith(2, new Error(), null, null);
   
       try {
-        expect(await articleRepository.getArticlesByAuthor(specification, author)).toBeUndefined()
+        expect(await articleRepository.getArticlesByAuthor(specification, email)).toBeUndefined()
       } catch (err) {
         expect(err).toBeInstanceOf(Error);
       }

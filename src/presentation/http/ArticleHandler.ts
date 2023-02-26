@@ -35,7 +35,7 @@ export default class ArticleHandler {
         res.status(200).json({
           status: Status.Success,
           data: ArticleSnapshotMapper.toJSON(featuredArticles)
-        })
+        }).end()
       } catch(err) {
         console.error(err)
 
@@ -51,6 +51,26 @@ export default class ArticleHandler {
         let page = Number(req.query.page ?? 1)
         let limit = Number(process.env.LIMIT_ARTICLES)
         let specification: Specification = new Specification(String(req.query.search ?? ''), page)
+
+        if (req.query.author) {
+          let authorEmail: Email = new Email(String(req.query.author))
+          let articles: ArticleSnapshots = await articleRepository.getArticlesByAuthor(specification, authorEmail)
+          let total: number = await articleRepository.countArticlesByAuthor(specification, authorEmail)
+
+          res.status(200).json({
+            status: Status.Success,
+            data: {
+              articles: ArticleSnapshotMapper.toJSON(articles),
+              paging: {
+                page: page,
+                pages: Math.ceil(total / limit),
+                limit: limit,
+                total: total
+              }
+            }
+          }).end()
+        }
+
         let articles: ArticleSnapshots = await articleRepository.getArticles(specification)
         let total: number = await articleRepository.countArticles(specification)
 
@@ -65,7 +85,7 @@ export default class ArticleHandler {
               total: total
             }
           }
-        })
+        }).end()
       } catch(err) {
         console.error(err)
 
@@ -100,7 +120,7 @@ export default class ArticleHandler {
         res.status(200).json({
           status: Status.Success,
           data: ArticleMapper.toJSON(article)
-        })
+        }).end()
       } catch (err) {
         console.error(err)
 
@@ -119,7 +139,7 @@ export default class ArticleHandler {
         res.status(200).json({
           status: Status.Success,
           data: ArticleMapper.toJSON(article)
-        })
+        }).end()
       } catch(err) {
         console.error(err)
 
@@ -148,7 +168,7 @@ export default class ArticleHandler {
 
         res.status(200).json({
           status: Status.Success
-        })
+        }).end()
       } catch(err) {
         console.error(err)
 
@@ -170,7 +190,7 @@ export default class ArticleHandler {
 
         res.status(200).json({
           status: Status.Success
-        })
+        }).end()
       } catch(err) {
         console.error(err)
 
@@ -192,7 +212,7 @@ export default class ArticleHandler {
 
         res.status(200).json({
           status: Status.Success
-        })
+        }).end()
       } catch(err) {
         console.error(err)
 

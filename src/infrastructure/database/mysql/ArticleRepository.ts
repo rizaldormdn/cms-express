@@ -3,13 +3,13 @@ require("dotenv").config();
 import { Connection } from "mysql2";
 import Specification from "../../../application/valueobject/Specification";
 import Article from "../../../domain/aggregate/Article";
-import Author from "../../../domain/entity/Author";
 import Image from "../../../domain/entity/Image";
 import * as ArticleRepositoryInterface from "../../../domain/repository/ArticleRepository";
 import ArticleDate from "../../../domain/valueobject/ArticleDate";
 import ArticleSnapshot, { ArticleSnapshots } from "../../../domain/valueobject/ArticleSnapshot";
 import Content from "../../../domain/valueobject/Content";
 import Dimension from "../../../domain/valueobject/Dimension";
+import Email from "../../../domain/valueobject/Email";
 import ImageURL from "../../../domain/valueobject/ImageURL";
 import Name from "../../../domain/valueobject/Name";
 import Slug from "../../../domain/valueobject/Slug";
@@ -203,6 +203,25 @@ export default class ArticleRepository implements ArticleRepositoryInterface.def
     })
   }
 
+  public countArticlesByAuthor(specification: Specification, authorEmail: Email): Promise<number> {
+    return new Promise<number>((resolve, reject) => {
+      this._connection.query(
+        "SELECT COUNT(slug) AS total FROM articles WHERE title LIKE ? AND author_email = ?",
+        [`%${specification.search}%`, authorEmail.string()],
+        (err: any | null, result: any) => {
+          if (err) {
+            console.error(err);
+
+            reject(new Error('failed count articles'));
+          }
+          if (result.length > 0) {
+            resolve(Number(result[0].total))
+          }
+        }
+      )
+    })
+  }
+
   public getFeaturedArticles(): Promise<ArticleSnapshots> {
     return new Promise<ArticleSnapshots>((resolve, reject) => {
       let query = `
@@ -326,7 +345,7 @@ export default class ArticleRepository implements ArticleRepositoryInterface.def
     });
   }
 
-  public getArticlesByAuthor(specification: Specification, author: Author): Promise<ArticleSnapshots> {
+  public getArticlesByAuthor(specification: Specification, authorEmail: Email): Promise<ArticleSnapshots> {
     return new Promise<ArticleSnapshots>((resolve, reject) => {
       let limit = Number(process.env.LIMIT_ARTICLES)
       let offset = (specification.page - 1) * limit
@@ -344,13 +363,13 @@ export default class ArticleRepository implements ArticleRepositoryInterface.def
         FROM articles
         JOIN images ON images.id = articles.image_id
         JOIN users ON users.email = articles.author_email
-        WHERE title LIKE ? AND author_email = ?
+        WHERE title LIKE ? AND articles.author_email = ?
         ORDER BY articles.updated_at DESC LIMIT ?, ?
       `
 
       this._connection.query(
         query,
-        [`%${specification.search}%`, author.email.string(), offset, limit],
+        [`%${specification.search}%`, authorEmail.string(), offset, limit],
         (err: any | null, result: any) => {
           if (err) {
             console.error(err);
