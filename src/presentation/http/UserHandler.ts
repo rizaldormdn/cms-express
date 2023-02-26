@@ -152,6 +152,38 @@ export default class UserHandler {
       }
     })
 
+    router.post('/update-password', Middleware.authentication, async (req: Request, res: Response) => {
+      if (req.body.password !== req.body.password_confirmation) {
+        res.status(400).json({
+          status: Status.Error,
+          message: 'failed to update a password'
+        }).end();
+
+        return
+      }
+
+      try {
+        let email = new Email(res.locals.user.email)
+        let user = await userRepository.getUser(email)
+        let newPassword = new Password()
+
+        newPassword.hash(req.body.password)
+
+        await userService.updatePassword(user, newPassword)
+
+        res.status(200).json({
+          status: Status.Success,
+        }).end();
+      } catch (err) {
+        console.error(err)
+
+        res.status(500).json({
+          status: Status.Error,
+          message: 'failed to update a password'
+        }).end();
+      }
+    })
+
     return router
   }
 }
