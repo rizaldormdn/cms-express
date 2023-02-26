@@ -24,8 +24,6 @@ describe("ArticleRepository", () => {
 
   let specification = new Specification("", 1)
   let email: Email = new Email("test@example.com");
-  let name: Name = new Name("John Doe");
-  let password: Password = new Password("$2b$10$WCZ6j4PLICecyCYvBvL7We");
   let title = "This is title"
   let slug = new Slug(title)
   let content = new Content(title, "This is content", "This is excerpt");
@@ -460,7 +458,7 @@ describe("ArticleRepository", () => {
       mock.expects("query").once().withArgs("DELETE FROM articles WHERE slug = ?");
   
       try {
-        articleRepository.deleteArticle(slug)
+        articleRepository.deleteArticle(slug, email)
       } catch (err) {
         expect(err).toBeUndefined()
       }
@@ -470,7 +468,7 @@ describe("ArticleRepository", () => {
       mock.expects("query").once().callsArgWith(2, new Error(), null, null);
 
       try {
-        await articleRepository.deleteArticle(slug)
+        await articleRepository.deleteArticle(slug, email)
       } catch (err) {
         expect(err).toBeDefined()
       }

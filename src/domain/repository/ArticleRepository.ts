@@ -13,5 +13,5 @@ export default interface ArticleRepository{
   getArticle(slug: Slug): Promise<Article>
   saveArticle(article: Article): Promise<void>
   updateArticle(article: Article): Promise<void>
-  deleteArticle(slug: Slug): Promise<void>
+  deleteArticle(slug: Slug, email: Email): Promise<void>
 }

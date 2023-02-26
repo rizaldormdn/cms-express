@@ -67,4 +67,14 @@ export default class ArticleService {
       }
     })
   }
+
+  public async deleteArticle(author: Author, slug: Slug): Promise<void> {
+    return new Promise<void>(async (resolve, reject) => {
+      try {
+        resolve(await this._articleRepository.deleteArticle(slug, author.email));
+      } catch (err) {
+        reject(err);
+      }
+    })
+  }
 }
