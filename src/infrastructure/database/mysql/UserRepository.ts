@@ -20,7 +20,7 @@ export default class UserRepository implements UserRepositoryInterface.default {
   public getAuthors(): Promise<AuthorSnapshots> {
     return new Promise<AuthorSnapshots>((resolve, reject) => {
       this._connection.query(
-        "SELECT email, first_name, last_name FROM users WHERE is_administrator IS FALSE OR is_administrator IS NULL LIMIT ?",
+        "SELECT email, first_name, last_name FROM users WHERE is_administrator IS NOT TRUE LIMIT ?",
         [Number(process.env.LIMIT_AUTHORS)],
         (err: any | null, result: any) => {
           if (err) {
@@ -160,7 +160,7 @@ export default class UserRepository implements UserRepositoryInterface.default {
   public deleteAuthor(email: Email): Promise<void> {
     return new Promise<void>((resolve, reject) => {
       this._connection.query(
-        "DELETE FROM users WHERE is_administrator = FALSE AND email = ?",
+        "DELETE FROM users WHERE is_administrator IS NOT TRUE AND email = ?",
         [email.string()],
         (err: any | null, result: any) => {
           if (err) {

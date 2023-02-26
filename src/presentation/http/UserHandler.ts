@@ -186,6 +186,12 @@ export default class UserHandler {
     })
 
     router.get('/authors', Middleware.authentication, async (_: Request, res: Response) => {
+      if (!res.locals.user.is_administrator) {
+        res.status(403).json({
+          status: Status.Error
+        }).end();
+      }
+
       try {
         let authors: AuthorSnapshots = await userRepository.getAuthors()
 
@@ -198,6 +204,32 @@ export default class UserHandler {
 
         res.status(500).json({
           status: Status.Error,
+          message: 'failed to get authors'
+        }).end();
+      }
+    })
+
+    router.delete('/authors/:email', Middleware.authentication, async (req: Request, res: Response) => {
+      if (!res.locals.user.is_administrator) {
+        res.status(403).json({
+          status: Status.Error
+        }).end();
+      }
+
+      try {
+        let email: Email = new Email(req.params.email)
+
+        await userRepository.deleteAuthor(email)
+
+        res.status(200).json({
+          status: Status.Success
+        }).end();
+      } catch (err) {
+        console.error(err);
+
+        res.status(500).json({
+          status: Status.Error,
+          message: 'failed to delete an author'
         }).end();
       }
     })

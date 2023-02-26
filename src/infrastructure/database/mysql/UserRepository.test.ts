@@ -161,7 +161,7 @@ describe("UserRepository", () => {
 
   describe("delete author", () => {
     it("should delete an author", () => {
-      mock.expects("query").once().withArgs("DELETE FROM users WHERE is_administrator = FALSE AND email = ?");
+      mock.expects("query").once().withArgs("DELETE FROM users WHERE is_administrator IS NOT TRUE AND email = ?");
   
       try {
         userRepository.deleteAuthor(email)
