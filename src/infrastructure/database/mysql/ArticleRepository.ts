@@ -1,3 +1,5 @@
+require("dotenv").config();
+
 import { Connection } from "mysql2";
 import Specification from "../../../application/valueobject/Specification";
 import Article from "../../../domain/aggregate/Article";
@@ -26,7 +28,7 @@ export default class ArticleRepository implements ArticleRepositoryInterface.def
       if (tags !== "") {
         tags += ","
       }
-      tags += tag
+      tags += tag.value
     }
 
     return tags
@@ -181,7 +183,26 @@ export default class ArticleRepository implements ArticleRepositoryInterface.def
     })
   }
 
-  getFeaturedArticles(): Promise<ArticleSnapshots> {
+  public countArticles(specification: Specification): Promise<number> {
+    return new Promise<number>((resolve, reject) => {
+      this._connection.query(
+        "SELECT COUNT(slug) AS total FROM articles WHERE title LIKE ?",
+        [`%${specification.search}%`],
+        (err: any | null, result: any) => {
+          if (err) {
+            console.error(err);
+
+            reject(new Error('failed count articles'));
+          }
+          if (result.length > 0) {
+            resolve(Number(result[0].total))
+          }
+        }
+      )
+    })
+  }
+
+  public getFeaturedArticles(): Promise<ArticleSnapshots> {
     return new Promise<ArticleSnapshots>((resolve, reject) => {
       let query = `
         SELECT
@@ -241,10 +262,10 @@ export default class ArticleRepository implements ArticleRepositoryInterface.def
     });
   }
 
-  getArticles(specification: Specification): Promise<ArticleSnapshots> {
+  public getArticles(specification: Specification): Promise<ArticleSnapshots> {
     return new Promise<ArticleSnapshots>((resolve, reject) => {
       let limit = Number(process.env.LIMIT_ARTICLES)
-      let offset = (specification.page - 1) * limit
+      let offset: number = (specification.page - 1) * limit
       let query = `
         SELECT
           slug,
@@ -273,7 +294,7 @@ export default class ArticleRepository implements ArticleRepositoryInterface.def
             reject(new Error('failed get articles'));
           }
           if (result.length > 0) {
-            let featuredArticles: ArticleSnapshots = []
+            let articles: ArticleSnapshots = []
 
             for (let entry of result) {
               let tags: Tags = []
@@ -281,7 +302,7 @@ export default class ArticleRepository implements ArticleRepositoryInterface.def
                 tags.push(new Tag(tag))
               }
 
-              let featuredArticle = new ArticleSnapshot(
+              let article = new ArticleSnapshot(
                 new Slug().rebuild(entry.slug),
                 entry.title,
                 entry.excerpt,
@@ -294,17 +315,17 @@ export default class ArticleRepository implements ArticleRepositoryInterface.def
                 )
               )
 
-              featuredArticles.push(featuredArticle)
+              articles.push(article)
             }
 
-            resolve(featuredArticles)
+            resolve(articles)
           }
         }
       )
     });
   }
 
-  getArticlesByAuthor(specification: Specification, author: Author): Promise<ArticleSnapshots> {
+  public getArticlesByAuthor(specification: Specification, author: Author): Promise<ArticleSnapshots> {
     return new Promise<ArticleSnapshots>((resolve, reject) => {
       let limit = Number(process.env.LIMIT_ARTICLES)
       let offset = (specification.page - 1) * limit
@@ -367,7 +388,7 @@ export default class ArticleRepository implements ArticleRepositoryInterface.def
     });
   }
 
-  getArticle(slug: Slug): Promise<Article> {
+  public getArticle(slug: Slug): Promise<Article> {
     return new Promise<Article>(async (resolve, reject) => {
       try {
         let article = await this._getArticle(slug)
@@ -390,7 +411,7 @@ export default class ArticleRepository implements ArticleRepositoryInterface.def
     });
   }
 
-  saveArticle(article: Article): Promise<void> {
+  public saveArticle(article: Article): Promise<void> {
     return new Promise<void>((resolve, reject) => {
       this._connection.query(
         'INSERT INTO articles (slug, title, content, excerpt, image_id, author_email, tags) VALUES (?, ?, ?, ?, UUID_TO_BIN(?), ?, ?)',
@@ -416,7 +437,7 @@ export default class ArticleRepository implements ArticleRepositoryInterface.def
     });
   }
 
-  updateArticle(article: Article): Promise<void> {
+  public updateArticle(article: Article): Promise<void> {
     return new Promise<void>((resolve, reject) => {
       this._connection.query(
         'UPDATE articles SET content = ?, excerpt = ?, image_id = ?, tags = ?) VALUES (?, ?, UUID_TO_BIN(?), ?) WHERE slug = ? AND author_email = ?',
@@ -441,7 +462,7 @@ export default class ArticleRepository implements ArticleRepositoryInterface.def
     });
   }
 
-  deleteArticle(slug: Slug): Promise<void> {
+  public deleteArticle(slug: Slug): Promise<void> {
     return new Promise<void>((resolve, reject) => {
       this._connection.query(
         'DELETE FROM articles WHERE slug = ?',

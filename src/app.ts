@@ -51,6 +51,7 @@ Server.run(
   Router.run(
     userRepository,
     imageRepository,
+    articleRepository,
     userService,
     articleService,
     administratorService,

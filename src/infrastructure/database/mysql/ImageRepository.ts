@@ -12,7 +12,7 @@ export default class ImageRepository implements ImageRepositoryInterface.default
     this._connection = connection;
   }
 
-  getImages(author: Author): Promise<Images> {
+  public getImages(author: Author): Promise<Images> {
     return new Promise<Images>((resolve, reject) => {
       this._connection.query(
         "SELECT BIN_TO_UUID(id), original_url, thumbnail_url, alt, height, width FROM images WHERE author_email = ? LIMIT ?",
@@ -45,7 +45,7 @@ export default class ImageRepository implements ImageRepositoryInterface.default
     })
   }
 
-  getImage(id: string): Promise<Image> {
+  public getImage(id: string): Promise<Image> {
     return new Promise<Image>((resolve, reject) => {
       this._connection.query(
         "SELECT original_url, thumbnail_url, alt, height, width, author_email FROM images WHERE BIN_TO_UUID(id) = ? LIMIT 1",
@@ -71,7 +71,7 @@ export default class ImageRepository implements ImageRepositoryInterface.default
     })
   }
 
-  saveImage(image: Image): Promise<void> {
+  public saveImage(image: Image): Promise<void> {
     return new Promise<void>((resolve, reject) => {
       this._connection.query(
         "INSERT INTO images (id, original_url, thumbnail_url, alt, height, width, author_email) VALUES (UUID_TO_BIN(?), ?, ?, ?, ?, ?, ?)",
@@ -97,7 +97,7 @@ export default class ImageRepository implements ImageRepositoryInterface.default
     })
   }
 
-  updateImage(image: Image): Promise<void> {
+  public updateImage(image: Image): Promise<void> {
     return new Promise<void>((resolve, reject) => {
       this._connection.query(
         "UPDATE images SET original_url = ?, thumbnail_url = ?, alt = ?, height = ?, width = ? WHERE BIN_TO_UUID(id) = ?",
@@ -122,7 +122,7 @@ export default class ImageRepository implements ImageRepositoryInterface.default
     })
   }
 
-  deleteImage(id: string): Promise<void> {
+  public deleteImage(id: string): Promise<void> {
     return new Promise<void>((resolve, reject) => {
       this._connection.query("DELETE FROM images WHERE BIN_TO_UUID(id) = ?",
         [id],

@@ -42,5 +42,6 @@ CREATE TABLE IF NOT EXISTS `articles` (
   PRIMARY KEY (`slug`),
   FOREIGN KEY (`image_id`) REFERENCES `images`(`id`),
   FOREIGN KEY (`author_email`) REFERENCES `users`(`email`),
+  INDEX `idx_title` (`title`),
   INDEX `idx_is_published` (`is_published`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;

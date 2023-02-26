@@ -5,6 +5,7 @@ import Slug from '../valueobject/Slug'
 import Specification from '../../application/valueobject/Specification'
 
 export default interface ArticleRepository{
+  countArticles(specification: Specification): Promise<number>
   getFeaturedArticles(): Promise<ArticleSnapshots>
   getArticles(specification: Specification): Promise<ArticleSnapshots>
   getArticlesByAuthor(specification: Specification, author: Author): Promise<ArticleSnapshots>

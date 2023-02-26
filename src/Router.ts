@@ -8,11 +8,13 @@ import UserService from "./application/service/UserService";
 import ArticleHandler from "./presentation/http/ArticleHandler";
 import ArticleService from "./domain/service/ArticleService";
 import ImageRepository from "./domain/repository/ImageRepository";
+import ArticleRepository from "./domain/repository/ArticleRepository";
 
 export default class Router {
   public static run(
     userRepository: UserRepository,
     imageRepository: ImageRepository,
+    articleRepository: ArticleRepository,
     userService: UserService,
     articleService: ArticleService,
     administratorService: AdministratorService,
@@ -30,6 +32,7 @@ export default class Router {
     router.use('/v1', ArticleHandler.router(
       userRepository,
       imageRepository,
+      articleRepository,
       articleService
     ))
 

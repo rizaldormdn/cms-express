@@ -1,3 +1,5 @@
+require("dotenv").config();
+
 import { Router, Request, Response } from "express";
 import Article from "../../domain/aggregate/Article";
 import Author from "../../domain/entity/Author";
@@ -9,17 +11,51 @@ import Tag, { Tags } from "../../domain/valueobject/Tag";
 import UserRepository from "../../domain/repository/UserRepository";
 import Middleware from "../../Middleware";
 import Status from "../../Status";
-import ArticleMapper from "./ArticleMapper";
+import ArticleMapper, { ArticleSnapshotMapper } from "./ArticleMapper";
 import Email from "../../domain/valueobject/Email";
 import ImageRepository from "../../domain/repository/ImageRepository";
+import ArticleRepository from "../../domain/repository/ArticleRepository";
+import Specification from "../../application/valueobject/Specification";
+import { ArticleSnapshots } from "../../domain/valueobject/ArticleSnapshot";
 
 export default class ArticleHandler {
   public static router(
     userRepository: UserRepository,
     imageRepository: ImageRepository,
+    articleRepository: ArticleRepository,
     articleService: ArticleService
   ): Router {
     const router: Router = Router();
+
+    router.get('/articles', async (req: Request, res: Response) => {
+      try {
+        let page = Number(req.query.page ?? 1)
+        let limit = Number(process.env.LIMIT_ARTICLES)
+        let specification: Specification = new Specification(String(req.query.search ?? ''), page)
+        let articles: ArticleSnapshots = await articleRepository.getArticles(specification)
+        let total: number = await articleRepository.countArticles(specification)
+
+        res.status(200).json({
+          status: Status.Success,
+          data: {
+            articles: ArticleSnapshotMapper.toJSON(articles),
+            paging: {
+              page: page,
+              pages: Math.ceil(total / limit),
+              limit: limit,
+              total: total
+            }
+          }
+        })
+      } catch(err) {
+        console.error(err)
+
+        res.status(500).json({
+          status: Status.Error,
+          message: 'failed to get articles'
+        }).end()
+      }
+    })
 
     router.post('/articles', Middleware.authentication, async (req: Request, res: Response) => {
       if (res.locals.user.is_administrator) {
