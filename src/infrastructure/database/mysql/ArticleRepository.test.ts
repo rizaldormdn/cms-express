@@ -240,7 +240,7 @@ describe("ArticleRepository", () => {
           title,
           content,
           excerpt,
-          BIN_TO_UUID(images.id) AS image_id,
+          BIN_TO_UUID(image_id) AS image_id,
           original_url,
           thumbnail_url,
           alt,
@@ -436,7 +436,7 @@ describe("ArticleRepository", () => {
 
   describe("update an article", () => {
     it("should update an article", () => {
-      mock.expects("query").once().withArgs("UPDATE articles SET title = ?, content = ?, excerpt = ?, image_id = UUID_TO_BIN(?), tags = ? WHERE slug = ? AND author_email = ?");
+      mock.expects("query").once().withArgs("UPDATE articles SET title = ?, content = ?, excerpt = ?, image_id = UUID_TO_BIN(?), tags = ?, is_published = ? WHERE slug = ? AND author_email = ?");
   
       try {
         articleRepository.updateArticle(article)

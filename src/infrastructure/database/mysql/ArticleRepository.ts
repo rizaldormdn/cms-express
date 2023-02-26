@@ -42,7 +42,7 @@ export default class ArticleRepository implements ArticleRepositoryInterface.def
           title,
           content,
           excerpt,
-          BIN_TO_UUID(images.id) AS image_id,
+          BIN_TO_UUID(image_id) AS image_id,
           original_url,
           thumbnail_url,
           alt,
@@ -85,6 +85,7 @@ export default class ArticleRepository implements ArticleRepositoryInterface.def
                 new ImageURL(result[0].original_url, result[0].thumbnail_url),
                 result[0].alt,
                 new Dimension(result[0].height, result[0].width),
+                result.email,
                 result[0].image_id
               ),
               new Name(result[0].first_name, result[0].last_name).full(),
@@ -440,13 +441,14 @@ export default class ArticleRepository implements ArticleRepositoryInterface.def
   public updateArticle(article: Article): Promise<void> {
     return new Promise<void>((resolve, reject) => {
       this._connection.query(
-        'UPDATE articles SET title = ?, content = ?, excerpt = ?, image_id = UUID_TO_BIN(?), tags = ? WHERE slug = ? AND author_email = ?',
+        'UPDATE articles SET title = ?, content = ?, excerpt = ?, image_id = UUID_TO_BIN(?), tags = ?, is_published = ? WHERE slug = ? AND author_email = ?',
         [
           article.content.title,
           article.content.content,
           article.content.excerpt,
           article.image.id,
           this._tags(article.tags),
+          article.isPublished,
           article.slug.value,
           article.authorEmail
         ],
