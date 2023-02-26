@@ -5,6 +5,7 @@ import nodemailer from "nodemailer";
 import AdministratorService from "./application/service/AdministratorService";
 import ConfirmationService from "./application/service/ConfirmationService";
 import ResetPasswordService from "./application/service/ResetPasswordService";
+import UserService from "./application/service/UserService";
 import UserRepository from "./domain/repository/UserRepository";
 import UserRepositoryMySQL from "./infrastructure/database/mysql/UserRepository";
 import EmailConfirmationService from "./infrastructure/service/confirmation/EmailConfirmationService";
@@ -19,6 +20,7 @@ const connection: Connection = mysql.createConnection({
   port: Number(process.env.DB_PORT)
 });
 const userRepository: UserRepository = new UserRepositoryMySQL(connection)
+const userService: UserService = new UserService(userRepository)
 const emailConfirmationService: ConfirmationService = new EmailConfirmationService(
   nodemailer.createTransport({
     host: process.env.EMAIL_TRANSPORT_HOST,
@@ -38,5 +40,10 @@ const resetPasswordService: ResetPasswordService = new ResetPasswordService(user
 
 Server.run(
   Number(process.env.PORT),
-  Router.run(userRepository, administratorService, resetPasswordService)
+  Router.run(
+    userRepository,
+    userService,
+    administratorService,
+    resetPasswordService
+  )
 )

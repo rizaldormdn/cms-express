@@ -24,7 +24,7 @@ export default class UserRepository implements UserRepositoryInterface.default {
           if (err) {
             console.error(err);
 
-            reject(err);
+            reject(new Error('failed get an user'));
           }
           if (result.length > 0) {
             resolve(
@@ -53,7 +53,7 @@ export default class UserRepository implements UserRepositoryInterface.default {
           if (err) {
             console.error(err);
 
-            reject(err);
+            reject(new Error('failed get an user by token'));
           }
           if (result.length > 0) {
             resolve(
@@ -90,7 +90,7 @@ export default class UserRepository implements UserRepositoryInterface.default {
           if (err) {
             console.error(err);
 
-            reject(err);
+            reject(new Error('failed save an author'));
           }
           
           resolve(result)
@@ -116,7 +116,7 @@ export default class UserRepository implements UserRepositoryInterface.default {
           if (err) {
             console.error(err);
 
-            reject(err);
+            reject(new Error('failed update an user'));
           }
 
           resolve(result);
@@ -134,7 +134,7 @@ export default class UserRepository implements UserRepositoryInterface.default {
           if (err) {
             console.error(err);
 
-            reject(err);
+            reject(new Error('failed delete an author'));
           }
 
           resolve(result);

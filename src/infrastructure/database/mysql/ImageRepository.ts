@@ -24,7 +24,7 @@ export default class ImageRepository implements ImageRepositoryInterface.default
           if (err) {
             console.error(err)
 
-            reject(err)
+            reject(new Error('failed get images'))
           }
           if (result.length > 0) {
             let images: Images = []
@@ -54,7 +54,7 @@ export default class ImageRepository implements ImageRepositoryInterface.default
           if (err) {
             console.error(err)
 
-            reject(err)
+            reject(new Error('failed get an image'))
           }
           if (result.length > 0) {
             resolve(new Image(
@@ -65,6 +65,8 @@ export default class ImageRepository implements ImageRepositoryInterface.default
               id
             ))
           }
+
+          reject(new Error('image not found'))
         })
     })
   }
@@ -86,7 +88,7 @@ export default class ImageRepository implements ImageRepositoryInterface.default
           if (err) {
             console.error(err)
 
-            reject(err)
+            reject(new Error('failed save an image'))
           }
           
           resolve(result)
@@ -111,7 +113,7 @@ export default class ImageRepository implements ImageRepositoryInterface.default
           if (err) {
             console.error(err)
 
-            reject(err)
+            reject(new Error('failed update an image'))
           }
 
           resolve(result)
@@ -128,7 +130,7 @@ export default class ImageRepository implements ImageRepositoryInterface.default
           if (err) {
             console.error(err)
 
-            reject(err)
+            reject(new Error('failed delete an image'))
           }
 
           resolve(result)

@@ -66,7 +66,7 @@ export default class ArticleRepository implements ArticleRepositoryInterface.def
           if (err) {
             console.error(err);
 
-            reject(err);
+            reject(new Error('failed get an article'));
           }
           if (result.length > 0) {
             let tags: Tags = []
@@ -147,7 +147,7 @@ export default class ArticleRepository implements ArticleRepositoryInterface.def
           if (err) {
             console.error(err);
 
-            reject(err);
+            reject(new Error('failed get related articles'));
           }
           if (result.length > 0) {
             let relatedArticles: ArticleSnapshots = []
@@ -207,7 +207,7 @@ export default class ArticleRepository implements ArticleRepositoryInterface.def
           if (err) {
             console.error(err);
 
-            reject(err);
+            reject(new Error('failed get featured articles'));
           }
           if (result.length > 0) {
             let featuredArticles: ArticleSnapshots = []
@@ -270,7 +270,7 @@ export default class ArticleRepository implements ArticleRepositoryInterface.def
           if (err) {
             console.error(err);
 
-            reject(err);
+            reject(new Error('failed get articles'));
           }
           if (result.length > 0) {
             let featuredArticles: ArticleSnapshots = []
@@ -333,7 +333,7 @@ export default class ArticleRepository implements ArticleRepositoryInterface.def
           if (err) {
             console.error(err);
 
-            reject(err);
+            reject(new Error('failed get articles by author'));
           }
           if (result.length > 0) {
             let featuredArticles: ArticleSnapshots = []
@@ -407,7 +407,7 @@ export default class ArticleRepository implements ArticleRepositoryInterface.def
           if (err) {
             console.error(err)
 
-            reject(err)
+            reject(new Error('faield save an article'))
           }
 
           resolve(result);
@@ -432,7 +432,7 @@ export default class ArticleRepository implements ArticleRepositoryInterface.def
           if (err) {
             console.error(err)
 
-            reject(err)
+            reject(new Error('failed update an article'))
           }
 
           resolve(result);
@@ -452,7 +452,7 @@ export default class ArticleRepository implements ArticleRepositoryInterface.def
           if (err) {
             console.error(err)
 
-            reject(err)
+            reject(new Error('failed delete an article'))
           }
 
           resolve(result);

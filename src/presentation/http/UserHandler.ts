@@ -14,11 +14,12 @@ import Author from "../../domain/entity/Author";
 import User from "../../domain/entity/User";
 import ResetPasswordService from "../../application/service/ResetPasswordService";
 import Password from "../../domain/valueobject/Password";
-import { password } from "../../testdata";
+import UserService from "../../application/service/UserService";
 
 export default class UserHandler {
   public static router(
     userRepository: UserRepository,
+    userService: UserService,
     administratorService: AdministratorService,
     resetPasswordService: ResetPasswordService
   ): Router {
@@ -55,8 +56,8 @@ export default class UserHandler {
           message: 'user not found'
         }).end();
       } catch (err) {
-        console.error(err);
-  
+        console.error(err)
+
         res.status(500).json({
           status: Status.Error,
           message: 'failed to login'
@@ -91,8 +92,8 @@ export default class UserHandler {
           data: UserMapper.toJSON(author)
         }).end();
       } catch (err) {
-        console.error(err);
-  
+        console.error(err)
+
         res.status(500).json({
           status: Status.Error,
           message: 'failed to register'
@@ -121,11 +122,32 @@ export default class UserHandler {
           status: Status.Success
         }).end();
       } catch (err) {
-        console.error(err);
-  
+        console.error(err)
+
         res.status(500).json({
           status: Status.Error,
           message: 'failed to reset a password'
+        }).end();
+      }
+    })
+
+    router.post('/change-name', Middleware.authentication, async (req: Request, res: Response) => {
+      try {
+        let email = new Email(res.locals.user.email)
+        let user = await userRepository.getUser(email)
+        let newName = new Name(req.body.first_name, req.body.last_name)
+
+        await userService.changeName(user, newName)
+
+        res.status(200).json({
+          status: Status.Success,
+        }).end();
+      } catch (err) {
+        console.error(err)
+
+        res.status(500).json({
+          status: Status.Error,
+          message: 'failed to change name'
         }).end();
       }
     })
