@@ -45,6 +45,10 @@ export default class User {
     return this._resetPasswordToken;
   }
 
+  public clearResetPasswordToken() {
+    this._resetPasswordToken = undefined;
+  }
+
   public get isAdministrator(): boolean {
     return this._isAdministrator
   }

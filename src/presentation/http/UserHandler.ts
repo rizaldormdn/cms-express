@@ -74,6 +74,12 @@ export default class UserHandler {
     })
 
     router.post('/register', Middleware.authentication, async (req: Request, res: Response) => {
+      if (!res.locals.user.is_administrator) {
+        res.status(403).json({
+          status: Status.Error
+        }).end();
+      }
+
       try {
         let administrator: Administrator = UserMapper.toAdministrator(res.locals.user)
         let email: Email = new Email(req.body.email);
@@ -107,9 +113,13 @@ export default class UserHandler {
       try {
         let newPassword: Password = new Password()
 
-        password.hash(req.body.password)
+        newPassword.hash(req.body.password)
 
         await resetPasswordService.resetPassword(req.body.token, newPassword)
+
+        res.status(200).json({
+          status: Status.Success
+        }).end();
       } catch (err) {
         console.error(err);
   

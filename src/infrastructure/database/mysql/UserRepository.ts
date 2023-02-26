@@ -83,7 +83,7 @@ export default class UserRepository implements UserRepositoryInterface.default {
           author.name.last,
           author.password!.salt,
           author.password!.hashedPassword,
-          String(author.resetPasswordToken?.token),
+          author.resetPasswordToken?.token,
           author.resetPasswordToken?.tokenExpiry
         ],
         (err: any | null, result: any) => {
@@ -108,12 +108,11 @@ export default class UserRepository implements UserRepositoryInterface.default {
           user.name.last,
           user.password!.salt,
           user.password!.hashedPassword,
-          String(user.resetPasswordToken?.token),
+          user.resetPasswordToken?.token,
           user.resetPasswordToken?.tokenExpiry,
           user.email.string(),
         ],
         (err: any | null, result: any) => {
-          console.log("HERE", err, result)
           if (err) {
             console.error(err);
 

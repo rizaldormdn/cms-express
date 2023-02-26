@@ -21,10 +21,9 @@ export default class ResetPasswordService {
         }
   
         user.updatePassword(newPassword);
+        user.clearResetPasswordToken();
 
-        await this._userRepository.updateUser(user);
-
-        resolve()
+        resolve(await this._userRepository.updateUser(user))
       } catch (err) {
         console.error(err)
 
