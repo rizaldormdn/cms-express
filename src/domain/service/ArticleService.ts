@@ -5,6 +5,7 @@ import Slug from "../valueobject/Slug";
 import Content from "../valueobject/Content";
 import Image from "../entity/Image";
 import { Tags } from "../valueobject/Tag";
+import User from "../entity/User";
 
 export default class ArticleService {
   private _articleRepository: ArticleRepository;
@@ -68,10 +69,14 @@ export default class ArticleService {
     })
   }
 
-  public async deleteArticle(author: Author, slug: Slug): Promise<void> {
+  public async deleteArticle(user: User, slug: Slug): Promise<void> {
     return new Promise<void>(async (resolve, reject) => {
       try {
-        resolve(await this._articleRepository.deleteArticle(slug, author.email));
+        if (!user.isAdministrator) {
+          resolve(await this._articleRepository.deleteArticleWithEmail(slug, user.email));
+        } else {
+          resolve(await this._articleRepository.deleteArticle(slug))
+        }
       } catch (err) {
         reject(err);
       }

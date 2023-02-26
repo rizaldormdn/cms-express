@@ -184,9 +184,8 @@ export default class ArticleHandler {
         let slug: Slug = new Slug().rebuild(req.params.slug)
         let email: Email = new Email(res.locals.user.email);
         let user: User = await userRepository.getUser(email)
-        let author: Author = new Author(user.email, user.name, user.password, user.resetPasswordToken)
 
-        await articleService.deleteArticle(author, slug)
+        await articleService.deleteArticle(user, slug)
 
         res.status(200).json({
           status: Status.Success

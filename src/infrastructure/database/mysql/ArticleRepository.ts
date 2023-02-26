@@ -484,7 +484,25 @@ export default class ArticleRepository implements ArticleRepositoryInterface.def
     });
   }
 
-  public deleteArticle(slug: Slug, email: Email): Promise<void> {
+  public deleteArticle(slug: Slug): Promise<void> {
+    return new Promise<void>((resolve, reject) => {
+      this._connection.query(
+        'DELETE FROM articles WHERE slug = ?',
+        [slug.value],
+        (err: any | null, result: any) => {
+          if (err) {
+            console.error(err)
+
+            reject(new Error('failed delete an article'))
+          }
+
+          resolve(result);
+        }
+      )
+    });
+  }
+
+  public deleteArticleWithEmail(slug: Slug, email: Email): Promise<void> {
     return new Promise<void>((resolve, reject) => {
       this._connection.query(
         'DELETE FROM articles WHERE slug = ? AND author_email = ?',

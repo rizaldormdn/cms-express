@@ -458,7 +458,7 @@ describe("ArticleRepository", () => {
       mock.expects("query").once().withArgs("DELETE FROM articles WHERE slug = ?");
   
       try {
-        articleRepository.deleteArticle(slug, email)
+        articleRepository.deleteArticle(slug)
       } catch (err) {
         expect(err).toBeUndefined()
       }
@@ -468,7 +468,7 @@ describe("ArticleRepository", () => {
       mock.expects("query").once().callsArgWith(2, new Error(), null, null);
 
       try {
-        await articleRepository.deleteArticle(slug, email)
+        await articleRepository.deleteArticle(slug)
       } catch (err) {
         expect(err).toBeDefined()
       }
