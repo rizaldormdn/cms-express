@@ -181,6 +181,28 @@ export default class ArticleHandler {
       }
     })
 
+    router.post('/unpublish-article/:slug', Middleware.authentication, async (req: Request, res: Response) => {
+      try {
+        let slug: Slug = new Slug().rebuild(req.params.slug)
+        let email: Email = new Email(res.locals.user.email);
+        let user: User = await userRepository.getUser(email)
+        let author: Author = new Author(user.email, user.name, user.password, user.resetPasswordToken)
+
+        await articleService.unpublishArticle(author, slug)
+
+        res.status(200).json({
+          status: Status.Success
+        })
+      } catch(err) {
+        console.error(err)
+
+        res.status(500).json({
+          status: Status.Error,
+          message: 'failed to unpublish an article'
+        }).end()
+      }
+    })
+
     return router
   }
 }
