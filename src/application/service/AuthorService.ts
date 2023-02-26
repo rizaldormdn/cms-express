@@ -5,15 +5,12 @@ import Slug from "../../domain/valueobject/Slug";
 import Content from "../../domain/valueobject/Content";
 import Image from "../../domain/entity/Image";
 import { Tags } from "../../domain/valueobject/Tag";
-import confirmationService from "./ConfirmationService";
 
 export default class AuthorService {
   private _articleRepository: ArticleRepository;
-  private _confirmationService: confirmationService;
 
-  constructor(articleRepository: ArticleRepository, confirmationService: confirmationService) {
+  constructor(articleRepository: ArticleRepository) {
     this._articleRepository = articleRepository;
-    this._confirmationService = confirmationService;
   }
 
   public async addArticle(author: Author, content: Content, image: Image, tags: Tags): Promise<Article> {
