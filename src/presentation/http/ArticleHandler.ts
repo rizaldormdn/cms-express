@@ -27,6 +27,24 @@ export default class ArticleHandler {
   ): Router {
     const router: Router = Router();
 
+    router.get('/featured-articles', async (_: Request, res: Response) => {
+      try {
+        let featuredArticles: ArticleSnapshots = await articleRepository.getFeaturedArticles()
+
+        res.status(200).json({
+          status: Status.Success,
+          data: ArticleSnapshotMapper.toJSON(featuredArticles)
+        })
+      } catch(err) {
+        console.error(err)
+
+        res.status(500).json({
+          status: Status.Error,
+          message: 'failed to get featured articles'
+        }).end()
+      }
+    })
+
     router.get('/articles', async (req: Request, res: Response) => {
       try {
         let page = Number(req.query.page ?? 1)
