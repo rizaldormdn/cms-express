@@ -46,4 +46,20 @@ export default class Author extends User {
 
     return article
   }
+
+  public publishArticle(article: Article): void {
+    if (this._email.string() !== article.authorEmail) {
+      throw new Error('permission denied')
+    }
+
+    article.publish()
+  }
+
+  public unpublishArticle(article: Article): void {
+    if (this._email.string() !== article.authorEmail) {
+      throw new Error('permission denied')
+    }
+
+    article.unpublish()
+  }
 }

@@ -48,6 +48,7 @@ export const tags: Tags = [
   new Tag("tag3")
 ]
 export const article: Article = author.addArticle(content, image, tags)
+export const otherArticle: Article = new Article(article.slug, content, image, author.name.full(), "other@example.com", tags)
 export const slug = new Slug("this-is-title-abc123")
 export const articleDate = new ArticleDate()
 export const articleSnapshot = new ArticleSnapshot(slug, title, excerpt, imageThumbnailURL, authorName, tags, articleDate)

@@ -40,12 +40,12 @@ export default class ArticleService {
     })
   }
 
-  public async publishArticle(slug: Slug): Promise<void> {
+  public async publishArticle(author: Author, slug: Slug): Promise<void> {
     return new Promise<void>(async (resolve, reject) => {
       try {
         let article = await this._articleRepository.getArticle(slug);
-  
-        article.publish();
+
+        author.publishArticle(article)
 
         resolve(await this._articleRepository.updateArticle(article));
       } catch (err) {
@@ -54,12 +54,12 @@ export default class ArticleService {
     })
   }
 
-  public async unpublishArticle(slug: Slug): Promise<void> {
+  public async unpublishArticle(author: Author, slug: Slug): Promise<void> {
     return new Promise<void>(async (resolve, reject) => {
       try {
         let article = await this._articleRepository.getArticle(slug);
   
-        article.unpublish();
+        author.unpublishArticle(author)
   
         resolve(await this._articleRepository.updateArticle(article));
       } catch (err) {
