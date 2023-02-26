@@ -1,5 +1,7 @@
+require("dotenv").config();
+
 import { Connection } from "mysql2";
-import Administrator from "../../../domain/entity/Administrator";
+import AuthorSnapshot, { AuthorSnapshots } from "../../../application/valueobject/AuthorSnapshot";
 import Author from "../../../domain/entity/Author";
 import User from "../../../domain/entity/User";
 import * as UserRepositoryInterface from "../../../domain/repository/UserRepository";
@@ -13,6 +15,36 @@ export default class UserRepository implements UserRepositoryInterface.default {
 
   constructor(connection: Connection) {
     this._connection = connection;
+  }
+
+  public getAuthors(): Promise<AuthorSnapshots> {
+    return new Promise<AuthorSnapshots>((resolve, reject) => {
+      this._connection.query(
+        "SELECT email, first_name, last_name FROM users WHERE is_administrator IS FALSE OR is_administrator IS NULL LIMIT ?",
+        [Number(process.env.LIMIT_AUTHORS)],
+        (err: any | null, result: any) => {
+          if (err) {
+            console.error(err);
+
+            reject(new Error('failed get authors'));
+          }
+          if (result.length > 0) {
+            let authorSnapshots: AuthorSnapshots = []
+
+            for (let entry of result) {
+              authorSnapshots.push(new AuthorSnapshot(
+                new Name(entry.first_name, entry.last_name).full(),
+                entry.email
+              ))
+            }
+
+            resolve(authorSnapshots);
+          }
+
+          reject(new Error('user not found'))
+        }
+      )
+    })
   }
 
   public getUser(email: Email): Promise<User> {
