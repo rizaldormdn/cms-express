@@ -170,7 +170,12 @@ export default class ImageHandler {
       try {
         let email: Email = new Email(res.locals.user.email)
 
-        await imageService.updateImage(email, req.params.id, req.body.alt)
+        await imageService.updateImage(
+          email,
+          res.locals.user.is_administrator,
+          req.params.id,
+          req.body.alt
+        )
 
         res.status(200).json({
           status: Status.Success,

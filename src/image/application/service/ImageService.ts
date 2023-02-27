@@ -9,12 +9,12 @@ export default class ImageService {
     this._imageRepository = imageRepository;
   }
 
-  public updateImage(authorEmail: Email, imageID: string, newAlt: string): Promise<void> {
+  public updateImage(authorEmail: Email, isAdministrator: boolean, imageID: string, newAlt: string): Promise<void> {
     return new Promise<void>(async (resolve, reject) => {
       try {
         let image: Image = await this._imageRepository.getImage(imageID)
 
-        if (authorEmail.string() !== image.authorEmail) {
+        if (!isAdministrator && authorEmail.string() !== image.authorEmail) {
           reject(new Error('permission denied'))
         }
 
