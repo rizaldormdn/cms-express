@@ -9,6 +9,7 @@ import ArticleHandler from "./article/presentation/http/ArticleHandler";
 import ArticleService from "./article/domain/service/ArticleService";
 import ImageRepository from "./image/domain/repository/ImageRepository";
 import ArticleRepository from "./article/domain/repository/ArticleRepository";
+import ImageHandler from "./image/presentation/http/ImageHandler";
 
 export default class Router {
   public static run(
@@ -35,6 +36,7 @@ export default class Router {
       articleRepository,
       articleService
     ))
+    router.use('/v1', ImageHandler.router(imageRepository))
 
     return router
   }

@@ -22,7 +22,7 @@ describe("ImageRepository", () => {
           author_email
         FROM images
         WHERE alt LIKE ?
-        ORDER BY articles.updated_at DESC
+        ORDER BY images.updated_at DESC
         LIMIT ?, ?
       `
 

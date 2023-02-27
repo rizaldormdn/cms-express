@@ -66,7 +66,7 @@ export default class ImageRepository implements ImageRepositoryInterface.default
           author_email
         FROM images
         WHERE alt LIKE ?
-        ORDER BY articles.updated_at DESC
+        ORDER BY images.updated_at DESC
         LIMIT ?, ?
       `
 
@@ -112,7 +112,7 @@ export default class ImageRepository implements ImageRepositoryInterface.default
           width
         FROM images
         WHERE alt LIKE ? AND author_email = ?
-        ORDER BY articles.updated_at DESC
+        ORDER BY images.updated_at DESC
         LIMIT ?, ?
       `
 
