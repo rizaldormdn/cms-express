@@ -5,9 +5,9 @@ import Middleware from "../../../Middleware";
 import Specification from "../../../Specification";
 import Status from "../../../Status";
 import Email from "../../../user/domain/valueobject/Email";
-import { Images } from "../../domain/entity/Image";
+import Image, { Images } from "../../domain/entity/Image";
 import ImageRepository from "../../domain/repository/ImageRepository";
-import ImageMapper from "./ImageMapper";
+import ImageMapper, { ImagesMapper } from "./ImageMapper";
 
 export default class ImageHandler {
   public static router(
@@ -29,7 +29,7 @@ export default class ImageHandler {
           res.status(200).json({
             status: Status.Success,
             data: {
-              images: ImageMapper.toJSON(images),
+              images: ImagesMapper.toJSON(images),
               paging: {
                 page: page,
                 pages: Math.ceil(total / limit),
@@ -46,7 +46,7 @@ export default class ImageHandler {
         res.status(200).json({
           status: Status.Success,
           data: {
-            images: ImageMapper.toJSON(images),
+            images: ImagesMapper.toJSON(images),
             paging: {
               page: page,
               pages: Math.ceil(total / limit),
@@ -61,6 +61,24 @@ export default class ImageHandler {
         res.status(500).json({
           status: Status.Error,
           message: 'failed to get images'
+        }).end()
+      }
+    })
+
+    router.get('/images/:id', async (req: Request, res: Response) => {
+      try {
+        let image: Image = await imageRepository.getImage(req.params.id)
+
+        res.status(200).json({
+          status: Status.Success,
+          data: ImageMapper.toJSON(image)
+        }).end()
+      } catch(err) {
+        console.error(err)
+
+        res.status(500).json({
+          status: Status.Error,
+          message: 'failed to get an image'
         }).end()
       }
     })

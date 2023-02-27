@@ -1,4 +1,4 @@
-import { Images } from "../../domain/entity/Image";
+import Image, { Images } from "../../domain/entity/Image";
 
 export type ImageJSON = {
   id: string;
@@ -16,7 +16,7 @@ export type ImageJSON = {
 
 export type ImagesJSON = ImageJSON[]
 
-export default class ImageMapper {
+export class ImagesMapper {
   public static toJSON(images: Images): ImagesJSON {
     let imagesJSON: ImagesJSON = []
 
@@ -37,5 +37,23 @@ export default class ImageMapper {
     }
 
     return imagesJSON
+  }
+}
+
+export default class ImageMapper {
+  public static toJSON(image: Image): ImageJSON {
+    return {
+      id: image.id,
+      url: {
+        original: image.url.original,
+        thumbnail: image.url.thumbnail
+      },
+      alt: image.alt,
+      dimension: {
+        height: image.dimension.height,
+        width: image.dimension.width
+      },
+      author_email: image.authorEmail
+    }
   }
 }
