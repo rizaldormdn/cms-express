@@ -11,6 +11,7 @@ import {
   imageRepository,
   articleRepository,
   userService,
+  imageService,
   articleService,
   administratorService,
   resetPasswordService
@@ -26,6 +27,7 @@ describe("UserHandler", () => {
     imageRepository,
     articleRepository,
     userService,
+    imageService,
     articleService,
     administratorService,
     resetPasswordService

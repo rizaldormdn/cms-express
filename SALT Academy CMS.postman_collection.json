@@ -29,7 +29,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n    \"email\": \"admin@example.com\",\n    \"password\": \"admin123\"\n}",
+							"raw": "{\n    \"email\": \"author@example.com\",\n    \"password\": \"author123\"\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -1697,6 +1697,657 @@
 								{
 									"key": "Date",
 									"value": "Sun, 26 Feb 2023 19:02:58 GMT"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								},
+								{
+									"key": "Keep-Alive",
+									"value": "timeout=5"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"status\": \"success\"\n}"
+						}
+					]
+				}
+			]
+		},
+		{
+			"name": "Image",
+			"item": [
+				{
+					"name": "Get Images",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{ACCESS_TOKEN}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{HOST}}/v1/images",
+							"host": [
+								"{{HOST}}"
+							],
+							"path": [
+								"v1",
+								"images"
+							],
+							"query": [
+								{
+									"key": "search",
+									"value": "",
+									"disabled": true
+								},
+								{
+									"key": "page",
+									"value": "1",
+									"disabled": true
+								},
+								{
+									"key": "author",
+									"value": "author@example.com",
+									"disabled": true
+								}
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "Get Images",
+							"originalRequest": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{HOST}}/v1/images",
+									"host": [
+										"{{HOST}}"
+									],
+									"path": [
+										"v1",
+										"images"
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "X-Powered-By",
+									"value": "Express"
+								},
+								{
+									"key": "Access-Control-Allow-Origin",
+									"value": "localhost:3000"
+								},
+								{
+									"key": "Access-Control-Allow-Methods",
+									"value": "GET, POST, PUT, PATCH, DELETE, OPTIONS"
+								},
+								{
+									"key": "Access-Control-Allow-Headers",
+									"value": "content-type"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json; charset=utf-8"
+								},
+								{
+									"key": "Content-Length",
+									"value": "330"
+								},
+								{
+									"key": "ETag",
+									"value": "W/\"14a-r6FM8HBZL6HJJBWPu1wqLG99cHw\""
+								},
+								{
+									"key": "Date",
+									"value": "Mon, 27 Feb 2023 16:29:17 GMT"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								},
+								{
+									"key": "Keep-Alive",
+									"value": "timeout=5"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"status\": \"success\",\n    \"data\": {\n        \"images\": [\n            {\n                \"id\": \"660b8122-ac8f-11ed-8805-80e82cb6b6a3\",\n                \"url\": {\n                    \"original\": \"http://example.com/original.jpg\",\n                    \"thumbnail\": \"http://example.com/thumbnail.jpg\"\n                },\n                \"alt\": \"Example\",\n                \"dimension\": {\n                    \"height\": 1920,\n                    \"width\": 1080\n                },\n                \"author_email\": \"author@example.com\"\n            }\n        ],\n        \"paging\": {\n            \"page\": 1,\n            \"pages\": 1,\n            \"limit\": 10,\n            \"total\": 1\n        }\n    }\n}"
+						},
+						{
+							"name": "Get Images By Author",
+							"originalRequest": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{HOST}}/v1/images?author=author@example.com",
+									"host": [
+										"{{HOST}}"
+									],
+									"path": [
+										"v1",
+										"images"
+									],
+									"query": [
+										{
+											"key": "search",
+											"value": "",
+											"disabled": true
+										},
+										{
+											"key": "page",
+											"value": "1",
+											"disabled": true
+										},
+										{
+											"key": "author",
+											"value": "author@example.com"
+										}
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "X-Powered-By",
+									"value": "Express"
+								},
+								{
+									"key": "Access-Control-Allow-Origin",
+									"value": "localhost:3000"
+								},
+								{
+									"key": "Access-Control-Allow-Methods",
+									"value": "GET, POST, PUT, PATCH, DELETE, OPTIONS"
+								},
+								{
+									"key": "Access-Control-Allow-Headers",
+									"value": "content-type"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json; charset=utf-8"
+								},
+								{
+									"key": "Content-Length",
+									"value": "330"
+								},
+								{
+									"key": "ETag",
+									"value": "W/\"14a-r6FM8HBZL6HJJBWPu1wqLG99cHw\""
+								},
+								{
+									"key": "Date",
+									"value": "Mon, 27 Feb 2023 16:35:30 GMT"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								},
+								{
+									"key": "Keep-Alive",
+									"value": "timeout=5"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"status\": \"success\",\n    \"data\": {\n        \"images\": [\n            {\n                \"id\": \"660b8122-ac8f-11ed-8805-80e82cb6b6a3\",\n                \"url\": {\n                    \"original\": \"http://example.com/original.jpg\",\n                    \"thumbnail\": \"http://example.com/thumbnail.jpg\"\n                },\n                \"alt\": \"Example\",\n                \"dimension\": {\n                    \"height\": 1920,\n                    \"width\": 1080\n                },\n                \"author_email\": \"author@example.com\"\n            }\n        ],\n        \"paging\": {\n            \"page\": 1,\n            \"pages\": 1,\n            \"limit\": 10,\n            \"total\": 1\n        }\n    }\n}"
+						}
+					]
+				},
+				{
+					"name": "Get Image",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{ACCESS_TOKEN}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{HOST}}/v1/images/{{ID}}",
+							"host": [
+								"{{HOST}}"
+							],
+							"path": [
+								"v1",
+								"images",
+								"{{ID}}"
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "Get Image",
+							"originalRequest": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{HOST}}/v1/images/{{ID}}",
+									"host": [
+										"{{HOST}}"
+									],
+									"path": [
+										"v1",
+										"images",
+										"{{ID}}"
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "X-Powered-By",
+									"value": "Express"
+								},
+								{
+									"key": "Access-Control-Allow-Origin",
+									"value": "localhost:3000"
+								},
+								{
+									"key": "Access-Control-Allow-Methods",
+									"value": "GET, POST, PUT, PATCH, DELETE, OPTIONS"
+								},
+								{
+									"key": "Access-Control-Allow-Headers",
+									"value": "content-type"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json; charset=utf-8"
+								},
+								{
+									"key": "Content-Length",
+									"value": "266"
+								},
+								{
+									"key": "ETag",
+									"value": "W/\"10a-1MU/VFDo2G5k5mN3PMWkqTdv86E\""
+								},
+								{
+									"key": "Date",
+									"value": "Mon, 27 Feb 2023 16:42:08 GMT"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								},
+								{
+									"key": "Keep-Alive",
+									"value": "timeout=5"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"status\": \"success\",\n    \"data\": {\n        \"id\": \"660b8122-ac8f-11ed-8805-80e82cb6b6a3\",\n        \"url\": {\n            \"original\": \"http://example.com/original.jpg\",\n            \"thumbnail\": \"http://example.com/thumbnail.jpg\"\n        },\n        \"alt\": \"Example\",\n        \"dimension\": {\n            \"height\": 1920,\n            \"width\": 1080\n        },\n        \"author_email\": \"author@example.com\"\n    }\n}"
+						}
+					]
+				},
+				{
+					"name": "Update Image",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{ACCESS_TOKEN}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"alt\": \"Example\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{HOST}}/v1/images/{{ID}}",
+							"host": [
+								"{{HOST}}"
+							],
+							"path": [
+								"v1",
+								"images",
+								"{{ID}}"
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "Update Image",
+							"originalRequest": {
+								"method": "PUT",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"alt\": \"Example Updated\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{HOST}}/v1/images/{{ID}}",
+									"host": [
+										"{{HOST}}"
+									],
+									"path": [
+										"v1",
+										"images",
+										"{{ID}}"
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "X-Powered-By",
+									"value": "Express"
+								},
+								{
+									"key": "Access-Control-Allow-Origin",
+									"value": "localhost:3000"
+								},
+								{
+									"key": "Access-Control-Allow-Methods",
+									"value": "GET, POST, PUT, PATCH, DELETE, OPTIONS"
+								},
+								{
+									"key": "Access-Control-Allow-Headers",
+									"value": "content-type"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json; charset=utf-8"
+								},
+								{
+									"key": "Content-Length",
+									"value": "20"
+								},
+								{
+									"key": "ETag",
+									"value": "W/\"14-Y53wuE/mmbSikKcT/WualL1N65U\""
+								},
+								{
+									"key": "Date",
+									"value": "Mon, 27 Feb 2023 17:11:29 GMT"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								},
+								{
+									"key": "Keep-Alive",
+									"value": "timeout=5"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"status\": \"success\"\n}"
+						}
+					]
+				},
+				{
+					"name": "Create Image",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{ACCESS_TOKEN}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "original",
+									"type": "file",
+									"src": "/home/ari-salt/Pictures/Logo/logo_salt.png"
+								},
+								{
+									"key": "thumbnail",
+									"type": "file",
+									"src": "/home/ari-salt/Pictures/Logo/logo_salt.png"
+								},
+								{
+									"key": "alt",
+									"value": "SALT Logo",
+									"type": "text"
+								},
+								{
+									"key": "height",
+									"value": "1920",
+									"type": "text"
+								},
+								{
+									"key": "width",
+									"value": "1080",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{HOST}}/v1/images",
+							"host": [
+								"{{HOST}}"
+							],
+							"path": [
+								"v1",
+								"images"
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "Create Image",
+							"originalRequest": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "formdata",
+									"formdata": [
+										{
+											"key": "original",
+											"type": "file",
+											"src": "/home/ari-salt/Pictures/Logo/logo_salt.png"
+										},
+										{
+											"key": "thumbnail",
+											"type": "file",
+											"src": "/home/ari-salt/Pictures/Logo/logo_salt.png"
+										},
+										{
+											"key": "alt",
+											"value": "SALT Logo",
+											"type": "text"
+										},
+										{
+											"key": "height",
+											"value": "1920",
+											"type": "text"
+										},
+										{
+											"key": "width",
+											"value": "1080",
+											"type": "text"
+										}
+									]
+								},
+								"url": {
+									"raw": "{{HOST}}/v1/images",
+									"host": [
+										"{{HOST}}"
+									],
+									"path": [
+										"v1",
+										"images"
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "X-Powered-By",
+									"value": "Express"
+								},
+								{
+									"key": "Access-Control-Allow-Origin",
+									"value": "localhost:3000"
+								},
+								{
+									"key": "Access-Control-Allow-Methods",
+									"value": "GET, POST, PUT, PATCH, DELETE, OPTIONS"
+								},
+								{
+									"key": "Access-Control-Allow-Headers",
+									"value": "content-type"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json; charset=utf-8"
+								},
+								{
+									"key": "Content-Length",
+									"value": "348"
+								},
+								{
+									"key": "ETag",
+									"value": "W/\"15c-0HB4sNBgVVweQLKLhBK8ZWfZ4Lw\""
+								},
+								{
+									"key": "Date",
+									"value": "Mon, 27 Feb 2023 19:57:39 GMT"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								},
+								{
+									"key": "Keep-Alive",
+									"value": "timeout=5"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"status\": \"success\",\n    \"data\": {\n        \"id\": \"51e20dcd-eafb-4260-9f64-48280154f782\",\n        \"url\": {\n            \"original\": \"http://localhost:8080/static/images/original/ce06d65415d0_logo_salt.png\",\n            \"thumbnail\": \"http://localhost:8080/static/images/thumbnail/cb2e284cbc8c_logo_salt.png\"\n        },\n        \"alt\": \"SALT Logo\",\n        \"dimension\": {\n            \"height\": 1920,\n            \"width\": 1080\n        },\n        \"author_email\": \"author@example.com\"\n    }\n}"
+						}
+					]
+				},
+				{
+					"name": "Delete Image",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{ACCESS_TOKEN}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{HOST}}/v1/images/{{ID}}",
+							"host": [
+								"{{HOST}}"
+							],
+							"path": [
+								"v1",
+								"images",
+								"{{ID}}"
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "Delete Image",
+							"originalRequest": {
+								"method": "DELETE",
+								"header": [],
+								"url": {
+									"raw": "{{HOST}}/v1/images/{{ID}}",
+									"host": [
+										"{{HOST}}"
+									],
+									"path": [
+										"v1",
+										"images",
+										"{{ID}}"
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "X-Powered-By",
+									"value": "Express"
+								},
+								{
+									"key": "Access-Control-Allow-Origin",
+									"value": "localhost:3000"
+								},
+								{
+									"key": "Access-Control-Allow-Methods",
+									"value": "GET, POST, PUT, PATCH, DELETE, OPTIONS"
+								},
+								{
+									"key": "Access-Control-Allow-Headers",
+									"value": "content-type"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json; charset=utf-8"
+								},
+								{
+									"key": "Content-Length",
+									"value": "20"
+								},
+								{
+									"key": "ETag",
+									"value": "W/\"14-Y53wuE/mmbSikKcT/WualL1N65U\""
+								},
+								{
+									"key": "Date",
+									"value": "Mon, 27 Feb 2023 20:50:14 GMT"
 								},
 								{
 									"key": "Connection",

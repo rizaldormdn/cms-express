@@ -1,14 +1,13 @@
 import express, { Express } from "express";
 import request from "supertest";
-import UserRepository from "./user/domain/repository/UserRepository";
 import Middleware from "./Middleware";
 import Router from "./Router";
 import {
-  author,
   userRepository,
   imageRepository,
   articleRepository,
   userService,
+  imageService,
   articleService,
   administratorService,
   resetPasswordService
@@ -24,6 +23,7 @@ describe("Handler", () => {
     imageRepository,
     articleRepository,
     userService,
+    imageService,
     articleService,
     administratorService,
     resetPasswordService
