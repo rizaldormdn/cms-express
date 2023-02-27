@@ -212,7 +212,7 @@ export default class ArticleRepository implements ArticleRepositoryInterface.def
           if (err) {
             console.error(err);
 
-            reject(new Error('failed count articles'));
+            reject(new Error('failed count articles by author'));
           }
           if (result.length > 0) {
             resolve(Number(result[0].total))

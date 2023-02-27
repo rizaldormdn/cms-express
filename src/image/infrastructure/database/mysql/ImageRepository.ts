@@ -3,7 +3,8 @@ import Image, { Images } from "../../../domain/entity/Image";
 import * as ImageRepositoryInterface from "../../../domain/repository/ImageRepository"
 import Dimension from "../../../domain/valueobject/Dimension";
 import ImageURL from "../../../domain/valueobject/ImageURL";
-import Author from "../../../../user/domain/entity/Author";
+import Specification from "../../../../Specification";
+import Email from "../../../../user/domain/valueobject/Email";
 
 export default class ImageRepository implements ImageRepositoryInterface.default {
   private _connection: Connection;
@@ -12,14 +13,66 @@ export default class ImageRepository implements ImageRepositoryInterface.default
     this._connection = connection;
   }
 
-  public getImages(author: Author): Promise<Images> {
-    return new Promise<Images>((resolve, reject) => {
+  public countImages(specification: Specification): Promise<number> {
+    return new Promise<number>((resolve, reject) => {
       this._connection.query(
-        "SELECT BIN_TO_UUID(id), original_url, thumbnail_url, alt, height, width FROM images WHERE author_email = ? LIMIT ?",
-        [
-          author.email.string(),
-          Number(process.env.LIMIT_IMAGES)
-        ],
+        "SELECT COUNT(id) AS total FROM images WHERE alt LIKE ?",
+        [`%${specification.search}%`],
+        (err: any | null, result: any) => {
+          if (err) {
+            console.error(err);
+
+            reject(new Error('failed count images'));
+          }
+          if (result.length > 0) {
+            resolve(Number(result[0].total))
+          }
+        }
+      )
+    })
+  }
+
+  public countImagesByAuthor(specification: Specification, authorEmail: Email): Promise<number> {
+    return new Promise<number>((resolve, reject) => {
+      this._connection.query(
+        "SELECT COUNT(id) AS total FROM images WHERE alt LIKE ? AND author_email = ?",
+        [`%${specification.search}%`, authorEmail.string()],
+        (err: any | null, result: any) => {
+          if (err) {
+            console.error(err);
+
+            reject(new Error('failed count images by author'));
+          }
+          if (result.length > 0) {
+            resolve(Number(result[0].total))
+          }
+        }
+      )
+    })
+  }
+
+  public getImages(specification: Specification): Promise<Images> {
+    return new Promise<Images>((resolve, reject) => {
+      let limit = Number(process.env.LIMIT_IMAGES)
+      let offset: number = (specification.page - 1) * limit
+      let query = `
+        SELECT
+          BIN_TO_UUID(id) AS id,
+          original_url,
+          thumbnail_url,
+          alt,
+          height,
+          width,
+          author_email
+        FROM images
+        WHERE alt LIKE ?
+        ORDER BY articles.updated_at DESC
+        LIMIT ?, ?
+      `
+
+      this._connection.query(
+        query,
+        [`%${specification.search}%`, offset, limit],
         (err: any | null, result: any) => {
           if (err) {
             console.error(err)
@@ -31,10 +84,56 @@ export default class ImageRepository implements ImageRepositoryInterface.default
 
             for (let entry of result) {
               images.push(new Image(
-                new ImageURL(entry.original, entry.thumbnail),
+                new ImageURL(entry.original_url, entry.thumbnail_url),
                 entry.alt,
                 new Dimension(entry.height, entry.width),
-                author.email.string(),
+                entry.author_email,
+                entry.id
+              ))
+            }
+
+            resolve(images)
+          }
+        })
+    })
+  }
+
+  public getImagesByAuthor(specification: Specification, authorEmail: Email): Promise<Images> {
+    return new Promise<Images>((resolve, reject) => {
+      let limit = Number(process.env.LIMIT_IMAGES)
+      let offset: number = (specification.page - 1) * limit
+      let query = `
+        SELECT
+          BIN_TO_UUID(id) AS id,
+          original_url,
+          thumbnail_url,
+          alt,
+          height,
+          width
+        FROM images
+        WHERE alt LIKE ? AND author_email = ?
+        ORDER BY articles.updated_at DESC
+        LIMIT ?, ?
+      `
+
+      this._connection.query(
+        query,
+        [`%${specification.search}%`, authorEmail.string(), offset, limit],
+        (err: any | null, result: any) => {
+          if (err) {
+            console.error(err)
+
+            reject(new Error('failed get images by author'))
+          }
+          if (result.length > 0) {
+            let images: Images = []
+
+            for (let entry of result) {
+              images.push(new Image(
+                new ImageURL(entry.original_url, entry.thumbnail_url),
+                entry.alt,
+                new Dimension(entry.height, entry.width),
+                authorEmail.string(),
                 entry.id
               ))
             }

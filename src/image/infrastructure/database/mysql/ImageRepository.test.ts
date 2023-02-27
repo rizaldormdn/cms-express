@@ -2,19 +2,34 @@ import mysql, { Connection } from "mysql2";
 import sinon, { SinonMock } from "sinon";
 import * as ImageRepositoryDomain from "../../../domain/repository/ImageRepository"
 import ImageRepository from "./ImageRepository";
-import { image, author } from "../../../../testdata";
+import { image, specification } from "../../../../testdata";
 
 describe("ImageRepository", () => {
   let connection: Connection = mysql.createConnection({ host: "localhost" });
   let mock: SinonMock = sinon.mock(connection);
   let imageRepository: ImageRepositoryDomain.default = new ImageRepository(connection)
 
-  describe("get images by author", () => {
-    it("should return images by author", async () => {
+  describe("get images", () => {
+    it("should return images", async () => {
+      let query = `
+        SELECT
+          BIN_TO_UUID(id) AS id,
+          original_url,
+          thumbnail_url,
+          alt,
+          height,
+          width,
+          author_email
+        FROM images
+        WHERE alt LIKE ?
+        ORDER BY articles.updated_at DESC
+        LIMIT ?, ?
+      `
+
       mock
         .expects("query")
         .once()
-        .withArgs("SELECT BIN_TO_UUID(id), original_url, thumbnail_url, alt, height, width FROM images WHERE author_email = ? LIMIT ?")
+        .withArgs(query)
         .callsArgWith(
           2,
           null,
@@ -25,14 +40,15 @@ describe("ImageRepository", () => {
               thumbnail_url: image.url.thumbnail,
               alt: image.alt,
               height: image.dimension.height,
-              width: image.dimension.width
+              width: image.dimension.width,
+              author_email: image.authorEmail
             }
           ],
-          ["id", "original_url", "thumbnail_url", "alt", "height", "width"]
+          ["id", "original_url", "thumbnail_url", "alt", "height", "width", "author_email"]
         )
 
       try {
-        expect(await imageRepository.getImages(author)).toBeDefined();
+        expect(await imageRepository.getImages(specification)).toBeDefined();
       } catch(err) {
         expect(err).toBeUndefined()
       }
@@ -42,7 +58,7 @@ describe("ImageRepository", () => {
       mock.expects("query").once().callsArgWith(2, new Error(), null, null)
   
       try {
-        await imageRepository.getImages(author)
+        await imageRepository.getImages(specification)
       } catch (error) {
         expect(error).toBeInstanceOf(Error)
       }

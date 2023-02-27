@@ -22,6 +22,7 @@ import ConfirmationService from "./user/application/service/ConfirmationService"
 import AdministratorService from "./user/application/service/AdministratorService";
 import ResetPasswordService from "./user/application/service/ResetPasswordService";
 import ArticleService from "./article/domain/service/ArticleService";
+import Specification from "./Specification";
 
 let now = new Date();
 let old = new Date();
@@ -62,6 +63,7 @@ export const articleDate = new ArticleDate()
 export const articleSnapshot = new ArticleSnapshot(slug, title, excerpt, imageThumbnailURL, authorName, tags, articleDate)
 export const articleSnapshots: ArticleSnapshots = [ articleSnapshot ]
 export const administrator: Administrator = new Administrator(email, name, password, resetPasswordToken);
+export const specification = new Specification("", 1)
 export const userRepository: UserRepository = {
   getAuthors: jest.fn(),
   getUser: jest.fn(),
@@ -71,7 +73,10 @@ export const userRepository: UserRepository = {
   deleteAuthor: jest.fn()
 }
 export const imageRepository: ImageRepository = {
+  countImages: jest.fn(),
+  countImagesByAuthor: jest.fn(),
   getImages: jest.fn(),
+  getImagesByAuthor: jest.fn(),
   getImage: jest.fn(),
   saveImage: jest.fn(),
   updateImage: jest.fn(),
