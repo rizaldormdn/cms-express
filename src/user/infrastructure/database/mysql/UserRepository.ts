@@ -63,9 +63,9 @@ export default class UserRepository implements UserRepositoryInterface.default {
               new User(
                 email,
                 new Name(result[0].first_name, result[0].last_name),
+                result[0].is_administrator,
                 new Password(result[0].salt, result[0].hashed_password),
-                new ResetPasswordToken(result[0].token, new Date(result[0].token_expiry)),
-                result[0].is_administrator
+                new ResetPasswordToken(result[0].token, new Date(result[0].token_expiry))
               )
             );
           }
@@ -92,9 +92,9 @@ export default class UserRepository implements UserRepositoryInterface.default {
               new User(
                 new Email(result[0].email),
                 new Name(result[0].first_name, result[0].last_name),
+                result[0].is_administrator,
                 new Password(result[0].salt, result[0].hashed_password),
-                new ResetPasswordToken(token, new Date(result[0].token_expiry)),
-                result[0].is_administrator
+                new ResetPasswordToken(token, new Date(result[0].token_expiry))
               )
             );
           }

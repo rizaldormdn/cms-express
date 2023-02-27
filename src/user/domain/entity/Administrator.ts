@@ -12,7 +12,7 @@ export default class Administrator extends User {
     password?: Password,
     resetPasswordToken?: ResetPasswordToken
   ) {
-    super(email, name, password, resetPasswordToken);
+    super(email, name, true, password, resetPasswordToken);
   }
 
   public addAuthor(email: Email, name: Name): Author {

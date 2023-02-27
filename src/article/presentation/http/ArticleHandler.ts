@@ -18,6 +18,7 @@ import ArticleRepository from "../../domain/repository/ArticleRepository";
 import Specification from "../../../Specification";
 import { ArticleSnapshots } from "../../domain/valueobject/ArticleSnapshot";
 import Slug from "../../domain/valueobject/Slug";
+import Name from "../../../user/domain/valueobject/Name";
 
 export default class ArticleHandler {
   public static router(
@@ -104,9 +105,9 @@ export default class ArticleHandler {
       }
 
       try {
-        let email: Email = new Email(res.locals.user.email);
-        let user: User = await userRepository.getUser(email)
-        let author: Author = new Author(user.email, user.name, user.password, user.resetPasswordToken)
+        let email: Email = new Email(res.locals.user.email)
+        let name: Name = new Name(res.locals.user.first_name, res.locals.user.last_name)
+        let author: Author = new Author(email, name)
         let content: Content = new Content(req.body.title, req.body.content, req.body.excerpt)
         let image: Image = await imageRepository.getImage(req.body.image_id)
         let tags: Tags = []
@@ -153,9 +154,9 @@ export default class ArticleHandler {
     router.put('/articles/:slug', Middleware.authentication, async (req: Request, res: Response) => {
       try {
         let slug: Slug = new Slug().rebuild(req.params.slug)
-        let email: Email = new Email(res.locals.user.email);
-        let user: User = await userRepository.getUser(email)
-        let author: Author = new Author(user.email, user.name, user.password, user.resetPasswordToken)
+        let email: Email = new Email(res.locals.user.email)
+        let name: Name = new Name(res.locals.user.first_name, res.locals.user.last_name)
+        let author: Author = new Author(email, name)
         let newContent: Content = new Content(req.body.title, req.body.content, req.body.excerpt)
         let newImage: Image = await imageRepository.getImage(req.body.image_id)
         let newTags: Tags = []
@@ -182,8 +183,9 @@ export default class ArticleHandler {
     router.delete('/articles/:slug', Middleware.authentication, async (req: Request, res: Response) => {
       try {
         let slug: Slug = new Slug().rebuild(req.params.slug)
-        let email: Email = new Email(res.locals.user.email);
-        let user: User = await userRepository.getUser(email)
+        let email: Email = new Email(res.locals.user.email)
+        let name: Name = new Name(res.locals.user.first_name, res.locals.user.last_name)
+        let user: User = new User(email, name, res.locals.user.is_administrator)
 
         await articleService.deleteArticle(user, slug)
 
@@ -203,9 +205,9 @@ export default class ArticleHandler {
     router.post('/publish-article/:slug', Middleware.authentication, async (req: Request, res: Response) => {
       try {
         let slug: Slug = new Slug().rebuild(req.params.slug)
-        let email: Email = new Email(res.locals.user.email);
-        let user: User = await userRepository.getUser(email)
-        let author: Author = new Author(user.email, user.name, user.password, user.resetPasswordToken)
+        let email: Email = new Email(res.locals.user.email)
+        let name: Name = new Name(res.locals.user.first_name, res.locals.user.last_name)
+        let author: Author = new Author(email, name)
 
         await articleService.publishArticle(author, slug)
 
@@ -225,9 +227,9 @@ export default class ArticleHandler {
     router.post('/unpublish-article/:slug', Middleware.authentication, async (req: Request, res: Response) => {
       try {
         let slug: Slug = new Slug().rebuild(req.params.slug)
-        let email: Email = new Email(res.locals.user.email);
-        let user: User = await userRepository.getUser(email)
-        let author: Author = new Author(user.email, user.name, user.password, user.resetPasswordToken)
+        let email: Email = new Email(res.locals.user.email)
+        let name: Name = new Name(res.locals.user.first_name, res.locals.user.last_name)
+        let author: Author = new Author(email, name)
 
         await articleService.unpublishArticle(author, slug)
 

@@ -6,11 +6,11 @@ import ResetPasswordToken from "../valueobject/ResetPasswordToken";
 export default class User {
   protected _email: Email;
   protected _name: Name;
+  protected _isAdministrator: boolean = false;
   protected _password?: Password;
   protected _resetPasswordToken?: ResetPasswordToken;
-  protected _isAdministrator: boolean = false;
 
-  constructor(email: Email, name: Name, password?: Password, resetPasswordToken?: ResetPasswordToken, isAdministrator?: boolean) {
+  constructor(email: Email, name: Name, isAdministrator?: boolean, password?: Password, resetPasswordToken?: ResetPasswordToken) {
     this._email = email;
     this._name = name;
     this._password = password;

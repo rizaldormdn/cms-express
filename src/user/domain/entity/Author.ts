@@ -16,7 +16,7 @@ export default class Author extends User {
     password?: Password,
     resetPasswordToken?: ResetPasswordToken
   ) {
-    super(email, name, password, resetPasswordToken);
+    super(email, name, false, password, resetPasswordToken);
   }
 
   public addArticle(

@@ -2,7 +2,7 @@ require("dotenv").config();
 
 import fs from "fs";
 import path from "path";
-import Email from "../../../user/domain/valueobject/Email";
+import User from "../../../user/domain/entity/User";
 import Image from "../../domain/entity/Image";
 import ImageRepository from "../../domain/repository/ImageRepository";
 
@@ -13,12 +13,12 @@ export default class ImageService {
     this._imageRepository = imageRepository;
   }
 
-  public updateImage(authorEmail: Email, isAdministrator: boolean, imageID: string, newAlt: string): Promise<void> {
+  public updateImage(user: User, imageID: string, newAlt: string): Promise<void> {
     return new Promise<void>(async (resolve, reject) => {
       try {
         let image: Image = await this._imageRepository.getImage(imageID)
 
-        if (!isAdministrator && authorEmail.string() !== image.authorEmail) {
+        if (!user.isAdministrator && user.email.string() !== image.authorEmail) {
           reject(new Error('permission denied'))
         }
 
@@ -31,12 +31,12 @@ export default class ImageService {
     })
   }
 
-  public deleteImage(authorEmail: Email, isAdministrator: boolean, imageID: string): Promise<void> {
+  public deleteImage(user: User, imageID: string): Promise<void> {
     return new Promise<void>(async (resolve, reject) => {
       try {
         let image: Image = await this._imageRepository.getImage(imageID)
 
-        if (!isAdministrator && authorEmail.string() !== image.authorEmail) {
+        if (!user.isAdministrator && user.email.string() !== image.authorEmail) {
           reject(new Error('permission denied'))
         }
 

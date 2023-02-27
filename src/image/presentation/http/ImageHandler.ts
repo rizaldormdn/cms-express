@@ -14,6 +14,9 @@ import ImageRepository from "../../domain/repository/ImageRepository";
 import ImageMapper, { ImagesMapper } from "./ImageMapper";
 import ImageURL from "../../domain/valueobject/ImageURL";
 import Dimension from "../../domain/valueobject/Dimension";
+import Name from "../../../user/domain/valueobject/Name";
+import Author from "../../../user/domain/entity/Author";
+import User from "../../../user/domain/entity/User";
 
 export default class ImageHandler {
   public static router(
@@ -169,10 +172,11 @@ export default class ImageHandler {
     router.put('/images/:id', Middleware.authentication, async (req: Request, res: Response) => {
       try {
         let email: Email = new Email(res.locals.user.email)
+        let name: Name = new Name(res.locals.user.first_name, res.locals.user.last_name)
+        let user: User = new User(email, name)
 
         await imageService.updateImage(
-          email,
-          res.locals.user.is_administrator,
+          user,
           req.params.id,
           req.body.alt
         )
@@ -193,8 +197,10 @@ export default class ImageHandler {
     router.delete('/images/:id', Middleware.authentication, async (req: Request, res: Response) => {
       try {
         let email: Email = new Email(res.locals.user.email)
+        let name: Name = new Name(res.locals.user.first_name, res.locals.user.last_name)
+        let user: User = new User(email, name)
 
-        await imageService.deleteImage(email, res.locals.user.is_administrator, req.params.id)
+        await imageService.deleteImage(user, req.params.id)
 
         res.status(200).json({
           status: Status.Success,

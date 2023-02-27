@@ -52,7 +52,7 @@ describe("User", () => {
 
   it("could have a reset password token", () => {
     let resetPasswordToken = new ResetPasswordToken()
-    let user: User = new User(email, name, password, resetPasswordToken);
+    let user: User = new User(email, name, false, password, resetPasswordToken);
 
     expect(user.resetPasswordToken).toBeDefined();
   })
