@@ -2,20 +2,20 @@ require("dotenv").config();
 
 import mysql, { Connection } from "mysql2";
 import nodemailer from "nodemailer";
-import AdministratorService from "./application/service/AdministratorService";
-import ConfirmationService from "./application/service/ConfirmationService";
-import ResetPasswordService from "./application/service/ResetPasswordService";
-import UserService from "./application/service/UserService";
-import ArticleRepository from "./domain/repository/ArticleRepository";
-import ArticleRepositoryMySQL from "./infrastructure/database/mysql/ArticleRepository"
-import ImageRepositoryMySQL from "./infrastructure/database/mysql/ImageRepository"
-import UserRepository from "./domain/repository/UserRepository";
-import UserRepositoryMySQL from "./infrastructure/database/mysql/UserRepository";
-import EmailConfirmationService from "./infrastructure/service/confirmation/EmailConfirmationService";
+import AdministratorService from "./user/application/service/AdministratorService";
+import ConfirmationService from "./user/application/service/ConfirmationService";
+import ResetPasswordService from "./user/application/service/ResetPasswordService";
+import UserService from "./user/application/service/UserService";
+import ArticleRepository from "./article/domain/repository/ArticleRepository";
+import ArticleRepositoryMySQL from "./article/infrastructure/database/mysql/ArticleRepository"
+import ImageRepositoryMySQL from "./image/infrastructure/database/mysql/ImageRepository"
+import UserRepository from "./user/domain/repository/UserRepository";
+import UserRepositoryMySQL from "./user/infrastructure/database/mysql/UserRepository";
+import EmailConfirmationService from "./user/infrastructure/service/confirmation/EmailConfirmationService";
 import Router from "./Router";
 import Server from "./Server";
-import ArticleService from "./domain/service/ArticleService";
-import ImageRepository from "./domain/repository/ImageRepository";
+import ArticleService from "./article/domain/service/ArticleService";
+import ImageRepository from "./image/domain/repository/ImageRepository";
 
 const connection: Connection = mysql.createConnection({
   user: process.env.DB_USERNAME,

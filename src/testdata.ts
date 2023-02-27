@@ -1,19 +1,27 @@
-import Email from "./domain/valueobject/Email";
-import Name from "./domain/valueobject/Name";
-import Password from "./domain/valueobject/Password";
-import Author from "./domain/entity/Author";
-import Content from "./domain/valueobject/Content";
-import Dimension from "./domain/valueobject/Dimension";
-import ImageURL from "./domain/valueobject/ImageURL";
-import Image from "./domain/entity/Image";
-import Article from "./domain/aggregate/Article";
-import Tag, { Tags } from "./domain/valueobject/Tag";
-import Slug from "./domain/valueobject/Slug";
-import ArticleDate from "./domain/valueobject/ArticleDate";
-import ArticleSnapshot, { ArticleSnapshots } from "./domain/valueobject/ArticleSnapshot";
-import Administrator from "./domain/entity/Administrator";
-import ResetPasswordToken from "./domain/valueobject/ResetPasswordToken";
-import User from "./domain/entity/User";
+import Email from "./user/domain/valueobject/Email";
+import Name from "./user/domain/valueobject/Name";
+import Password from "./user/domain/valueobject/Password";
+import Author from "./user/domain/entity/Author";
+import Content from "./article/domain/valueobject/Content";
+import Dimension from "./image/domain/valueobject/Dimension";
+import ImageURL from "./image/domain/valueobject/ImageURL";
+import Image from "./image/domain/entity/Image";
+import Article from "./article/domain/aggregate/Article";
+import Tag, { Tags } from "./article/domain/valueobject/Tag";
+import Slug from "./article/domain/valueobject/Slug";
+import ArticleDate from "./article/domain/valueobject/ArticleDate";
+import ArticleSnapshot, { ArticleSnapshots } from "./article/domain/valueobject/ArticleSnapshot";
+import Administrator from "./user/domain/entity/Administrator";
+import ResetPasswordToken from "./user/domain/valueobject/ResetPasswordToken";
+import User from "./user/domain/entity/User";
+import UserRepository from "./user/domain/repository/UserRepository";
+import ImageRepository from "./image/domain/repository/ImageRepository";
+import ArticleRepository from "./article/domain/repository/ArticleRepository";
+import UserService from "./user/application/service/UserService";
+import ConfirmationService from "./user/application/service/ConfirmationService";
+import AdministratorService from "./user/application/service/AdministratorService";
+import ResetPasswordService from "./user/application/service/ResetPasswordService";
+import ArticleService from "./article/domain/service/ArticleService";
 
 let now = new Date();
 let old = new Date();
@@ -54,3 +62,37 @@ export const articleDate = new ArticleDate()
 export const articleSnapshot = new ArticleSnapshot(slug, title, excerpt, imageThumbnailURL, authorName, tags, articleDate)
 export const articleSnapshots: ArticleSnapshots = [ articleSnapshot ]
 export const administrator: Administrator = new Administrator(email, name, password, resetPasswordToken);
+export const userRepository: UserRepository = {
+  getAuthors: jest.fn(),
+  getUser: jest.fn(),
+  getUserByToken: jest.fn(),
+  saveAuthor: jest.fn(),
+  updateUser: jest.fn(),
+  deleteAuthor: jest.fn()
+}
+export const imageRepository: ImageRepository = {
+  getImages: jest.fn(),
+  getImage: jest.fn(),
+  saveImage: jest.fn(),
+  updateImage: jest.fn(),
+  deleteImage: jest.fn()
+}
+export const articleRepository: ArticleRepository = {
+  countArticles: jest.fn(),
+  countArticlesByAuthor: jest.fn(),
+  getFeaturedArticles: jest.fn(),
+  getArticles: jest.fn(),
+  getArticlesByAuthor: jest.fn(),
+  getArticle: jest.fn(),
+  saveArticle: jest.fn(),
+  updateArticle: jest.fn(),
+  deleteArticle: jest.fn(),
+  deleteArticleWithEmail: jest.fn(),
+}
+export const userService: UserService = new UserService(userRepository);
+export const articleService: ArticleService = new ArticleService(articleRepository)
+export const confirmationService: ConfirmationService = {
+  sendConfirmation: jest.fn()
+} 
+export const administratorService: AdministratorService = new AdministratorService(userRepository, confirmationService)
+export const resetPasswordService: ResetPasswordService = new ResetPasswordService(userRepository)

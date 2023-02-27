@@ -1,14 +1,14 @@
 import { Router as ExpressRouter } from "express";
 import Handler from "./Handler";
-import UserRepository from "./domain/repository/UserRepository";
-import UserHandler from "./presentation/http/UserHandler";
-import AdministratorService from "./application/service/AdministratorService";
-import ResetPasswordService from "./application/service/ResetPasswordService";
-import UserService from "./application/service/UserService";
-import ArticleHandler from "./presentation/http/ArticleHandler";
-import ArticleService from "./domain/service/ArticleService";
-import ImageRepository from "./domain/repository/ImageRepository";
-import ArticleRepository from "./domain/repository/ArticleRepository";
+import UserRepository from "./user/domain/repository/UserRepository";
+import UserHandler from "./user/presentation/http/UserHandler";
+import AdministratorService from "./user/application/service/AdministratorService";
+import ResetPasswordService from "./user/application/service/ResetPasswordService";
+import UserService from "./user/application/service/UserService";
+import ArticleHandler from "./article/presentation/http/ArticleHandler";
+import ArticleService from "./article/domain/service/ArticleService";
+import ImageRepository from "./image/domain/repository/ImageRepository";
+import ArticleRepository from "./article/domain/repository/ArticleRepository";
 
 export default class Router {
   public static run(

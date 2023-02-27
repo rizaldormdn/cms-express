@@ -1,21 +1,33 @@
 import express, { Express } from "express";
 import request from "supertest";
-import UserRepository from "./domain/repository/UserRepository";
+import UserRepository from "./user/domain/repository/UserRepository";
 import Middleware from "./Middleware";
 import Router from "./Router";
+import {
+  author,
+  userRepository,
+  imageRepository,
+  articleRepository,
+  userService,
+  articleService,
+  administratorService,
+  resetPasswordService
+} from "./testdata"
 
 describe("Handler", () => {
-	const userRepository: UserRepository = {
-    getUser: jest.fn(),
-    saveAuthor: jest.fn(),
-    updateUser: jest.fn(),
-    deleteAuthor: jest.fn()
-  }
 	let app: Express = express();
 
 	app.use(express.json())
 	app.use(Middleware.cors);
-	app.use("/", Router.run(userRepository));
+	app.use("/", Router.run(
+    userRepository,
+    imageRepository,
+    articleRepository,
+    userService,
+    articleService,
+    administratorService,
+    resetPasswordService
+  ));
 
 	test("GET /v1/ping 200", async () => {
 		let res = await request(app).get("/ping");
