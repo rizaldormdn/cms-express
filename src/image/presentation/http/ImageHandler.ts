@@ -190,6 +190,25 @@ export default class ImageHandler {
       }
     })
 
+    router.delete('/images/:id', Middleware.authentication, async (req: Request, res: Response) => {
+      try {
+        let email: Email = new Email(res.locals.user.email)
+
+        await imageService.deleteImage(email, res.locals.user.is_administrator, req.params.id)
+
+        res.status(200).json({
+          status: Status.Success,
+        }).end()
+      } catch(err) {
+        console.error(err)
+
+        res.status(500).json({
+          status: Status.Error,
+          message: 'failed to delete an image'
+        }).end()
+      }
+    })
+
     return router
   }
 }
