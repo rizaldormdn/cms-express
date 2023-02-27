@@ -10,6 +10,7 @@ import ArticleService from "./article/domain/service/ArticleService";
 import ImageRepository from "./image/domain/repository/ImageRepository";
 import ArticleRepository from "./article/domain/repository/ArticleRepository";
 import ImageHandler from "./image/presentation/http/ImageHandler";
+import ImageService from "./image/application/service/ImageService";
 
 export default class Router {
   public static run(
@@ -17,6 +18,7 @@ export default class Router {
     imageRepository: ImageRepository,
     articleRepository: ArticleRepository,
     userService: UserService,
+    imageService: ImageService,
     articleService: ArticleService,
     administratorService: AdministratorService,
     resetPasswordService: ResetPasswordService
@@ -36,7 +38,10 @@ export default class Router {
       articleRepository,
       articleService
     ))
-    router.use('/v1', ImageHandler.router(imageRepository))
+    router.use('/v1', ImageHandler.router(
+      imageRepository,
+      imageService
+    ))
 
     return router
   }

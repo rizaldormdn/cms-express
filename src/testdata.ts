@@ -23,6 +23,7 @@ import AdministratorService from "./user/application/service/AdministratorServic
 import ResetPasswordService from "./user/application/service/ResetPasswordService";
 import ArticleService from "./article/domain/service/ArticleService";
 import Specification from "./Specification";
+import ImageService from "./image/application/service/ImageService";
 
 let now = new Date();
 let old = new Date();
@@ -95,6 +96,7 @@ export const articleRepository: ArticleRepository = {
   deleteArticleWithEmail: jest.fn(),
 }
 export const userService: UserService = new UserService(userRepository);
+export const imageService: ImageService = new ImageService(imageRepository);
 export const articleService: ArticleService = new ArticleService(articleRepository)
 export const confirmationService: ConfirmationService = {
   sendConfirmation: jest.fn()

@@ -33,4 +33,10 @@ describe("Image", () => {
     expect(image.authorEmail).toBe(email.string());
     expect(() => new Image(imageURL, alt, dimension, "")).toThrowError();
   })
+
+  it("should update alt", () => {
+    image.updateAlt(alt)
+
+    expect(image.alt).toBe(alt)
+  })
 });

@@ -40,6 +40,10 @@ export default class Image {
 		return this._alt;
 	}
 
+	public updateAlt(alt: string): void {
+		this._alt = alt;
+	}
+
 	get dimension(): Dimension {
 		return this._dimension;
 	}

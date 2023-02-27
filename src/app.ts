@@ -16,6 +16,7 @@ import Router from "./Router";
 import Server from "./Server";
 import ArticleService from "./article/domain/service/ArticleService";
 import ImageRepository from "./image/domain/repository/ImageRepository";
+import ImageService from "./image/application/service/ImageService";
 
 const connection: Connection = mysql.createConnection({
   user: process.env.DB_USERNAME,
@@ -28,6 +29,7 @@ const userRepository: UserRepository = new UserRepositoryMySQL(connection)
 const articleRepository: ArticleRepository = new ArticleRepositoryMySQL(connection)
 const imageRepository: ImageRepository = new ImageRepositoryMySQL(connection)
 const userService: UserService = new UserService(userRepository)
+const imageService: ImageService = new ImageService(imageRepository)
 const articleService: ArticleService = new ArticleService(articleRepository)
 const emailConfirmationService: ConfirmationService = new EmailConfirmationService(
   nodemailer.createTransport({
@@ -53,6 +55,7 @@ Server.run(
     imageRepository,
     articleRepository,
     userService,
+    imageService,
     articleService,
     administratorService,
     resetPasswordService

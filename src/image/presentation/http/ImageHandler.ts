@@ -5,13 +5,15 @@ import Middleware from "../../../Middleware";
 import Specification from "../../../Specification";
 import Status from "../../../Status";
 import Email from "../../../user/domain/valueobject/Email";
+import ImageService from "../../application/service/ImageService";
 import Image, { Images } from "../../domain/entity/Image";
 import ImageRepository from "../../domain/repository/ImageRepository";
 import ImageMapper, { ImagesMapper } from "./ImageMapper";
 
 export default class ImageHandler {
   public static router(
-    imageRepository: ImageRepository
+    imageRepository: ImageRepository,
+    imageService: ImageService
   ): Router {
     const router: Router = Router();
 
@@ -65,7 +67,7 @@ export default class ImageHandler {
       }
     })
 
-    router.get('/images/:id', async (req: Request, res: Response) => {
+    router.get('/images/:id', Middleware.authentication, async (req: Request, res: Response) => {
       try {
         let image: Image = await imageRepository.getImage(req.params.id)
 
@@ -79,6 +81,25 @@ export default class ImageHandler {
         res.status(500).json({
           status: Status.Error,
           message: 'failed to get an image'
+        }).end()
+      }
+    })
+
+    router.put('/images/:id', Middleware.authentication, async (req: Request, res: Response) => {
+      try {
+        let email: Email = new Email(res.locals.user.email)
+
+        await imageService.updateImage(email, req.params.id, req.body.alt)
+
+        res.status(200).json({
+          status: Status.Success,
+        }).end()
+      } catch(err) {
+        console.error(err)
+
+        res.status(500).json({
+          status: Status.Error,
+          message: 'failed to update an image'
         }).end()
       }
     })

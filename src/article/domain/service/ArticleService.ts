@@ -14,7 +14,7 @@ export default class ArticleService {
     this._articleRepository = articleRepository;
   }
 
-  public async addArticle(author: Author, content: Content, image: Image, tags: Tags): Promise<Article> {
+  public addArticle(author: Author, content: Content, image: Image, tags: Tags): Promise<Article> {
     return new Promise<Article>((async (resolve, reject) => {
       try {
         let article = author.addArticle(content, image, tags)
@@ -28,7 +28,7 @@ export default class ArticleService {
     }))
   }
 
-  public async updateArticle(author: Author, slug: Slug, newContent: Content, newImage: Image, newTags: Tags): Promise<void> {
+  public updateArticle(author: Author, slug: Slug, newContent: Content, newImage: Image, newTags: Tags): Promise<void> {
     return new Promise<void>(async (resolve, reject) => {
       try {
         let article = await this._articleRepository.getArticle(slug)
@@ -41,7 +41,7 @@ export default class ArticleService {
     })
   }
 
-  public async publishArticle(author: Author, slug: Slug): Promise<void> {
+  public publishArticle(author: Author, slug: Slug): Promise<void> {
     return new Promise<void>(async (resolve, reject) => {
       try {
         let article = await this._articleRepository.getArticle(slug);
@@ -55,7 +55,7 @@ export default class ArticleService {
     })
   }
 
-  public async unpublishArticle(author: Author, slug: Slug): Promise<void> {
+  public unpublishArticle(author: Author, slug: Slug): Promise<void> {
     return new Promise<void>(async (resolve, reject) => {
       try {
         let article = await this._articleRepository.getArticle(slug);
@@ -69,7 +69,7 @@ export default class ArticleService {
     })
   }
 
-  public async deleteArticle(user: User, slug: Slug): Promise<void> {
+  public deleteArticle(user: User, slug: Slug): Promise<void> {
     return new Promise<void>(async (resolve, reject) => {
       try {
         if (!user.isAdministrator) {
