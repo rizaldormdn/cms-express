@@ -8,7 +8,6 @@ import User from "../../../user/domain/entity/User";
 import ArticleService from "../../domain/service/ArticleService";
 import Content from "../../domain/valueobject/Content";
 import Tag, { Tags } from "../../domain/valueobject/Tag";
-import UserRepository from "../../../user/domain/repository/UserRepository";
 import Middleware from "../../../Middleware";
 import Status from "../../../Status";
 import ArticleMapper, { ArticleSnapshotMapper } from "./ArticleMapper";

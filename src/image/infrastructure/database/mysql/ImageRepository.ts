@@ -196,23 +196,41 @@ export default class ImageRepository implements ImageRepositoryInterface.default
     })
   }
 
-  public updateImage(image: Image): Promise<void> {
+  public updateImageAlt(newAlt: string, id: string, authorEmail: Email): Promise<void> {
     return new Promise<void>((resolve, reject) => {
       this._connection.query(
-        "UPDATE images SET original_url = ?, thumbnail_url = ?, alt = ?, height = ?, width = ? WHERE BIN_TO_UUID(id) = ?",
+        "UPDATE images SET alt = ? WHERE BIN_TO_UUID(id) = ? AND author_email = ?",
         [
-          image.url.original,
-          image.url.thumbnail,
-          image.alt,
-          image.dimension.height,
-          image.dimension.width,
-          image.id
+          newAlt,
+          id,
+          authorEmail.string()
         ],
         (err: any | null, result: any) => {
           if (err) {
             console.error(err)
 
-            reject(new Error('failed update an image'))
+            reject(new Error('failed update an image alt'))
+          }
+
+          resolve(result)
+        }
+      )
+    })
+  }
+
+  public updateImageAltWithoutAuthorEmail(newAlt: string, id: string): Promise<void> {
+    return new Promise<void>((resolve, reject) => {
+      this._connection.query(
+        "UPDATE images SET alt = ? WHERE BIN_TO_UUID(id) = ?",
+        [
+          newAlt,
+          id,
+        ],
+        (err: any | null, result: any) => {
+          if (err) {
+            console.error(err)
+
+            reject(new Error('failed update an image alt'))
           }
 
           resolve(result)

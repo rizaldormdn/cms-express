@@ -15,7 +15,6 @@ import ImageMapper, { ImagesMapper } from "./ImageMapper";
 import ImageURL from "../../domain/valueobject/ImageURL";
 import Dimension from "../../domain/valueobject/Dimension";
 import Name from "../../../user/domain/valueobject/Name";
-import Author from "../../../user/domain/entity/Author";
 import User from "../../../user/domain/entity/User";
 
 export default class ImageHandler {
@@ -173,7 +172,7 @@ export default class ImageHandler {
       try {
         let email: Email = new Email(res.locals.user.email)
         let name: Name = new Name(res.locals.user.first_name, res.locals.user.last_name)
-        let user: User = new User(email, name)
+        let user: User = new User(email, name, res.locals.user.is_administrator)
 
         await imageService.updateImage(
           user,

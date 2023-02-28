@@ -2,7 +2,7 @@ import mysql, { Connection } from "mysql2";
 import sinon, { SinonMock } from "sinon";
 import * as ImageRepositoryDomain from "../../../domain/repository/ImageRepository"
 import ImageRepository from "./ImageRepository";
-import { image, specification } from "../../../../testdata";
+import { image, specification, email } from "../../../../testdata";
 
 describe("ImageRepository", () => {
   let connection: Connection = mysql.createConnection({ host: "localhost" });
@@ -126,22 +126,22 @@ describe("ImageRepository", () => {
     })
   })
 
-  describe("update image", () => {
-    it("should update an image", () => {
-      mock.expects("query").once().withArgs("UPDATE images SET original_url = ?, thumbnail_url = ?, alt = ?, height = ?, width = ? WHERE BIN_TO_UUID(id) = ?");
+  describe("update image alt", () => {
+    it("should update an image alt", () => {
+      mock.expects("query").once().withArgs("UPDATE images SET alt = ? WHERE BIN_TO_UUID(id) = ? AND author_email = ?");
   
       try {
-        imageRepository.updateImage(image)
+        imageRepository.updateImageAlt(image.alt, image.id, email)
       } catch (err) {
         expect(err).toBeUndefined()
       }
     });
 
-    it("should return an error if failed update an image", async () => {
+    it("should return an error if failed update an image alt", async () => {
       mock.expects("query").once().callsArgWith(2, new Error(), null, null)
   
       try {
-        await imageRepository.updateImage(image)
+        await imageRepository.updateImageAlt(image.alt, image.id, email)
       } catch (error) {
         expect(error).toBeInstanceOf(Error)
       }

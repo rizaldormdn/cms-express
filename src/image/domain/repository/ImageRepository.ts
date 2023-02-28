@@ -9,6 +9,7 @@ export default interface ImageRepository{
   getImagesByAuthor(specification: Specification, authorEmail: Email): Promise<Images>
   getImage(id: string): Promise<Image>
   saveImage(image: Image): Promise<void>
-  updateImage(image: Image): Promise<void>
+  updateImageAlt(newAlt: string, id: string, authorEmail: Email): Promise<void>
+  updateImageAltWithoutAuthorEmail(newAlt: string, id: string): Promise<void>
   deleteImage(id: string): Promise<void>
 }

@@ -80,7 +80,8 @@ export const imageRepository: ImageRepository = {
   getImagesByAuthor: jest.fn(),
   getImage: jest.fn(),
   saveImage: jest.fn(),
-  updateImage: jest.fn(),
+  updateImageAlt: jest.fn(),
+  updateImageAltWithoutAuthorEmail: jest.fn(),
   deleteImage: jest.fn()
 }
 export const articleRepository: ArticleRepository = {
