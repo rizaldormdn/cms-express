@@ -22,7 +22,6 @@ import Name from "../../../user/domain/valueobject/Name";
 
 export default class ArticleHandler {
   public static router(
-    userRepository: UserRepository,
     imageRepository: ImageRepository,
     articleRepository: ArticleRepository,
     articleService: ArticleService
@@ -206,10 +205,8 @@ export default class ArticleHandler {
       try {
         let slug: Slug = new Slug().rebuild(req.params.slug)
         let email: Email = new Email(res.locals.user.email)
-        let name: Name = new Name(res.locals.user.first_name, res.locals.user.last_name)
-        let author: Author = new Author(email, name)
 
-        await articleService.publishArticle(author, slug)
+        await articleRepository.updatePublishedArticle(slug, email, true)
 
         res.status(200).json({
           status: Status.Success
@@ -228,10 +225,8 @@ export default class ArticleHandler {
       try {
         let slug: Slug = new Slug().rebuild(req.params.slug)
         let email: Email = new Email(res.locals.user.email)
-        let name: Name = new Name(res.locals.user.first_name, res.locals.user.last_name)
-        let author: Author = new Author(email, name)
 
-        await articleService.unpublishArticle(author, slug)
+        await articleRepository.updatePublishedArticle(slug, email, false)
 
         res.status(200).json({
           status: Status.Success

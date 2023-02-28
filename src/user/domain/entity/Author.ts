@@ -31,35 +31,18 @@ export default class Author extends User {
   }
 
   public updateArticle(
-    article: Article,
+    slug: Slug,
     newContent: Content,
     newImage: Image,
-    newTags: Tags,
+    newTags: Tags
   ): Article {
-    if (this._email.string() !== article.authorEmail) {
-      throw new Error('permission denied')
-    }
-
-    article.updateContent(newContent)
-    article.updateImage(newImage)
-    article.updateTags(newTags)
-
-    return article
-  }
-
-  public publishArticle(article: Article): void {
-    if (this._email.string() !== article.authorEmail) {
-      throw new Error('permission denied')
-    }
-
-    article.publish()
-  }
-
-  public unpublishArticle(article: Article): void {
-    if (this._email.string() !== article.authorEmail) {
-      throw new Error('permission denied')
-    }
-
-    article.unpublish()
+    return new Article(
+      slug,
+      newContent,
+      newImage,
+      this._name.full(),
+      this._email.string(),
+      newTags
+    )
   }
 }

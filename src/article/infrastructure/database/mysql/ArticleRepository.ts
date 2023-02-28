@@ -91,9 +91,8 @@ export default class ArticleRepository implements ArticleRepositoryInterface.def
               new Name(result[0].first_name, result[0].last_name).full(),
               result[0].email,
               tags,
-              [],
               result[0].is_published,
-              new ArticleDate(result[0].created_at, result[0].updated_at)
+              new ArticleDate(result[0].created_at, result[0].updated_at),
             ))
           }
         }
@@ -421,9 +420,9 @@ export default class ArticleRepository implements ArticleRepositoryInterface.def
           article.authorName,
           article.authorEmail,
           article.tags,
-          relatedArticles,
           article.isPublished,
           article.date,
+          relatedArticles
         ))
       } catch (err) {
         reject(err);
@@ -460,14 +459,13 @@ export default class ArticleRepository implements ArticleRepositoryInterface.def
   public updateArticle(article: Article): Promise<void> {
     return new Promise<void>((resolve, reject) => {
       this._connection.query(
-        'UPDATE articles SET title = ?, content = ?, excerpt = ?, image_id = UUID_TO_BIN(?), tags = ?, is_published = ? WHERE slug = ? AND author_email = ?',
+        'UPDATE articles SET title = ?, content = ?, excerpt = ?, image_id = UUID_TO_BIN(?), tags = ? WHERE slug = ? AND author_email = ?',
         [
           article.content.title,
           article.content.content,
           article.content.excerpt,
           article.image.id,
           this._tags(article.tags),
-          article.isPublished,
           article.slug.value,
           article.authorEmail
         ],
@@ -476,6 +474,28 @@ export default class ArticleRepository implements ArticleRepositoryInterface.def
             console.error(err)
 
             reject(new Error('failed update an article'))
+          }
+
+          resolve(result);
+        }
+      )
+    });
+  }
+
+  public updatePublishedArticle(slug: Slug, authorEmail: Email, isPublished: boolean): Promise<void> {
+    return new Promise<void>((resolve, reject) => {
+      this._connection.query(
+        'UPDATE articles SET is_published = ? WHERE slug = ? AND author_email = ?',
+        [
+          isPublished,
+          slug.value,
+          authorEmail.string()
+        ],
+        (err: any | null, result: any) => {
+          if (err) {
+            console.error(err)
+
+            reject(new Error('failed update an published article'))
           }
 
           resolve(result);

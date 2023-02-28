@@ -33,7 +33,6 @@ export default class Router {
       resetPasswordService
     ))
     router.use('/v1', ArticleHandler.router(
-      userRepository,
       imageRepository,
       articleRepository,
       articleService

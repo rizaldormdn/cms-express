@@ -1,43 +1,13 @@
 import mysql, { Connection } from "mysql2";
 import sinon, { SinonMock } from "sinon";
-import Specification from "../../../../Specification";
 import * as ArticleRepositoryInterface from "../../../domain/repository/ArticleRepository";
 import ArticleRepository from "./ArticleRepository";
-import Email from "../../../../user/domain/valueobject/Email";
-import Slug from "../../../domain/valueobject/Slug";
-import Content from "../../../domain/valueobject/Content";
-import Dimension from "../../../../image/domain/valueobject/Dimension";
-import Image from "../../../../image/domain/entity/Image";
-import ImageURL from "../../../../image/domain/valueobject/ImageURL";
-import Tag, { Tags } from "../../../domain/valueobject/Tag";
-import { ArticleSnapshots } from "../../../domain/valueobject/ArticleSnapshot";
-import ArticleDate from "../../../domain/valueobject/ArticleDate";
-import Article from "../../../domain/aggregate/Article";
+import { article, specification, email, slug } from "../../../../testdata"
 
 describe("ArticleRepository", () => {
   let connection: Connection = mysql.createConnection({host: "localhost"});
   let mock: SinonMock = sinon.mock(connection);
   let articleRepository: ArticleRepositoryInterface.default = new ArticleRepository(connection);
-
-  let specification = new Specification("", 1)
-  let email: Email = new Email("test@example.com");
-  let title = "This is title"
-  let slug = new Slug(title)
-  let content = new Content(title, "This is content", "This is excerpt");
-  let dimension = new Dimension(1920, 1080);
-  let imageURL = new ImageURL("http://example.com/original.jpg", "http://example.com/thumbnail.jpg")
-  let image = new Image(imageURL, "A sample image", dimension, email.string());
-  let authorName = "John Doe"
-  let authorEmail = "john.doe@example.com"
-  let tags: Tags = [
-    new Tag("tag1"),
-    new Tag("tag2"),
-    new Tag("tag3"),
-  ]
-  let relatedArticles: ArticleSnapshots = []
-  let isPublished = true
-  let date = new ArticleDate()
-  let article = new Article(slug, content, image, authorName, authorEmail, tags, relatedArticles, isPublished, date);
 
   describe("get featured articles", () => {
     it("should return featured articles", async () => {
@@ -430,7 +400,7 @@ describe("ArticleRepository", () => {
 
   describe("update an article", () => {
     it("should update an article", () => {
-      mock.expects("query").once().withArgs("UPDATE articles SET title = ?, content = ?, excerpt = ?, image_id = UUID_TO_BIN(?), tags = ?, is_published = ? WHERE slug = ? AND author_email = ?");
+      mock.expects("query").once().withArgs("UPDATE articles SET title = ?, content = ?, excerpt = ?, image_id = UUID_TO_BIN(?), tags = ? WHERE slug = ? AND author_email = ?");
   
       try {
         articleRepository.updateArticle(article)

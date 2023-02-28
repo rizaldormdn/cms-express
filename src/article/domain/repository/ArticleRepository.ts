@@ -13,6 +13,7 @@ export default interface ArticleRepository{
   getArticle(slug: Slug): Promise<Article>
   saveArticle(article: Article): Promise<void>
   updateArticle(article: Article): Promise<void>
+  updatePublishedArticle(slug: Slug, authorEmail: Email, isPublished: boolean): Promise<void>
   deleteArticle(slug: Slug): Promise<void>
   deleteArticleWithEmail(slug: Slug, email: Email): Promise<void>
 }

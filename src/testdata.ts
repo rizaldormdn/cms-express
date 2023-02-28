@@ -92,6 +92,7 @@ export const articleRepository: ArticleRepository = {
   getArticle: jest.fn(),
   saveArticle: jest.fn(),
   updateArticle: jest.fn(),
+  updatePublishedArticle: jest.fn(),
   deleteArticle: jest.fn(),
   deleteArticleWithEmail: jest.fn(),
 }

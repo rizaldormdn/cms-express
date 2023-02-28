@@ -23,9 +23,9 @@ export default class Article {
     authorName: string,
     authorEmail: string,
     tags?: Tags,
-    relatedArticles?: ArticleSnapshots,
     isPublished?: boolean,
-    date?: ArticleDate
+    date?: ArticleDate,
+    relatedArticles?: ArticleSnapshots
   ) {
     if (authorName === "") {
       throw new Error("author name cannot be empty");
@@ -61,16 +61,8 @@ export default class Article {
     return this._content;
   }
 
-  public updateContent(content: Content) {
-    this._content = content;
-  }
-
   public get image(): Image {
     return this._image;
-  }
-
-  public updateImage(image: Image) {
-    this._image = image;
   }
 
   public get authorName(): string {
@@ -83,10 +75,6 @@ export default class Article {
 
   public get tags(): Tags {
     return this._tags;
-  }
-
-  public updateTags(tags: Tags) {
-    this._tags = tags
   }
 
   public get relatedArticles(): ArticleSnapshots {

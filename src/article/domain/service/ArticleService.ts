@@ -31,40 +31,11 @@ export default class ArticleService {
   public updateArticle(author: Author, slug: Slug, newContent: Content, newImage: Image, newTags: Tags): Promise<void> {
     return new Promise<void>(async (resolve, reject) => {
       try {
-        let article = await this._articleRepository.getArticle(slug)
-        let updatedArticle = author.updateArticle(article, newContent, newImage, newTags)
+        let updatedArticle = author.updateArticle(slug, newContent, newImage, newTags)
   
         resolve(await this._articleRepository.updateArticle(updatedArticle))
       } catch (err) {
         reject(err)
-      }
-    })
-  }
-
-  public publishArticle(author: Author, slug: Slug): Promise<void> {
-    return new Promise<void>(async (resolve, reject) => {
-      try {
-        let article = await this._articleRepository.getArticle(slug);
-
-        author.publishArticle(article)
-
-        resolve(await this._articleRepository.updateArticle(article));
-      } catch (err) {
-        reject(err);
-      }
-    })
-  }
-
-  public unpublishArticle(author: Author, slug: Slug): Promise<void> {
-    return new Promise<void>(async (resolve, reject) => {
-      try {
-        let article = await this._articleRepository.getArticle(slug);
-  
-        author.unpublishArticle(article)
-  
-        resolve(await this._articleRepository.updateArticle(article));
-      } catch (err) {
-        reject(err);
       }
     })
   }

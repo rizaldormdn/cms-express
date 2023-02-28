@@ -18,7 +18,17 @@ describe("Article", () => {
   });
 
   it("should have predefined content, image, author name, author email, tags, related articles, is published, and date properties", () => {
-    let rebuildedArticle = new Article(article.slug, article.content, article.image, article.authorName, article.authorEmail, article.tags, article.relatedArticles, article.isPublished, article.date)
+    let rebuildedArticle = new Article(
+      article.slug,
+      article.content,
+      article.image,
+      article.authorName,
+      article.authorEmail,
+      article.tags,
+      article.isPublished,
+      article.date,
+      article.relatedArticles
+    )
     
     expect(rebuildedArticle.content).toEqual(content);
     expect(rebuildedArticle.image).toEqual(image);
@@ -59,22 +69,4 @@ describe("Article", () => {
       "author email cannot be empty"
     );
   });
-
-  it("should update content", () => {
-    article.updateContent(content)
-
-    expect(article.content).toBe(content);
-  })
-
-  it("should update image", () => {
-    article.updateImage(image)
-
-    expect(article.image).toBe(image);
-  })
-
-  it("should update tags", () => {
-    article.updateTags(tags)
-
-    expect(article.tags).toBe(tags);
-  })
 });
