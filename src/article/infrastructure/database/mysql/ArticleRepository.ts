@@ -95,6 +95,8 @@ export default class ArticleRepository implements ArticleRepositoryInterface.def
               new ArticleDate(result[0].created_at, result[0].updated_at),
             ))
           }
+
+          reject(new Error('article not found'))
         }
       )
     })
@@ -151,9 +153,10 @@ export default class ArticleRepository implements ArticleRepositoryInterface.def
 
             reject(new Error('failed get related articles'));
           }
-          if (result.length > 0) {
-            let relatedArticles: ArticleSnapshots = []
 
+          let relatedArticles: ArticleSnapshots = []
+  
+          if (result.length > 0) {
             for (let entry of result) {
               let tags: Tags = []
               for (let tag of entry.tags.split(',')) {
@@ -175,9 +178,9 @@ export default class ArticleRepository implements ArticleRepositoryInterface.def
 
               relatedArticles.push(relatedArticle)
             }
-
-            resolve(relatedArticles)
           }
+
+          resolve(relatedArticles)
         }
       )
     })
@@ -197,6 +200,8 @@ export default class ArticleRepository implements ArticleRepositoryInterface.def
           if (result.length > 0) {
             resolve(Number(result[0].total))
           }
+
+          resolve(0)
         }
       )
     })
@@ -216,6 +221,8 @@ export default class ArticleRepository implements ArticleRepositoryInterface.def
           if (result.length > 0) {
             resolve(Number(result[0].total))
           }
+
+          resolve(0)
         }
       )
     })
@@ -249,9 +256,10 @@ export default class ArticleRepository implements ArticleRepositoryInterface.def
 
             reject(new Error('failed get featured articles'));
           }
-          if (result.length > 0) {
-            let featuredArticles: ArticleSnapshots = []
 
+          let featuredArticles: ArticleSnapshots = []
+
+          if (result.length > 0) {
             for (let entry of result) {
               let tags: Tags = []
               for (let tag of entry.tags.split(',')) {
@@ -273,9 +281,9 @@ export default class ArticleRepository implements ArticleRepositoryInterface.def
 
               featuredArticles.push(featuredArticle)
             }
-
-            resolve(featuredArticles)
           }
+
+          resolve(featuredArticles)
         }
       )
     });
@@ -312,9 +320,10 @@ export default class ArticleRepository implements ArticleRepositoryInterface.def
 
             reject(new Error('failed get articles'));
           }
-          if (result.length > 0) {
-            let articles: ArticleSnapshots = []
 
+          let articles: ArticleSnapshots = []
+
+          if (result.length > 0) {
             for (let entry of result) {
               let tags: Tags = []
               for (let tag of entry.tags.split(',')) {
@@ -336,9 +345,9 @@ export default class ArticleRepository implements ArticleRepositoryInterface.def
 
               articles.push(article)
             }
-
-            resolve(articles)
           }
+
+          resolve(articles)
         }
       )
     });
@@ -375,9 +384,10 @@ export default class ArticleRepository implements ArticleRepositoryInterface.def
 
             reject(new Error('failed get articles by author'));
           }
-          if (result.length > 0) {
-            let featuredArticles: ArticleSnapshots = []
 
+          let featuredArticles: ArticleSnapshots = []
+
+          if (result.length > 0) {
             for (let entry of result) {
               let tags: Tags = []
               for (let tag of entry.tags.split(',')) {
@@ -399,9 +409,9 @@ export default class ArticleRepository implements ArticleRepositoryInterface.def
 
               featuredArticles.push(featuredArticle)
             }
-
-            resolve(featuredArticles)
           }
+
+          resolve(featuredArticles)
         }
       )
     });

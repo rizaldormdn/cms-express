@@ -27,6 +27,8 @@ export default class ImageRepository implements ImageRepositoryInterface.default
           if (result.length > 0) {
             resolve(Number(result[0].total))
           }
+
+          resolve(0)
         }
       )
     })
@@ -46,6 +48,8 @@ export default class ImageRepository implements ImageRepositoryInterface.default
           if (result.length > 0) {
             resolve(Number(result[0].total))
           }
+
+          resolve(0)
         }
       )
     })
@@ -79,9 +83,10 @@ export default class ImageRepository implements ImageRepositoryInterface.default
 
             reject(new Error('failed get images'))
           }
-          if (result.length > 0) {
-            let images: Images = []
 
+          let images: Images = []
+
+          if (result.length > 0) {
             for (let entry of result) {
               images.push(new Image(
                 new ImageURL(entry.original_url, entry.thumbnail_url),
@@ -91,9 +96,9 @@ export default class ImageRepository implements ImageRepositoryInterface.default
                 entry.id
               ))
             }
-
-            resolve(images)
           }
+
+          resolve(images)
         })
     })
   }
@@ -125,9 +130,10 @@ export default class ImageRepository implements ImageRepositoryInterface.default
 
             reject(new Error('failed get images by author'))
           }
-          if (result.length > 0) {
-            let images: Images = []
 
+          let images: Images = []
+    
+          if (result.length > 0) {
             for (let entry of result) {
               images.push(new Image(
                 new ImageURL(entry.original_url, entry.thumbnail_url),
@@ -137,9 +143,9 @@ export default class ImageRepository implements ImageRepositoryInterface.default
                 entry.id
               ))
             }
-
-            resolve(images)
           }
+
+          resolve(images)
         })
     })
   }
