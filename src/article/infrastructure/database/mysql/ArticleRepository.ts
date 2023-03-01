@@ -34,8 +34,8 @@ export default class ArticleRepository implements ArticleRepositoryInterface.def
     return tags
   }
 
-  private _getArticle(slug: Slug): Promise<Article> {
-    return new Promise<Article>((resolve, reject) => {
+  private _getArticle(slug: Slug): Promise<Article | undefined> {
+    return new Promise<Article | undefined>((resolve, reject) => {
       let query = `
         SELECT
           slug,
@@ -96,7 +96,7 @@ export default class ArticleRepository implements ArticleRepositoryInterface.def
             ))
           }
 
-          reject(new Error('article not found'))
+          resolve(undefined)
         }
       )
     })
@@ -417,10 +417,17 @@ export default class ArticleRepository implements ArticleRepositoryInterface.def
     });
   }
 
-  public getArticle(slug: Slug): Promise<Article> {
-    return new Promise<Article>(async (resolve, reject) => {
+  public getArticle(slug: Slug): Promise<Article | undefined> {
+    return new Promise<Article | undefined>(async (resolve, reject) => {
       try {
-        let article = await this._getArticle(slug)
+        let article: Article | undefined = await this._getArticle(slug)
+
+        if (!article) {
+          resolve(undefined)
+
+          return
+        }
+
         let relatedArticles = await this._getRelatedArticle(article)
 
         resolve(new Article(

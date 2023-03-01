@@ -31,8 +31,13 @@ export default class ImageService {
   public deleteImage(user: User, imageID: string): Promise<void> {
     return new Promise<void>(async (resolve, reject) => {
       try {
-        let image: Image = await this._imageRepository.getImage(imageID)
+        let image: Image | undefined = await this._imageRepository.getImage(imageID)
 
+        if (!image) {
+          resolve()
+
+          return
+        }
         if (!user.isAdministrator && user.email.string() !== image.authorEmail) {
           reject(new Error('permission denied'))
         }

@@ -29,7 +29,16 @@ export default class UserHandler {
     router.post('/login', async (req: Request, res: Response) => {
       try {
         let email: Email = new Email(req.body.email)
-        let user: User = await userRepository.getUser(email)
+        let user: User | undefined = await userRepository.getUser(email)
+
+        if (!user) {
+          res.status(404).json({
+            status: Status.Fail,
+            message: 'user not found'
+          }).end();
+
+          return
+        }
   
         if (user.password!.verify(req.body.password)) {
           res.status(200).json({
@@ -136,6 +145,16 @@ export default class UserHandler {
       try {
         let email = new Email(res.locals.user.email)
         let user = await userRepository.getUser(email)
+        
+        if (!user) {
+          res.status(404).json({
+            status: Status.Fail,
+            message: 'user not found'
+          }).end();
+
+          return
+        }
+
         let newName = new Name(req.body.first_name, req.body.last_name)
 
         await userService.changeName(user, newName)
@@ -165,7 +184,8 @@ export default class UserHandler {
 
       try {
         let email = new Email(res.locals.user.email)
-        let user = await userRepository.getUser(email)
+        let name = new Name(res.locals.user.first_name, res.locals.user.last_name)
+        let user = new User(email, name)
         let newPassword = new Password()
 
         newPassword.hash(req.body.password)

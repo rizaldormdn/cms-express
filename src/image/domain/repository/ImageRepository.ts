@@ -7,7 +7,7 @@ export default interface ImageRepository{
   countImagesByAuthor(specification: Specification, authorEmail: Email): Promise<number>
   getImages(specification: Specification): Promise<Images>
   getImagesByAuthor(specification: Specification, authorEmail: Email): Promise<Images>
-  getImage(id: string): Promise<Image>
+  getImage(id: string): Promise<Image | undefined>
   saveImage(image: Image): Promise<void>
   updateImageAlt(newAlt: string, id: string, authorEmail: Email): Promise<void>
   updateImageAltWithoutAuthorEmail(newAlt: string, id: string): Promise<void>

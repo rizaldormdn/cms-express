@@ -103,11 +103,21 @@ export default class ArticleHandler {
       }
 
       try {
+        let image: Image | undefined = await imageRepository.getImage(req.body.image_id)
+
+        if (!image) {
+          res.status(404).json({
+            status: Status.Fail,
+            message: 'image not found'
+          }).end()
+
+          return
+        }
+
         let email: Email = new Email(res.locals.user.email)
         let name: Name = new Name(res.locals.user.first_name, res.locals.user.last_name)
         let author: Author = new Author(email, name)
         let content: Content = new Content(req.body.title, req.body.content, req.body.excerpt)
-        let image: Image = await imageRepository.getImage(req.body.image_id)
         let tags: Tags = []
 
         for (let tag of req.body.tags) {
@@ -133,7 +143,16 @@ export default class ArticleHandler {
     router.get('/articles/:slug', async (req: Request, res: Response) => {
       try {
         let slug: Slug = new Slug().rebuild(req.params.slug)
-        let article: Article = await articleRepository.getArticle(slug)
+        let article: Article | undefined = await articleRepository.getArticle(slug)
+
+        if (!article) {
+          res.status(404).json({
+            status: Status.Fail,
+            message: 'article not found'
+          }).end()
+
+          return
+        }
 
         res.status(200).json({
           status: Status.Success,
@@ -151,12 +170,22 @@ export default class ArticleHandler {
 
     router.put('/articles/:slug', Middleware.authentication, async (req: Request, res: Response) => {
       try {
+        let newImage: Image | undefined = await imageRepository.getImage(req.body.image_id)
+
+        if (!newImage) {
+          res.status(404).json({
+            status: Status.Fail,
+            message: 'image not found'
+          }).end()
+
+          return
+        }
+
         let slug: Slug = new Slug().rebuild(req.params.slug)
         let email: Email = new Email(res.locals.user.email)
         let name: Name = new Name(res.locals.user.first_name, res.locals.user.last_name)
         let author: Author = new Author(email, name)
         let newContent: Content = new Content(req.body.title, req.body.content, req.body.excerpt)
-        let newImage: Image = await imageRepository.getImage(req.body.image_id)
         let newTags: Tags = []
 
         for (let tag of req.body.tags) {

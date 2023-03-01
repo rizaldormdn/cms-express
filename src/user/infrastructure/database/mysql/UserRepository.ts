@@ -47,8 +47,8 @@ export default class UserRepository implements UserRepositoryInterface.default {
     })
   }
 
-  public getUser(email: Email): Promise<User> {
-    return new Promise<User>((resolve, reject) => {
+  public getUser(email: Email): Promise<User | undefined> {
+    return new Promise<User | undefined>((resolve, reject) => {
       this._connection.query(
         "SELECT first_name, last_name, salt, hashed_password, token, token_expiry, is_administrator FROM users WHERE email = ? LIMIT 1",
         [email.string()],
@@ -70,7 +70,7 @@ export default class UserRepository implements UserRepositoryInterface.default {
             );
           }
 
-          reject(new Error('user not found'))
+          reject(undefined)
         }
       );
     });

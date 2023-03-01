@@ -10,7 +10,7 @@ export default interface ArticleRepository{
   getFeaturedArticles(): Promise<ArticleSnapshots>
   getArticles(specification: Specification): Promise<ArticleSnapshots>
   getArticlesByAuthor(specification: Specification, authorEmail: Email): Promise<ArticleSnapshots>
-  getArticle(slug: Slug): Promise<Article>
+  getArticle(slug: Slug): Promise<Article | undefined>
   saveArticle(article: Article): Promise<void>
   updateArticle(article: Article): Promise<void>
   updatePublishedArticle(slug: Slug, authorEmail: Email, isPublished: boolean): Promise<void>

@@ -12,8 +12,13 @@ export default class ResetPasswordService {
   public resetPassword(token: string, newPassword: Password): Promise<void> {
     return new Promise<void>(async (resolve, reject) => {
       try {
-        let user: User = await this._userRepository.getUserByToken(token)
+        let user: User | undefined = await this._userRepository.getUserByToken(token)
 
+        if (!user) {
+          reject(new Error("user not found"))
+
+          return
+        }
         if (!user.resetPasswordToken!.isValid()) {
           reject(new Error("token is not valid"));
   

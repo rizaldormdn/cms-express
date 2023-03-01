@@ -147,7 +147,16 @@ export default class ImageHandler {
 
     router.get('/images/:id', Middleware.authentication, async (req: Request, res: Response) => {
       try {
-        let image: Image = await imageRepository.getImage(req.params.id)
+        let image: Image | undefined = await imageRepository.getImage(req.params.id)
+
+        if (!image) {
+          res.status(404).json({
+            status: Status.Fail,
+            message: 'image not found'
+          }).end()
+
+          return
+        }
 
         res.status(200).json({
           status: Status.Success,

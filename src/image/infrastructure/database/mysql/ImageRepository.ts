@@ -150,8 +150,8 @@ export default class ImageRepository implements ImageRepositoryInterface.default
     })
   }
 
-  public getImage(id: string): Promise<Image> {
-    return new Promise<Image>((resolve, reject) => {
+  public getImage(id: string): Promise<Image | undefined> {
+    return new Promise<Image | undefined>((resolve, reject) => {
       this._connection.query(
         "SELECT original_url, thumbnail_url, alt, height, width, author_email FROM images WHERE BIN_TO_UUID(id) = ? LIMIT 1",
         [id],
@@ -171,7 +171,7 @@ export default class ImageRepository implements ImageRepositoryInterface.default
             ))
           }
 
-          reject(new Error('image not found'))
+          resolve(undefined)
         })
     })
   }
