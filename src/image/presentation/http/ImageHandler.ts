@@ -24,11 +24,6 @@ export default class ImageHandler {
   ): Router {
     const storage = multer.diskStorage({
       destination: (_, file, cb) => {
-        if (file.mimetype !== 'image/png' && file.mimetype !== 'image/jpeg') {
-          cb(new Error('image type is not allowed'), '')
-
-          return
-        }
         if (file.fieldname === 'original') {
           cb(null, 'public/images/original/')
         } else {
