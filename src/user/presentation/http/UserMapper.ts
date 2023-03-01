@@ -12,6 +12,16 @@ export type AuthorJSON = {
 
 export type AuthorsJSON = AuthorJSON[]
 
+export type MeJSON = {
+  email: string;
+  name: {
+    first: string;
+    last: string;
+    full: string;
+  };
+  is_administrator: boolean;
+}
+
 export type UserJSON = {
   email: string;
   name: {
@@ -19,6 +29,10 @@ export type UserJSON = {
     last: string;
     full: string;
   };
+  password: {
+    salt: string;
+    hashed_password: string;
+  }
   is_administrator: boolean;
 }
 
@@ -38,6 +52,18 @@ export class AuthorMapper {
 }
 
 export default class UserMapper {
+  public static fromJSON(user: UserJSON): MeJSON {
+    return {
+      email: user.email,
+      name: {
+        first: user.name.first,
+        last: user.name.last,
+        full: user.name.full
+      },
+      is_administrator: Boolean(user.is_administrator)
+    }
+  }
+
   public static toJSON(user: User): UserJSON {
     return {
       email: user.email.string(),
@@ -45,6 +71,10 @@ export default class UserMapper {
         first: user.name.first,
         last: user.name.last,
         full: user.name.full()
+      },
+      password: {
+        salt: String(user.password?.salt),
+        hashed_password: String(user.password?.hashedPassword)
       },
       is_administrator: user.isAdministrator
     }

@@ -79,7 +79,7 @@ export default class UserHandler {
       res.status(200).json({
         status: Status.Success,
         data: {
-          user: res.locals.user
+          user: UserMapper.fromJSON(res.locals.user)
         }
       }).end();
     })
@@ -144,17 +144,9 @@ export default class UserHandler {
     router.post('/change-name', Middleware.authentication, async (req: Request, res: Response) => {
       try {
         let email = new Email(res.locals.user.email)
-        let user = await userRepository.getUser(email)
-        
-        if (!user) {
-          res.status(404).json({
-            status: Status.Fail,
-            message: 'user not found'
-          }).end();
-
-          return
-        }
-
+        let name = new Name(res.locals.user.first_name, res.locals.user.last_name)
+        let password = new Password(res.locals.user.password, res.locals.user.hashed_password)
+        let user = new User(email, name, res.locals.user.is_administrator, password)
         let newName = new Name(req.body.first_name, req.body.last_name)
 
         await userService.changeName(user, newName)
