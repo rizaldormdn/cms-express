@@ -17,6 +17,9 @@ import Server from "./Server";
 import ArticleService from "./article/domain/service/ArticleService";
 import ImageRepository from "./image/domain/repository/ImageRepository";
 import ImageService from "./image/application/service/ImageService";
+import ProgramRepository from "./program/domain/repository/ProgramRepository";
+import ProgramRepositoryMYSQL from "./program/infrastucture/database/mysql/ProgramRepository";
+import ProgramService from "./program/domain/service/ProgramService";
 
 const connection: Connection = mysql.createConnection({
   user: process.env.DB_USERNAME,
@@ -28,9 +31,11 @@ const connection: Connection = mysql.createConnection({
 const userRepository: UserRepository = new UserRepositoryMySQL(connection)
 const articleRepository: ArticleRepository = new ArticleRepositoryMySQL(connection)
 const imageRepository: ImageRepository = new ImageRepositoryMySQL(connection)
+const programRepository: ProgramRepository = new ProgramRepositoryMYSQL(connection)
 const userService: UserService = new UserService(userRepository)
 const imageService: ImageService = new ImageService(imageRepository)
 const articleService: ArticleService = new ArticleService(articleRepository)
+const programService: ProgramService = new ProgramService(programRepository)
 const emailConfirmationService: ConfirmationService = new EmailConfirmationService(
   nodemailer.createTransport({
     host: process.env.EMAIL_TRANSPORT_HOST,
@@ -58,6 +63,8 @@ Server.run(
     imageService,
     articleService,
     administratorService,
-    resetPasswordService
+    resetPasswordService,
+    programRepository,
+    programService,
   )
 )

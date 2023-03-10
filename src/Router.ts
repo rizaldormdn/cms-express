@@ -11,6 +11,9 @@ import ImageRepository from "./image/domain/repository/ImageRepository";
 import ArticleRepository from "./article/domain/repository/ArticleRepository";
 import ImageHandler from "./image/presentation/http/ImageHandler";
 import ImageService from "./image/application/service/ImageService";
+import ProgramRepository from "./program/domain/repository/ProgramRepository";
+import ProgramHandler from "./program/presentation/ProgramHandler";
+import ProgramService from "./program/domain/service/ProgramService";
 
 export default class Router {
   public static run(
@@ -21,7 +24,9 @@ export default class Router {
     imageService: ImageService,
     articleService: ArticleService,
     administratorService: AdministratorService,
-    resetPasswordService: ResetPasswordService
+    resetPasswordService: ResetPasswordService,
+    programRepository: ProgramRepository,
+    programService: ProgramService
   ): ExpressRouter {
     const router: ExpressRouter = ExpressRouter();
   
@@ -37,6 +42,11 @@ export default class Router {
       articleRepository,
       articleService
     ))
+      router.use('/v1', ProgramHandler.router(
+        imageRepository,
+        programRepository,
+        programService,
+      ))
     router.use('/v1', ImageHandler.router(
       imageRepository,
       imageService

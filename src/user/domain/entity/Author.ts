@@ -8,6 +8,7 @@ import Password from "../valueobject/Password";
 import { Tags } from "../../../article/domain/valueobject/Tag";
 import Slug from "../../../article/domain/valueobject/Slug";
 import ResetPasswordToken from "../valueobject/ResetPasswordToken";
+import Program from "../../../program/domain/aggregate/Program";
 
 export default class Author extends User {
   constructor(
@@ -44,5 +45,14 @@ export default class Author extends User {
       this._email.string(),
       newTags
     )
+  }
+  public addProgram(
+    content: Content,
+    image: Image,
+  ): Program {
+    let slug = new Slug(content.title)
+    let program = new Program(slug, content, image, super.name.full(), super.email.string())
+
+    return program
   }
 }
